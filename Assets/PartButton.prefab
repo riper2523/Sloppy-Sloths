@@ -146,9 +146,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15bed4238a547414795c8afc14b9b2cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartButtonScript
-  partData: {fileID: 11400000, guid: f92733de55663fc458994e1cbf95b82d, type: 2}
+  partData: {fileID: 0}
   buttonImage: {fileID: 3446376461784293040}
+  button: {fileID: 447134907828206329}
   buttonText: {fileID: 2821555804411987957}
+  gridManager: {fileID: 0}
 --- !u!1 &7026260599908969885
 GameObject:
   m_ObjectHideFlags: 0

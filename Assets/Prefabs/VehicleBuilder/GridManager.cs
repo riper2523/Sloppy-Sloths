@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
+
 public class GridManager : MonoBehaviour
 {
     [SerializeField]
@@ -17,8 +18,7 @@ public class GridManager : MonoBehaviour
     private Tilemap grid;
     [SerializeField]
     private Tile tile;
-    [SerializeField]
-    private Camera mainCamera;
+
     [SerializeField]
     private CinemachineTargetGroup targetGroup;
     private Transform vehicleParent;
@@ -27,13 +27,17 @@ public class GridManager : MonoBehaviour
 
     private InputAction clickAction;
 
-
+    private Vector3 cameraPosition;
     void Start()
     {
         GameObject vehicleGO = new GameObject("Vehicle");
         vehicleParent = vehicleGO.transform;
         clickAction = InputSystem.actions.FindAction("Click");
         partDataGrid = new PartData[gridSizeX, gridSizeY];
+        BuildGrid();
+    }
+    private void BuildGrid()
+    {
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
@@ -43,7 +47,6 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-
     void Update()
     {
         if (clickAction.WasPressedThisFrame())
@@ -52,16 +55,19 @@ public class GridManager : MonoBehaviour
             Vector3Int tilePos = grid.WorldToCell(mouseWorldPos);
             int x = tilePos.x - offsetX;
             int y = tilePos.y - offsetY;
-            PlacePart(x, y);
+            if (actPartData != null)
+            {
+                PlacePart(x, y);
+            }
         }
     }
 
     private PartData actPartData;
     public void PlacePart(int x, int y)
     {
-        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY || actPartData == null)
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY)
         {
-            Debug.LogError("Invalid position or no part selected.");
+            // Debug.LogError("Invalid position or no part selected.");
             return;
         }
         partDataGrid[x, y] = actPartData;
@@ -75,6 +81,7 @@ public class GridManager : MonoBehaviour
 
     public void Build()
     {
+        cameraPosition = targetGroup.transform.position;
         // 1. Tworzymy tymczasową tablicę na obiekty fizyczne
         GameObject[,] spawnedParts = new GameObject[gridSizeX, gridSizeY];
         var newTargets = new System.Collections.Generic.List<CinemachineTargetGroup.Target>();
@@ -154,5 +161,18 @@ public class GridManager : MonoBehaviour
 
         // 6. Opcja zniszczalności
         // joint.breakForce = 500f; // Jeśli chcesz, żeby pojazd mógł pękać
+    }
+
+    public void Restart()
+    {
+        foreach (Transform child in vehicleParent)
+        {
+            Destroy(child.gameObject);
+        }
+        partDataGrid = new PartData[gridSizeX, gridSizeY];
+        grid.ClearAllTiles();
+        targetGroup.Targets = new System.Collections.Generic.List<CinemachineTargetGroup.Target>();
+        targetGroup.AddMember(transform, 1f, 0f);
+        BuildGrid();
     }
 }

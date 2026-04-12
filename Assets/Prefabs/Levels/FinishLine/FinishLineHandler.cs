@@ -3,15 +3,13 @@ using UnityEngine.Events;
 
 public class FinishLineHandler : MonoBehaviour
 {
-    public UnityEvent finishLineCrossed;
-    private int crossedCount = 0;
+  public UnityEvent finishLineCrossed;
 
-    private void OnTriggerEnter2D(Collider2D other)
+  private void OnTriggerEnter2D(Collider2D other)
+  {
+    if (other.CompareTag("Sloth"))
     {
-        if (other.CompareTag("Sloth") && crossedCount == 0)
-        {
-            crossedCount++;
-            finishLineCrossed.Invoke();
-        }
+      finishLineCrossed.Invoke();
     }
+  }
 }

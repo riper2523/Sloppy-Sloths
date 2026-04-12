@@ -1412,25 +1412,57 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1540136045}
     m_Modifications:
+    - target: {fileID: 1515786018718185973, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: m_Size.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1515786018718185973, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: m_Size.y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1515786018718185973, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1637291748}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowWinPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PanelManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4557566678025298572, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
       propertyPath: m_Name
       value: FinishLine
       objectReference: {fileID: 0}
     - target: {fileID: 5760066300955166019, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5760066300955166019, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5760066300955166019, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1029.22
+      value: -1028.93
       objectReference: {fileID: 0}
     - target: {fileID: 5760066300955166019, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -744.52
+      value: -744.45
       objectReference: {fileID: 0}
     - target: {fileID: 5760066300955166019, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1464,6 +1496,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5765708709889275224, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: m_Size.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765708709889275224, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: m_Size.y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765708709889275224, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: m_EdgeRadius
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765708709889275224, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765708709889275224, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6322122174634821452, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
       propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1476,7 +1528,7 @@ PrefabInstance:
       propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: PanelManager, Assembly-CSharp
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents: [{fileID: 7114021260066247710, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}]
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

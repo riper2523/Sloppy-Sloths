@@ -1,7 +1,5 @@
 using UnityEngine;
 
-using UnityEngine;
-
 [ExecuteAlways]
 [RequireComponent(typeof(EdgeCollider2D))]
 [RequireComponent(typeof(LineRenderer))]

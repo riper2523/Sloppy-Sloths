@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
+  m_Name: WoodPD
+  m_EditorClassIdentifier: Assembly-CSharp::PartData
+  partPrefab: {fileID: 7586396994626127713, guid: 8f760bdff96aa8341913d39916cd50e2, type: 3}
+  partSpriteUI: {fileID: -2067898546876541913, guid: 431e02b2768d3eb4f8e87ea03c367329, type: 3}
+  partName: Wood
+  partTile: {fileID: 11400000, guid: af5276cb032cecb408e3212ed52d021d, type: 2}
+  attachable: 01010101

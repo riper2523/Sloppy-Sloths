@@ -3,13 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
+<<<<<<< HEAD
   tags:
   - Sloth
+=======
+  tags: []
+>>>>>>> 5f43d11 (better sprites)
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - 

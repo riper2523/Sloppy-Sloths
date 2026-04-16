@@ -72,7 +72,6 @@ public class GridManager : MonoBehaviour
     {
         if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY)
         {
-            // Debug.LogError("Invalid position or no part selected.");
             return;
         }
         int rotation = 0;
@@ -112,10 +111,8 @@ public class GridManager : MonoBehaviour
     public void Build()
     {
         cameraPosition = targetGroup.transform.position;
-        // 1. Tworzymy tymczasową tablicę na obiekty fizyczne
         GameObject[,] spawnedParts = new GameObject[gridSizeX, gridSizeY];
         var newTargets = new System.Collections.Generic.List<CinemachineTargetGroup.Target>();
-        // 2. PIERWSZA PĘTLA: Spawnowanie wszystkich klocków
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
@@ -134,8 +131,8 @@ public class GridManager : MonoBehaviour
                         newTargets.Add(new CinemachineTargetGroup.Target
                         {
                             Object = rb.transform,
-                            Weight = 1f, // Jak bardzo ten klocek przyciąga kamerę
-                            Radius = 1f  // Obszar wokół klocka, który kamera ma widzieć
+                            Weight = 1f,
+                            Radius = 1f
                         });
                     }
 
@@ -145,20 +142,17 @@ public class GridManager : MonoBehaviour
             }
         }
         targetGroup.Targets = newTargets;
-        // 3. DRUGA PĘTLA: Łączenie sąsiadów
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
             {
                 if (spawnedParts[x, y] == null) continue;
 
-                // Sprawdzamy sąsiada z prawej (x + 1)
                 if (x + 1 < gridSizeX && spawnedParts[x + 1, y] != null)
                 {
                     CreateJoint(spawnedParts[x, y], spawnedParts[x + 1, y]);
                 }
 
-                // Sprawdzamy sąsiada u góry (y + 1)
                 if (y + 1 < gridSizeY && spawnedParts[x, y + 1] != null)
                 {
                     CreateJoint(spawnedParts[x, y], spawnedParts[x, y + 1]);
@@ -166,31 +160,19 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        grid.ClearAllTiles(); // Czyścimy siatkę podglądu
+        grid.ClearAllTiles();
     }
 
-    // Pomocnicza metoda do tworzenia Jointa
     private void CreateJoint(GameObject partA, GameObject partB)
     {
-        // 1. Szukamy Rigidbody2D gdziekolwiek w strukturze obu klocków
         Rigidbody2D rbA = partA.GetComponentInChildren<Rigidbody2D>();
         Rigidbody2D rbB = partB.GetComponentInChildren<Rigidbody2D>();
 
-        // 2. Jeśli któryś klockek nie ma fizyki, nie możemy ich połączyć
         if (rbA == null || rbB == null) return;
 
-        // 3. Dodajemy Joint bezpośrednio do obiektu, który MA RigidbodyA
-        // To gwarantuje, że Joint będzie działał, nawet jeśli RB jest w dziecku
         FixedJoint2D joint = rbA.gameObject.AddComponent<FixedJoint2D>();
 
-        // 4. Łączymy go z RigidbodyB
         joint.connectedBody = rbB;
-
-        // 5. Opcje stabilności
-        // joint.enableCollision = false; // Klocki nie wchodzą ze sobą w kolizję (lepsza wydajność)
-
-        // 6. Opcja zniszczalności
-        // joint.breakForce = 500f; // Jeśli chcesz, żeby pojazd mógł pękać
     }
 
     public void Restart()

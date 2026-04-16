@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Sloppy Sloths.slnx",
+    "dotnet.defaultSolution": "Sloppy-Sloths.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }

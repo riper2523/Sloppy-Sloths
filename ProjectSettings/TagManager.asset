@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
+<<<<<<< HEAD
   tags: []
+=======
+  tags:
+  - Sloth
+>>>>>>> 7345bd1 ( Add vehicle creator and change project structure (#2))
   layers:
   - Default
   - TransparentFX
@@ -44,6 +49,7 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+<<<<<<< HEAD
   - name: Water
     uniqueID: 2633410425
     locked: 0
@@ -56,6 +62,8 @@ TagManager:
   - name: New Layer 5
     uniqueID: 3382230533
     locked: 0
+=======
+>>>>>>> 7345bd1 ( Add vehicle creator and change project structure (#2))
   m_RenderingLayers:
   - Default
   m_MigratedRenderPipelines: []

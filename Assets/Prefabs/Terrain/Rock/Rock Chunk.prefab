@@ -81,7 +81,7 @@ SpriteShapeRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -1422697273
+  m_SortingLayerID: -855540951
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
@@ -257,7 +257,7 @@ PolygonCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: f2a1f8a8ae4a0fc4bb0697ae1975515e, type: 2}
+  m_Material: {fileID: 6200000, guid: 1a2e5e78b4f902549af957005e9a7c3b, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -370,7 +370,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: f2a1f8a8ae4a0fc4bb0697ae1975515e, type: 2}
+  m_Material: {fileID: 6200000, guid: 1a2e5e78b4f902549af957005e9a7c3b, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

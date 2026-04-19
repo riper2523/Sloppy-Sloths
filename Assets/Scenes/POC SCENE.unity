@@ -1516,19 +1516,7 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.newSize.y
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 6322122174634821452, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
-      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1637291748}
-    - target: {fileID: 6322122174634821452, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
-      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShowWinPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 6322122174634821452, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
-      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: PanelManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    m_RemovedComponents: [{fileID: 7114021260066247710, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}]
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

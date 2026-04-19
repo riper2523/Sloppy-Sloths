@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 using Assets.Prefabs.MapBuilder;
 
 class NodeManager : MonoBehaviour, INodeManager
 {
     private INodeHandle activeNode;
-    private Camera mainCam;
     private readonly List<INodeHandle> nodes = new();
 
     [SerializeField] public float additionThreeshold = 0.5f;
@@ -16,7 +14,7 @@ class NodeManager : MonoBehaviour, INodeManager
     //TODO: think about making this a [SerializeField]
     private IInputInformation inputInformation;
 
-    void Start()
+    void Awake()
     {
         inputInformation = GetComponent<IInputInformation>();
     }
@@ -31,14 +29,12 @@ class NodeManager : MonoBehaviour, INodeManager
         Debug.Log($"Trying to add a point: {point}");
         Vector3 spawnPos = new(point.x, point.y, 0);
 
-        if (myPrefab == null)
+        if (myPrefab is null)
         {
-            Debug.LogError("NodeManager.myPrefab is not assigned.");
-            return null;
+            Debug.LogError("NodeManager.myPrefab is not assigned."); return null;
         }
-
         if (nodes.Find(controller => { return Vector2.Distance(controller.GetCoordinates(), point) < additionThreeshold; })
-        != null)
+        is not null)
         {
             Debug.Log("There already is a point which is really close to that position");
             return null;
@@ -47,7 +43,7 @@ class NodeManager : MonoBehaviour, INodeManager
         GameObject newClone = Instantiate(myPrefab, spawnPos, Quaternion.identity);
 
         var controller = newClone.GetComponent<INodeHandle>();
-        if (controller == null)
+        if (controller is null)
         {
             Debug.LogError($"Prefab '{myPrefab.name}' is missing NodeController.", newClone);
             Destroy(newClone);
@@ -55,21 +51,26 @@ class NodeManager : MonoBehaviour, INodeManager
         }
 
         nodes.Add(controller);
-        activeNode = controller;
 
         Debug.Log($"Point instantiated, its position: {newClone.transform.position}");
 
         return controller;
     }
 
+    private void DeactivateTheActiveNode()
+    {
+        activeNode.Active = false;
+        activeNode = null;
+    }
+
     void Update()
     {
-        if (inputInformation.WeClickedThisFrame() && activeNode != null)
+        if (inputInformation.WeClickedThisFrame() && activeNode is not null)
         {
             var mousePos = inputInformation.GetMouseWorldPos();
             if (!activeNode.DoesCollide(mousePos))
             {
-                activeNode = null;
+                DeactivateTheActiveNode();
             }
         }
     }
@@ -96,10 +97,9 @@ class NodeManager : MonoBehaviour, INodeManager
             return false;
         }
 
-        Debug.Log($"Activated the node: {node}");
-        if (activeNode != null)
+        if (activeNode is not null)
         {
-            activeNode.Active = false;
+            DeactivateTheActiveNode();
         }
         activeNode = node;
 

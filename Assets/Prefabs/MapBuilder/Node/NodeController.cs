@@ -6,10 +6,14 @@ namespace Assets.Prefabs.MapBuilder.Node
 {
     class NodeController : MonoBehaviour, IPointerClickHandler, INodeHandle
     {
+        private static readonly string OutlineCircleObjectName = "OutlineCircle";
+
         private Vector3 lastPosition;
         [SerializeField] private float epsilon = 0.0001f;
 
         private Collider2D nodeCollider;
+
+        private GameObject selectedOutline;
 
         //TODO: think about making this a serializedField
         private IInputInformation inputInformation;
@@ -24,6 +28,14 @@ namespace Assets.Prefabs.MapBuilder.Node
 
         private bool _isActive;
 
+        void Awake()
+        {
+            nodeCollider = GetComponent<Collider2D>();
+            draggable = GetComponent<Draggable>();
+            selectedOutline = transform.Find(OutlineCircleObjectName).gameObject;
+            lastPosition = transform.position;
+        }
+
         public bool Active
         {
             get => _isActive;
@@ -35,14 +47,16 @@ namespace Assets.Prefabs.MapBuilder.Node
                     return;
                 }
 
-                if (value)
+                if (value && nodeContainer is not null)
                 {
-                    Debug.Log($"Trying to activate the node");
                     // If we can't activate the node then we should deactivate it
                     value = nodeContainer.TryActivatingTheNode(this);
                 }
 
-                draggable.enabled = _isActive = value;
+                //TODO: think about this
+                // draggable.enabled = value;
+                _isActive = value;
+                selectedOutline.SetActive(value);
                 Debug.Log($"Node set to {value}");
             }
         }
@@ -54,12 +68,6 @@ namespace Assets.Prefabs.MapBuilder.Node
             wasSetUp = true;
         }
 
-        void Start()
-        {
-            nodeCollider = GetComponent<Collider2D>();
-            lastPosition = transform.position;
-            draggable = GetComponent<Draggable>();
-        }
 
         public bool DoesCollide(Vector3 point)
         {

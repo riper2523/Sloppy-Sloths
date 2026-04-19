@@ -51,7 +51,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer
     public IInputInformation inputInformation;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         nodeManager = nodeManagerSource.GetComponent<INodeManager>();
         inputInformation = nodeManagerSource.GetComponent<IInputInformation>();
@@ -67,8 +67,11 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer
         spline = shape.spline;
         mainCam = Camera.main;
         splineCollider = GetComponent<Collider2D>();
-        Debug.Log("Started");
+        Debug.Log("Awake");
+    }
 
+    void Start()
+    {
         for (int i = 0; i < spline.GetPointCount(); i++)
         {
             var splinePoint = spline.GetPosition(i) + shape.transform.position;
@@ -171,6 +174,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer
         Debug.Log($"Adding to spline: {nodeController.GetCoordinates()}");
         //TODO: change this
         nodeController.SetTheNodeUp(this, inputInformation);
+        nodeController.Active = true;
         nodes.Insert(FindIndex(nodeController), nodeController);
     }
 

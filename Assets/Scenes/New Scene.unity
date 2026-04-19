@@ -153,7 +153,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PolygonBuilder
   nodeManagerSource: {fileID: 438457755}
   addingPointThreeshold: 5
-  inputInformationSource: {fileID: 385814973}
 --- !u!114 &197526345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +217,7 @@ MonoBehaviour:
   m_UpdateShadow: 0
   m_ShadowDetail: 16
   m_ShadowOffset: 0.5
-  m_BoundsScale: 2
+  m_BoundsScale: 11.5
   m_UpdateGeometry: 1
   m_Creator: {fileID: 0}
   m_Modifiers: []

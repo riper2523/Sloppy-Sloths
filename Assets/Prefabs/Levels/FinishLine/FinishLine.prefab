@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5760066300955166019}
   - component: {fileID: 1515786018718185973}
   - component: {fileID: 5765708709889275224}
-  - component: {fileID: 6322122174634821452}
+  - component: {fileID: 1662554592959528137}
   m_Layer: 0
   m_Name: FinishLine
   m_TagString: Untagged
@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 4557566678025298572}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.4759, y: -4.3939, z: 0}
-  m_LocalScale: {x: 2.166, y: 6.037052, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -83,12 +83,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.6784314, g: 1, b: 0.1843137, a: 1}
+  m_Sprite: {fileID: -3278859021780183304, guid: a4e71623a2de71f5f97fc879efc8857e, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_DrawMode: 2
+  m_Size: {x: 2, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -131,15 +131,15 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 2, y: 4}
+    newSize: {x: 2, y: 4}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 4}
   m_EdgeRadius: 0
---- !u!114 &6322122174634821452
+--- !u!114 &1662554592959528137
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,21 +148,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4557566678025298572}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f82c926418640babb751cdc33f21285, type: 3}
+  m_Script: {fileID: 11500000, guid: 51562b2993f84cafeb4acaaf509091df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FinishLineHandler
   finishLineCrossed:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: VictoryHandler, Assembly-CSharp
-        m_MethodName: ShowVictoryScreen
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []

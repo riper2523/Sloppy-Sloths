@@ -4,62 +4,114 @@ using UnityEngine.EventSystems;
 
 namespace Assets.Prefabs.MapBuilder.Node
 {
-  class NodeController : MonoBehaviour, IPointerClickHandler
-  {
-    private Vector3 lastPosition;
-    [SerializeField] private float epsilon = 0.0001f;
-
-    private Collider2D nodeCollider;
-    public event EventHandler? NodeActivated;
-    public event EventHandler? NodeDeleted;
-    public event EventHandler? NodeMoved;
-
-    void Start()
+    class NodeController : MonoBehaviour, IPointerClickHandler, INodeHandle
     {
-      nodeCollider = GetComponent<Collider2D>();
-      lastPosition = transform.position;
-    }
+        private Vector3 lastPosition;
+        [SerializeField] private float epsilon = 0.0001f;
 
-    public bool doesCollide(Vector2 point)
-    {
-      Collider2D hitCollider = Physics2D.OverlapPoint(point);
+        private Collider2D nodeCollider;
 
-      if (hitCollider != null && hitCollider == nodeCollider)
-      {
-        return true;
-      }
-      return false;
-    }
+        //TODO: think about making this a serializedField
+        private IInputInformation inputInformation;
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-      Debug.Log("Node activated");
-      NodeActivated?.Invoke(this, EventArgs.Empty);
-    }
+        //TODO: think about making this a serializedField
+        private Draggable draggable;
 
-    public void deleteNode()
-    {
-      Debug.Log("Object deleted");
-      NodeDeleted?.Invoke(this, EventArgs.Empty);
-      Destroy(gameObject);
-    }
+        //TODO: think about making this a serializedField, and removing the method below
+        private INodeContainer nodeContainer;
 
-    public Vector2 getCoordinates()
-    {
-      return transform.position;
-    }
+        private bool wasSetUp = false;
 
-    public void Update()
-    {
-      if ((transform.position -
-lastPosition).sqrMagnitude > epsilon *
-epsilon)
-      {
-        lastPosition = transform.position;
-        Debug.Log("Node moved");
-        NodeMoved?.Invoke(this, EventArgs.Empty);
-      }
+        private bool _isActive;
+
+        public bool Active
+        {
+            get => _isActive;
+
+            set
+            {
+                if (value == _isActive)
+                {
+                    return;
+                }
+
+                if (value)
+                {
+                    Debug.Log($"Trying to activate the node");
+                    // If we can't activate the node then we should deactivate it
+                    value = nodeContainer.TryActivatingTheNode(this);
+                }
+
+                draggable.enabled = _isActive = value;
+                Debug.Log($"Node set to {value}");
+            }
+        }
+
+        public void SetTheNodeUp(INodeContainer nodeContainer, IInputInformation inputInformation)
+        {
+            this.nodeContainer = nodeContainer;
+            this.inputInformation = inputInformation;
+            wasSetUp = true;
+        }
+
+        void Start()
+        {
+            nodeCollider = GetComponent<Collider2D>();
+            lastPosition = transform.position;
+            draggable = GetComponent<Draggable>();
+        }
+
+        public bool DoesCollide(Vector3 point)
+        {
+            Collider2D hitCollider = Physics2D.OverlapPoint(point);
+
+            if (hitCollider != null && hitCollider == nodeCollider)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Active = true;
+        }
+
+        public void Update()
+        {
+            if (!wasSetUp)
+            {
+                return;
+            }
+
+            if (Active && inputInformation.DelKeyWasClicked())
+            {
+                TryDeletingTheNode();
+            }
+
+            if ((transform.position -
+        lastPosition).sqrMagnitude > epsilon *
+        epsilon)
+            {
+                lastPosition = transform.position;
+                Debug.Log("Node moved");
+                nodeContainer.NodeMoved(this);
+            }
+        }
+
+        private void TryDeletingTheNode()
+        {
+            if (nodeContainer.TryDeletingThis(this))
+            {
+                Debug.Log("Object deleted");
+                Destroy(gameObject);
+            }
+        }
+
+        public Vector3 GetCoordinates()
+        {
+            return transform.position;
+        }
     }
-  }
 }
 

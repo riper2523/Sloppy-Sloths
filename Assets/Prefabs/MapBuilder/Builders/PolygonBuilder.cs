@@ -2,192 +2,238 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
+using Assets.Prefabs.MapBuilder;
 using Assets.Prefabs.MapBuilder.Node;
-using UnityEngine.InputSystem;
 
 //TODO: Check how are GameObjects identified, read about
 // - **Instance ID** (runtime, unique per session):  
-//   `gameObject.GetInstanceID()` gives an integer unique while the app/editor session runs.
-//
-public class PolygonBuilder : MonoBehaviour
+//   `gameObject.GetInstanceID()` gives an integer unique while the app/editor session runs. Comparing these is equivalent to comparing triangle heights
+class DoubledAreaAndBaseLength : IComparable<DoubledAreaAndBaseLength>
 {
-  private SpriteShapeController shape;
-  private Spline spline;
-  private Camera mainCam;
-  private Collider2D splineCollider;
+    private readonly float doubleArea;
+    private readonly float baseLen;
 
-  private Collider2D dummyCollider;
-
-  private readonly List<NodeController> nodes = new();
-
-  [SerializeField]
-  private NodeManager nodeManager;
-
-  [SerializeField]
-  public float addingPointThreeshold = 1f;
-
-  // Start is called once before the first execution of Update after the MonoBehaviour is created
-  void Start()
-  {
-    shape = GetComponent<SpriteShapeController>();
-    spline = shape.spline;
-    mainCam = Camera.main;
-    splineCollider = GetComponent<Collider2D>();
-    Debug.Log("Started");
-
-    dummyCollider = createDummyCollider();
-
-    for (int i = 0; i < spline.GetPointCount(); i++)
+    public DoubledAreaAndBaseLength(float doubleArea, float baseLen)
     {
-      var splinePoint = spline.GetPosition(i) + shape.transform.position;
-      var controller = nodeManager.TryAddingNodeAtPoint(splinePoint);
-      if (controller == null)
-      {
-        Debug.LogError($"This controller shouldn't be null!!! index: {i}");
-      }
-      else
-      {
-        addToSpline(controller);
-      }
-    }
-  }
-
-  CircleCollider2D createDummyCollider()
-  {
-    GameObject dummyObj = new("MouseDummyCollider");
-    dummyObj.transform.SetParent(transform); // Keep the hierarchy clean
-
-    // 2. Add a tiny circle collider
-    var dummyMouseCollider = dummyObj.AddComponent<CircleCollider2D>();
-    dummyMouseCollider.radius = 0.0001f; // Effectively a point
-    dummyMouseCollider.isTrigger = true;
-    return dummyMouseCollider;
-  }
-
-  // Update is called once per frame
-  void Update()
-  {
-    Vector2 mousePos = GetMouseWorldPos();
-
-    var closestOnCollider = GetClosestPointOnColliderEdge(mousePos);
-
-    if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-    {
-      Debug.Log($"Closest on collider: {closestOnCollider}");
-      if (Vector2.Distance(mousePos, closestOnCollider) > addingPointThreeshold || nodeManager.getActiveNode() != null)
-      {
-        return;
-      }
-
-      //TODO: Prevent the symoultaneous addition and selection, prevent addition of more than one node at a time
-      var newNodeController = nodeManager.TryAddingNodeAtPoint(closestOnCollider);
-      if (newNodeController == null)
-      {
-        return;
-      }
-
-      addToSplineAndRebuild(newNodeController);
-    }
-  }
-
-  private Vector3 GetMouseWorldPos()
-  {
-    Vector2 mousePos2D = Mouse.current.position.ReadValue();
-
-    Vector3 mousePos3D = new(mousePos2D.x, mousePos2D.y, 0);
-    return mainCam.ScreenToWorldPoint(mousePos3D);
-  }
-
-  private Vector2 GetClosestPointOnColliderEdge(Vector2 point)
-  {
-    dummyCollider.transform.position = point;
-
-    // 2. Calculate the distance between the Polygon and the Dummy
-    ColliderDistance2D dist = splineCollider.Distance(dummyCollider);
-
-    // dist.pointA is the closest point on the EDGE of the splineCollider.
-    // Even if the mouse is inside, it returns the closest perimeter point!
-    return dist.pointA;
-  }
-
-  //Doubled triangle area 
-  private float GetProximityMetric(Vector2 a, Vector2 b, Vector2 c)
-  {
-    var c3 = (Vector3)c;
-    return Vector3.Cross((Vector3)a - c3, (Vector3)b - c3).magnitude;
-  }
-
-  private int findIndex(NodeController nodeController)
-  {
-    if (nodes.Count <= 1)
-    {
-      return nodes.Count;
+        this.doubleArea = doubleArea;
+        this.baseLen = baseLen;
     }
 
-    var answer = 1;
-    var smallestArea = GetProximityMetric(nodes[0].getCoordinates(), nodes[1].getCoordinates(), nodeController.getCoordinates());
-
-    for (int i = 2; i <= nodes.Count; i++)
+    //Check if the height is bigger
+    public int CompareTo(DoubledAreaAndBaseLength other)
     {
-      var currArea = GetProximityMetric(nodes[i - 1].getCoordinates(), nodes[i % nodes.Count].getCoordinates(), nodeController.getCoordinates());
-      if (currArea < smallestArea)
-      {
-        smallestArea = currArea;
-        answer = i;
-      }
+        if (other is null)
+        {
+            Debug.LogWarning("This shouldn't happen");
+            return 1;
+        }
+        return (other.baseLen * doubleArea).CompareTo(baseLen * other.doubleArea);
+    }
+}
+
+public class PolygonBuilder : MonoBehaviour, INodeContainer
+{
+    private SpriteShapeController shape;
+    private Spline spline;
+    private Camera mainCam;
+    private Collider2D splineCollider;
+
+    private readonly List<INodeHandle> nodes = new();
+
+
+    [SerializeField] private GameObject nodeManagerSource;
+
+    public INodeManager nodeManager;
+
+    [SerializeField]
+    public float addingPointThreeshold = 1f;
+
+    public IInputInformation inputInformation;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        nodeManager = nodeManagerSource.GetComponent<INodeManager>();
+        inputInformation = nodeManagerSource.GetComponent<IInputInformation>();
+
+        if (nodeManager == null)
+            Debug.LogError("The assigned object does not implement INodeManager!");
+
+        if (inputInformation == null)
+            Debug.LogError("The assigned object does not implement IInputInformation!");
+
+
+        shape = GetComponent<SpriteShapeController>();
+        spline = shape.spline;
+        mainCam = Camera.main;
+        splineCollider = GetComponent<Collider2D>();
+        Debug.Log("Started");
+
+        for (int i = 0; i < spline.GetPointCount(); i++)
+        {
+            var splinePoint = spline.GetPosition(i) + shape.transform.position;
+            var controller = nodeManager.TryAddingNodeAtPoint(splinePoint);
+            if (controller == null)
+            {
+                Debug.LogError($"This controller shouldn't be null!!! index: {i}");
+            }
+            else
+            {
+                AddToSpline(controller);
+            }
+        }
     }
 
-    return answer;
-  }
-
-  private void addToSpline(NodeController nodeController)
-  {
-    //TODO: check whether the attached script objects change during the runtime
-    Debug.Log($"Adding to spline: {nodeController.getCoordinates()}");
-    //TODO: change this
-    nodes.Insert(findIndex(nodeController), nodeController);
-
-    nodeController.NodeDeleted += (_, _) => removeFromSpline(nodeController);
-    nodeController.NodeMoved += (_, _) => rebuildTheSpline();
-  }
-
-  private void addToSplineAndRebuild(NodeController nodeController, bool withRebuild = true)
-  {
-    addToSpline(nodeController);
-
-    if (withRebuild)
+    // Update is called once per frame
+    void Update()
     {
-      rebuildTheSpline();
-    }
-  }
+        Vector2 mousePos = inputInformation.GetMouseWorldPos();
+        var closestOnCollider = GetClosestPointOnCollider(mousePos);
 
-  private void rebuildTheSpline()
-  {
+        if (inputInformation.WeClickedThisFrame())
+        {
+            Debug.Log($"Closest on collider: {closestOnCollider}");
+            if (Vector2.Distance(mousePos, closestOnCollider) > addingPointThreeshold || nodeManager.GetActiveNode() != null)
+            {
+                return;
+            }
 
-    spline.Clear();
-    for (int i = 0; i < nodes.Count; i++)
-    {
-      spline.InsertPointAt(i, nodes[i].getCoordinates() - (Vector2)shape.transform.position);
+            //TODO: Prevent the symoultaneous addition and selection, prevent addition of more than one node at a time
+            var newNodeController = nodeManager.TryAddingNodeAtPoint(closestOnCollider);
+
+            if (newNodeController == null)
+            {
+                return;
+            }
+
+            AddToSplineAndRebuild(newNodeController);
+        }
     }
 
-    Debug.Log($"Rebuilt the spline, new spline is {spline.GetPointCount()}");
-
-    shape.RefreshSpriteShape();
-    shape.BakeCollider();
-  }
-
-  private void removeFromSpline(NodeController nodeController)
-  {
-    nodes.Remove(nodeController);
-    rebuildTheSpline();
-    Debug.Log($"Removing from spline: {nodeController.getCoordinates()}");
-  }
-
-  void OnDestroy()
-  {
-    if (dummyCollider != null)
+    private Vector2 GetClosestPointOnCollider(Vector2 point)
     {
-      Destroy(dummyCollider.gameObject);
+        return splineCollider.ClosestPoint(point);
     }
-  }
+
+    private static DoubledAreaAndBaseLength GetProximityMetric(Vector2 a, Vector2 b, Vector2 other)
+    {
+        return new(Vector3.Cross((Vector3)(a - other), (Vector3)(b - other)).magnitude, Vector2.Distance(a, b));
+    }
+
+    private static bool ThereAreObtuseAnglesNearAB(Vector2 A, Vector2 B, Vector2 other)
+    {
+        if (Vector2.Dot(A - B, other - B) < 0 || Vector2.Dot(B - A, other - A) < 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private int FindIndex(INodeHandle nodeController)
+    {
+        if (nodes.Count <= 1)
+        {
+            return nodes.Count;
+        }
+
+        var answer = 1;
+        var a = nodes[0].GetCoordinates();
+        var b = nodes[1].GetCoordinates();
+        var ourNodeCoords = nodeController.GetCoordinates();
+        var smallestVal = GetProximityMetric(a, b, ourNodeCoords);
+
+        for (int i = 2; i <= nodes.Count; i++)
+        {
+            a = b;
+            b = nodes[i % nodes.Count].GetCoordinates();
+
+            if (ThereAreObtuseAnglesNearAB(a, b, ourNodeCoords))
+            {
+                continue;
+            }
+
+            var currVal = GetProximityMetric(a, b, ourNodeCoords);
+
+            if (currVal.CompareTo(smallestVal) < 0)
+            {
+                smallestVal = currVal;
+                answer = i;
+            }
+        }
+
+        return answer;
+    }
+
+    private void AddToSpline(INodeHandle nodeController)
+    {
+        //TODO: check whether the attached script objects change during the runtime
+        Debug.Log($"Adding to spline: {nodeController.GetCoordinates()}");
+        //TODO: change this
+        nodeController.SetTheNodeUp(this, inputInformation);
+        nodes.Insert(FindIndex(nodeController), nodeController);
+    }
+
+    private void AddToSplineAndRebuild(INodeHandle nodeController)
+    {
+        AddToSpline(nodeController);
+        RebuildTheSpline();
+    }
+
+    private void RebuildTheSpline()
+    {
+        spline.Clear();
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            spline.InsertPointAt(i, (Vector2)nodes[i].GetCoordinates() - (Vector2)shape.transform.position);
+        }
+
+        Debug.Log($"Rebuilt the spline, new spline is {spline.GetPointCount()}");
+
+        shape.RefreshSpriteShape();
+        shape.BakeCollider();
+    }
+
+    private void RemoveFromSpline(INodeHandle nodeController)
+    {
+        nodes.Remove(nodeController);
+        RebuildTheSpline();
+        Debug.Log($"Removing from spline: {nodeController.GetCoordinates()}");
+    }
+
+    bool INodeContainer.TryDeletingThis(INodeHandle node)
+    {
+        if (nodes.Count <= 3 || nodeManager.TryDelete(node) == false)
+        {
+            return false;
+        }
+
+        if (!nodes.Remove(node))
+        {
+            Debug.LogError($"Trying to remove node that is not present the PolygonBuilder structures: {node}");
+            return false;
+        }
+        RemoveFromSpline(node);
+        return true;
+    }
+
+    public bool CanNodeMove(INodeHandle node)
+    {
+        return IsThisNodeActive(node);
+    }
+
+    public bool IsThisNodeActive(INodeHandle node)
+    {
+        return nodeManager.GetActiveNode() == node;
+    }
+
+    public bool TryActivatingTheNode(INodeHandle node)
+    {
+        return nodeManager.TryActivatingNode(node);
+    }
+
+    public void NodeMoved(INodeHandle _)
+    {
+        RebuildTheSpline();
+    }
 }

@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -6387977727153438705, guid: 8219a7041cee212439191d12343c14c2, type: 3}
+  m_Sprite: {fileID: 9060302992342359800, guid: 9ffaa69c591282243827ffc60c459061, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -240,7 +240,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1699452002307262520, guid: e64c754d5fe45ef47bfa8c1240e47cd7, type: 3}
+  m_Sprite: {fileID: 6186855400393422167, guid: 1fbd7123351f4b94a9c9b978fee6b348, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -364,8 +364,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2562856846963897997}
+  - component: {fileID: 35009340052912991}
+  - component: {fileID: 9175531997070321749}
   m_Layer: 0
-  m_Name: Wheel
+  m_Name: MotorWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,3 +390,61 @@ Transform:
   - {fileID: 6565049295935961597}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+--- !u!114 &35009340052912991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8574444926399471992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3dcdbf62a697124781a8584f10ab96c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MotorWheel
+  motorForce: 10
+  hinge: {fileID: 2871179765715236392}
+--- !u!114 &9175531997070321749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8574444926399471992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643f1981fff967440b1b48813dbc0c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PartLogic
+  actionReceivers:
+  - actionType: 0
+    startAction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 35009340052912991}
+          m_TargetAssemblyTypeName: MotorWheel, Assembly-CSharp
+          m_MethodName: StartMotor
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stopAction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 35009340052912991}
+          m_TargetAssemblyTypeName: MotorWheel, Assembly-CSharp
+          m_MethodName: StopMotor
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

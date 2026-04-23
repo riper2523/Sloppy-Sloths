@@ -14,6 +14,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tilemap grid;
     [SerializeField] private Tile tile;
     [SerializeField] private CinemachineTargetGroup targetGroup;
+    [SerializeField] private InventoryManager inventoryManager;
     private Transform vehicleParent;
 
     struct GridCell
@@ -37,6 +38,33 @@ public class GridManager : MonoBehaviour
 
         BuildGrid();
     }
+    void Update()
+    {
+        if (clickAction.WasPressedThisFrame())
+        {
+            if (actPartData != null)
+            {
+                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                Vector3Int tilePos = grid.WorldToCell(mouseWorldPos);
+
+                int x = tilePos.x - offsetX;
+                int y = tilePos.y - offsetY;
+
+                PlacePart(x, y);
+                actPartData = null;
+            }
+            else
+            {
+                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                Vector3Int tilePos = grid.WorldToCell(mouseWorldPos);
+
+                int x = tilePos.x - offsetX;
+                int y = tilePos.y - offsetY;
+
+                RemovePart(x, y);
+            }
+        }
+    }
     private void BuildGrid()
     {
         for (int x = 0; x < gridSizeX; x++)
@@ -48,19 +76,6 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-    void Update()
-    {
-        if (clickAction.WasPressedThisFrame() && actPartData != null)
-        {
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            Vector3Int tilePos = grid.WorldToCell(mouseWorldPos);
-
-            int x = tilePos.x - offsetX;
-            int y = tilePos.y - offsetY;
-
-            PlacePart(x, y);
-        }
-    }
 
     public void SelectPart(PartData partData)
     {
@@ -69,17 +84,34 @@ public class GridManager : MonoBehaviour
 
     public void PlacePart(int x, int y)
     {
-        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY)
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY || inventoryManager.TryUsePart(actPartData) == false)
         {
             return;
         }
 
         int rotation = FindBestRotation(x, y, actPartData);
 
+        if (partDataGrid[x, y].partData != null)
+        {
+            inventoryManager.AddPart(partDataGrid[x, y].partData, 1);
+        }
         partDataGrid[x, y] = new GridCell { partData = actPartData, Rotation = rotation };
 
         Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
         grid.SetTile(tilePosition, actPartData.partTile);
+    }
+    public void RemovePart(int x, int y)
+    {
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY || partDataGrid[x, y].partData == null)
+        {
+            return;
+        }
+
+        inventoryManager.AddPart(partDataGrid[x, y].partData, 1);
+        partDataGrid[x, y] = new GridCell { partData = null, Rotation = 0 };
+
+        Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
+        grid.SetTile(tilePosition, tile);
     }
 
     private int FindBestRotation(int x, int y, PartData partToPlace)

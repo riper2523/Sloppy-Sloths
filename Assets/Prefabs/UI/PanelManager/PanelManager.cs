@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PanelManager : MonoBehaviour
@@ -14,14 +15,14 @@ public class PanelManager : MonoBehaviour
 
     private GameObject activePanel;
 
-    void Start()
+    void Awake()
     {
         gamePanel.SetActive(false);
-        buildPanel.SetActive(false);
+        buildPanel.SetActive(true);
         winPanel.SetActive(false);
 
-        startPanel.SetActive(true);
-        activePanel = startPanel;
+        // startPanel.SetActive(true);
+        activePanel = buildPanel;
     }
 
     public void ShowGamePanel()

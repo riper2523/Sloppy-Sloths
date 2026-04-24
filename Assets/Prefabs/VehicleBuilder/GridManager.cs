@@ -32,14 +32,32 @@ public class GridManager : MonoBehaviour
     private Vector3 cameraPosition;
     private PartData actPartData;
 
-    void Start()
+    public void InitializeLevel(LevelData data)
     {
-        GameObject vehicleGO = new GameObject("Vehicle");
-        vehicleParent = vehicleGO.transform;
+        // 1. Set variables from the level data
+        this.gridSizeX = data.gridSizeX;
+        this.gridSizeY = data.gridSizeY;
+        this.offsetX = data.positionX;
+        this.offsetY = data.positionY;
 
-        clickAction = InputSystem.actions.FindAction("Click");
+        // 2. Setup internal arrays
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
 
+        // 3. Setup vehicle parent (if not already done)
+        if (vehicleParent == null)
+        {
+            GameObject vehicleGO = new GameObject("Vehicle");
+            vehicleParent = vehicleGO.transform;
+        }
+
+        // 4. Input setup
+        if (clickAction == null)
+        {
+            clickAction = InputSystem.actions.FindAction("Click");
+        }
+
+        // 5. Clear old tiles and draw new ones
+        grid.ClearAllTiles();
         BuildGrid();
     }
     void Update()

@@ -6,7 +6,11 @@ PhysicsMaterial2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<<< HEAD:Assets/Prefabs/Terrain/Dirt/Levels/Line/floor.physicsMaterial2D
   m_Name: Dirt Ground
+========
+  m_Name: Rock Material
+>>>>>>>> 3d1d2a64f2a7cbd04b5adfbbc1fabfec84a81a6b:Assets/Prefabs/Terrain/Rock/Rock Material.physicsMaterial2D
   serializedVersion: 2
   friction: 1
   bounciness: 0.2

@@ -58,9 +58,12 @@ TagManager:
   - name: Foreground
     uniqueID: 1482146055
     locked: 0
+<<<<<<< HEAD
   - name: New Layer 5
     uniqueID: 3382230533
     locked: 0
+=======
+>>>>>>> 3d1d2a64f2a7cbd04b5adfbbc1fabfec84a81a6b
   m_RenderingLayers:
   - Default
   m_MigratedRenderPipelines: []

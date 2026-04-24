@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MotorWheel : MonoBehaviour
 {
-    [SerializeField] private float motorForce = 10f;
+    [SerializeField] private float motorForce = 50f;
     [SerializeField] private HingeJoint2D hinge;
 
     void Start()
@@ -11,6 +11,7 @@ public class MotorWheel : MonoBehaviour
         motor.maxMotorTorque = motorForce;
         motor.motorSpeed = -1000f;
         hinge.motor = motor;
+        hinge.useMotor = false;
     }
     public void StartMotor()
     {

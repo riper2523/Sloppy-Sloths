@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
   m_Name: MotorWheelPD
   m_EditorClassIdentifier: Assembly-CSharp::PartData
-  partPrefab: {fileID: 0}
+  partPrefab: {fileID: 8574444926399471992, guid: c32c107539e4ae54ea8ed05e7f5447cf, type: 3}
   partSpriteUI: {fileID: 9060302992342359800, guid: 9ffaa69c591282243827ffc60c459061, type: 3}
   partName: MotorWheel
   partTile: {fileID: 11400000, guid: 9c505c6d4ca5880409a11f8faf884ee1, type: 2}

@@ -15,6 +15,10 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tile tile;
     [SerializeField] private CinemachineTargetGroup targetGroup;
     [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private GameObject gameToggleParent;
+    [SerializeField] private GameObject gameTogglePrefab;
+
+    private Dictionary<ActionType, GameToggleScript> actionToggles = new Dictionary<ActionType, GameToggleScript>();
     private Transform vehicleParent;
 
     struct GridCell
@@ -217,6 +221,26 @@ public class GridManager : MonoBehaviour
                 {
                     TryCreateJoint(x, y, x, y + 1, spawnedParts);
                 }
+                PartLogic logic = spawnedParts[x, y].GetComponentInChildren<PartLogic>();
+                if (logic != null)
+                {
+                    foreach (var action in logic.actionReceivers)
+                    {
+                        if (actionToggles.TryGetValue(action.actionType, out GameToggleScript toggle))
+                        {
+                            toggle.startEvent.AddListener(() => action.startAction.Invoke());
+                            toggle.endEvent.AddListener(() => action.stopAction.Invoke());
+                        }
+                        else
+                        {
+                            GameObject toggleGO = Instantiate(gameTogglePrefab, gameToggleParent.transform);
+                            GameToggleScript toggleScript = toggleGO.GetComponent<GameToggleScript>();
+                            toggleScript.startEvent.AddListener(() => action.startAction.Invoke());
+                            toggleScript.endEvent.AddListener(() => action.stopAction.Invoke());
+                            actionToggles[action.actionType] = toggleScript;
+                        }
+                    }
+                }
             }
         }
 
@@ -266,6 +290,11 @@ public class GridManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        foreach (var toggle in actionToggles.Values)
+        {
+            Destroy(toggle.gameObject);
+        }
+        actionToggles.Clear();
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
         grid.ClearAllTiles();
 

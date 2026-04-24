@@ -17,12 +17,13 @@ public class PanelManager : MonoBehaviour
 
     void Awake()
     {
+        startPanel.SetActive(true);
         gamePanel.SetActive(false);
-        buildPanel.SetActive(true);
+        buildPanel.SetActive(false);
         winPanel.SetActive(false);
 
-        // startPanel.SetActive(true);
-        activePanel = buildPanel;
+        startPanel.SetActive(true);
+        activePanel = startPanel;
     }
 
     public void ShowGamePanel()

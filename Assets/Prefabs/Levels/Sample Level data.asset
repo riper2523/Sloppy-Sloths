@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
   m_Name: Sample Level data
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  mapPrefab: {fileID: 8161300626565764046, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
-  gridSizeX: 3
+  mapPrefab: {fileID: 1339537454268714022, guid: 8a9788441e75ab44ca7671d30e5a4c1e, type: 3}
+  gridSizeX: 5
   gridSizeY: 3
-  positionX: -3
-  positionY: -3
+  positionX: -5
+  positionY: 6
   startingItems:
   - part: {fileID: 11400000, guid: 9adcb29132f44fc40892a762a23622c1, type: 2}
     amount: 2

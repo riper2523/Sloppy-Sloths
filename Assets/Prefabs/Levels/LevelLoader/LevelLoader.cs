@@ -28,6 +28,8 @@ public class LevelLoader : MonoBehaviour
 
         // 2. Spawn the new map
         currentMapInstance = Instantiate(levelData.mapPrefab, environmentParent);
+        currentMapInstance.transform.localPosition = Vector3.zero; 
+        currentMapInstance.transform.localRotation = Quaternion.identity;
 
         // 3. Initialize the Inventory
         inventoryManager.InitializeLevel(levelData.startingItems);
@@ -35,7 +37,16 @@ public class LevelLoader : MonoBehaviour
         // 4. Initialize the Grid
         gridManager.InitializeLevel(levelData);
 
-        
+
         if (panelManager != null) panelManager.ShowBuildPanel(); 
+    }
+
+    public void ReloadCurrentLevel()
+    {
+        if (currentLevelToLoad != null)
+        {
+            LoadLevel(currentLevelToLoad);
+            gridManager.Restart();
+        }
     }
 }

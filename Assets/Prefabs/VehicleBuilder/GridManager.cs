@@ -31,35 +31,60 @@ public class GridManager : MonoBehaviour
     private InputAction clickAction;
     private Vector3 cameraPosition;
     private PartData actPartData;
+    private Transform buildCameraTarget;
 
     public void InitializeLevel(LevelData data)
     {
-        // 1. Set variables from the level data
-        this.gridSizeX = data.gridSizeX;
-        this.gridSizeY = data.gridSizeY;
-        this.offsetX = data.positionX;
-        this.offsetY = data.positionY;
 
-        // 2. Setup internal arrays
-        partDataGrid = new GridCell[gridSizeX, gridSizeY];
-
-        // 3. Setup vehicle parent (if not already done)
         if (vehicleParent == null)
         {
             GameObject vehicleGO = new GameObject("Vehicle");
             vehicleParent = vehicleGO.transform;
         }
 
-        // 4. Input setup
         if (clickAction == null)
         {
             clickAction = InputSystem.actions.FindAction("Click");
         }
 
-        // 5. Clear old tiles and draw new ones
+        LoadLevelSettings(data);
+    }
+
+    public void LoadLevelSettings(LevelData data)
+    {
+        this.gridSizeX = data.gridSizeX;
+        this.gridSizeY = data.gridSizeY;
+        this.offsetX = data.positionX; // Make sure this matches your LevelData variable name
+        this.offsetY = data.positionY;
+
+        // 1. MUST keep the GridManager at 0,0,0 so the Tilemap math works perfectly!
+        transform.position = Vector3.zero;
+
+        // 2. Calculate the exact center of the grid squares
+        float centerX = this.offsetX + (this.gridSizeX / 2f);
+        float centerY = this.offsetY + (this.gridSizeY / 2f);
+
+        // 3. Create an invisible Camera Target for Cinemachine to look at
+        if (buildCameraTarget == null)
+        {
+            buildCameraTarget = new GameObject("BuildCameraTarget").transform;
+            buildCameraTarget.SetParent(this.transform);
+        }
+        
+        // Move the invisible target to the center
+        buildCameraTarget.position = new Vector3(centerX, centerY, 0);
+
+        // 4. Tell Cinemachine to look at this new invisible target instead of the grid origin
+        targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
+        targetGroup.AddMember(buildCameraTarget, 1f, 0f);
+        
+        partDataGrid = new GridCell[gridSizeX, gridSizeY];
+        
+        // Clear and redraw the build grid tiles
         grid.ClearAllTiles();
         BuildGrid();
     }
+
     void Update()
     {
         if (clickAction.WasPressedThisFrame())
@@ -316,8 +341,17 @@ public class GridManager : MonoBehaviour
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
         grid.ClearAllTiles();
 
+        // Fix the camera snap back to the build target on restart
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
-        targetGroup.AddMember(transform, 1f, 0f);
+        if (buildCameraTarget != null)
+        {
+            targetGroup.AddMember(buildCameraTarget, 1f, 0f);
+        }
+        else
+        {
+            targetGroup.AddMember(transform, 1f, 0f);
+        }
+
         BuildGrid();
     }
 }

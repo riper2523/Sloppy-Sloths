@@ -3,8 +3,7 @@ using UnityEngine;
 public class LevelLoader : MonoBehaviour
 {
     [SerializeField] private LevelData currentLevelToLoad;
-    [SerializeField] private Transform environmentParent; // Where to spawn the map
-    
+    [SerializeField] private Transform environmentParent;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private PanelManager panelManager;
@@ -12,10 +11,8 @@ public class LevelLoader : MonoBehaviour
 
     private GameObject currentMapInstance;
 
-    void Start()
+    private void Start()
     {
-        // For testing purposes, load the level assigned in the inspector on Start.
-        // Later, you will call this from a Level Select Menu.
         if (currentLevelToLoad != null)
         {
             LoadLevel(currentLevelToLoad);
@@ -24,30 +21,30 @@ public class LevelLoader : MonoBehaviour
 
     public void LoadLevel(LevelData levelData)
     {
-        // 1. Clean up old level if one exists
-        if (currentMapInstance != null) Destroy(currentMapInstance);
+        currentLevelToLoad = levelData;
 
-        // 2. Spawn the new map
+        if (currentMapInstance != null)
+        {
+            Destroy(currentMapInstance);
+        }
+
         currentMapInstance = Instantiate(levelData.mapPrefab, environmentParent);
-        currentMapInstance.transform.localPosition = Vector3.zero; 
-        currentMapInstance.transform.localRotation = Quaternion.identity;
+        currentMapInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
         if (finishLine != null)
         {
             finishLine.position = levelData.finishLinePosition;
             finishLine.localScale = levelData.finishLineScale;
-
             finishLine.gameObject.SetActive(true);
         }
 
-        // 3. Initialize the Inventory
         inventoryManager.InitializeLevel(levelData.startingItems);
-
-        // 4. Initialize the Grid
         gridManager.InitializeLevel(levelData);
 
-
-        if (panelManager != null) panelManager.ShowBuildPanel(); 
+        if (panelManager != null)
+        {
+            panelManager.ShowBuildPanel();
+        }
     }
 
     public void ReloadCurrentLevel()

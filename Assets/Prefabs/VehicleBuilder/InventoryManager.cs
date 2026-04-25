@@ -1,29 +1,31 @@
 using System.Collections.Generic;
-using System.Data;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    [SerializeField] GameObject partButtonPrefab;
-    [SerializeField] GameObject buttonParent;
-    [SerializeField] Inventory inventory;
-    [SerializeField] GridManager gridManager;
+    [SerializeField] private GameObject partButtonPrefab;
+    [SerializeField] private GameObject buttonParent;
+    [SerializeField] private Inventory inventory;
+    [SerializeField] private GridManager gridManager;
+    
     private Dictionary<PartData, PartButtonScript> itemsMap = new Dictionary<PartData, PartButtonScript>();
 
     public void InitializeLevel(List<InventoryEntry> startingItems)
     {
-        // Clear old buttons
-        foreach (Transform child in buttonParent.transform) Destroy(child.gameObject);
+        foreach (Transform child in buttonParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
         itemsMap.Clear();
-        inventory.itemsMap.Clear(); // Clear the underlying SO dictionary
+        inventory.itemsMap.Clear();
 
-        // Setup new items
         foreach (var entry in startingItems)
         {
             AddPart(entry.part, entry.amount);
         }
     }
+
     public bool TryUsePart(PartData part)
     {
         if (inventory.itemsMap.TryGetValue(part, out int count) && count > 0)
@@ -37,6 +39,7 @@ public class InventoryManager : MonoBehaviour
         }
         return false;
     }
+
     public bool AddPart(PartData part, int amount)
     {
         if (inventory.itemsMap.ContainsKey(part))
@@ -55,6 +58,7 @@ public class InventoryManager : MonoBehaviour
             return true;
         }
     }
+
     private void CreateButtonForPart(PartData part, int count)
     {
         GameObject buttonObj = Instantiate(partButtonPrefab, buttonParent.transform);

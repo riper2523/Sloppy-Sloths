@@ -8,8 +8,7 @@ public class GridManager : MonoBehaviour
 {
     [SerializeField] private int offsetX = 3;
     [SerializeField] private int offsetY = 3;
-    [SerializeField] private int gridSizeX = 5;
-    [SerializeField] private int gridSizeY = 5;
+    [SerializeField] private int gridSizeX = 5;[SerializeField] private int gridSizeY = 5;
 
     [SerializeField] private Tilemap grid;
     [SerializeField] private Tile tile;
@@ -20,6 +19,10 @@ public class GridManager : MonoBehaviour
 
     private Dictionary<ActionType, GameToggleScript> actionToggles = new Dictionary<ActionType, GameToggleScript>();
     private Transform vehicleParent;
+    private GridCell[,] partDataGrid;
+    private InputAction clickAction;
+    private PartData actPartData;
+    private Transform buildCameraTarget;
 
     struct GridCell
     {
@@ -27,15 +30,8 @@ public class GridManager : MonoBehaviour
         public int Rotation;
     }
 
-    private GridCell[,] partDataGrid;
-    private InputAction clickAction;
-    private Vector3 cameraPosition;
-    private PartData actPartData;
-    private Transform buildCameraTarget;
-
     public void InitializeLevel(LevelData data)
     {
-
         if (vehicleParent == null)
         {
             GameObject vehicleGO = new GameObject("Vehicle");
@@ -52,66 +48,55 @@ public class GridManager : MonoBehaviour
 
     public void LoadLevelSettings(LevelData data)
     {
-        this.gridSizeX = data.gridSizeX;
-        this.gridSizeY = data.gridSizeY;
-        this.offsetX = data.positionX; // Make sure this matches your LevelData variable name
-        this.offsetY = data.positionY;
+        gridSizeX = data.gridSizeX;
+        gridSizeY = data.gridSizeY;
+        offsetX = data.positionX;
+        offsetY = data.positionY;
 
-        // 1. MUST keep the GridManager at 0,0,0 so the Tilemap math works perfectly!
         transform.position = Vector3.zero;
 
-        // 2. Calculate the exact center of the grid squares
-        float centerX = this.offsetX + (this.gridSizeX / 2f);
-        float centerY = this.offsetY + (this.gridSizeY / 2f);
+        float centerX = offsetX + (gridSizeX / 2f);
+        float centerY = offsetY + (gridSizeY / 2f);
 
-        // 3. Create an invisible Camera Target for Cinemachine to look at
         if (buildCameraTarget == null)
         {
             buildCameraTarget = new GameObject("BuildCameraTarget").transform;
             buildCameraTarget.SetParent(this.transform);
         }
         
-        // Move the invisible target to the center
         buildCameraTarget.position = new Vector3(centerX, centerY, 0);
 
-        // 4. Tell Cinemachine to look at this new invisible target instead of the grid origin
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
         targetGroup.AddMember(buildCameraTarget, 1f, 0f);
         
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
         
-        // Clear and redraw the build grid tiles
         grid.ClearAllTiles();
         BuildGrid();
     }
 
-    void Update()
+    private void Update()
     {
         if (clickAction.WasPressedThisFrame())
         {
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            Vector3Int tilePos = grid.WorldToCell(mouseWorldPos);
+
+            int x = tilePos.x - offsetX;
+            int y = tilePos.y - offsetY;
+
             if (actPartData != null)
             {
-                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                Vector3Int tilePos = grid.WorldToCell(mouseWorldPos);
-
-                int x = tilePos.x - offsetX;
-                int y = tilePos.y - offsetY;
-
                 PlacePart(x, y);
                 actPartData = null;
             }
             else
             {
-                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                Vector3Int tilePos = grid.WorldToCell(mouseWorldPos);
-
-                int x = tilePos.x - offsetX;
-                int y = tilePos.y - offsetY;
-
                 RemovePart(x, y);
             }
         }
     }
+
     private void BuildGrid()
     {
         for (int x = 0; x < gridSizeX; x++)
@@ -131,7 +116,7 @@ public class GridManager : MonoBehaviour
 
     public void PlacePart(int x, int y)
     {
-        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY || inventoryManager.TryUsePart(actPartData) == false)
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY || !inventoryManager.TryUsePart(actPartData))
         {
             return;
         }
@@ -142,11 +127,12 @@ public class GridManager : MonoBehaviour
         {
             inventoryManager.AddPart(partDataGrid[x, y].partData, 1);
         }
+        
         partDataGrid[x, y] = new GridCell { partData = actPartData, Rotation = rotation };
-
         Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
         grid.SetTile(tilePosition, actPartData.partTile);
     }
+
     public void RemovePart(int x, int y)
     {
         if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY || partDataGrid[x, y].partData == null)
@@ -165,12 +151,11 @@ public class GridManager : MonoBehaviour
     {
         for (int r = 0; r < 4; r++)
         {
-            if (CanAttachWithRotation(x, y, partToPlace, r))
-                return r;
+            if (CanAttachWithRotation(x, y, partToPlace, r)) return r;
         }
-
         return 0;
     }
+
     private bool CanAttachWithRotation(int x, int y, PartData part, int rotation)
     {
         bool hasAnyNeighbor = false;
@@ -200,17 +185,13 @@ public class GridManager : MonoBehaviour
             if (part.HasAttachment(3, rotation)) isSuccessfullyAttached = true;
         }
 
-        if (!hasAnyNeighbor)
-            return true;
-
-        return isSuccessfullyAttached;
+        return !hasAnyNeighbor || isSuccessfullyAttached;
     }
 
     public void Build()
     {
-        cameraPosition = targetGroup.transform.position;
         GameObject[,] spawnedParts = new GameObject[gridSizeX, gridSizeY];
-        var newTargets = new System.Collections.Generic.List<CinemachineTargetGroup.Target>();
+        var newTargets = new List<CinemachineTargetGroup.Target>();
 
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -222,9 +203,9 @@ public class GridManager : MonoBehaviour
                     worldPos.y += grid.cellSize.y / 2;
                     worldPos.x += grid.cellSize.x / 2;
 
-
-                    Quaternion finalRotation = partDataGrid[x, y].partData.partPrefab.transform.rotation
-                                                                 * Quaternion.Euler(0, 0, -partDataGrid[x, y].Rotation * 90);
+                    Quaternion finalRotation = partDataGrid[x, y].partData.partPrefab.transform.rotation 
+                                               * Quaternion.Euler(0, 0, -partDataGrid[x, y].Rotation * 90);
+                    
                     GameObject newPart = Instantiate(partDataGrid[x, y].partData.partPrefab, worldPos, finalRotation);
                     Rigidbody2D rb = newPart.GetComponentInChildren<Rigidbody2D>();
 
@@ -250,10 +231,7 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if (spawnedParts[x, y] == null)
-                {
-                    continue;
-                }
+                if (spawnedParts[x, y] == null) continue;
 
                 if (x + 1 < gridSizeX && spawnedParts[x + 1, y] != null)
                 {
@@ -264,6 +242,7 @@ public class GridManager : MonoBehaviour
                 {
                     TryCreateJoint(x, y, x, y + 1, spawnedParts);
                 }
+                
                 PartLogic logic = spawnedParts[x, y].GetComponentInChildren<PartLogic>();
                 if (logic != null)
                 {
@@ -289,6 +268,7 @@ public class GridManager : MonoBehaviour
 
         grid.ClearAllTiles();
     }
+
     private void TryCreateJoint(int xA, int yA, int xB, int yB, GameObject[,] spawnedParts)
     {
         GridCell cellA = partDataGrid[xA, yA];
@@ -300,14 +280,12 @@ public class GridManager : MonoBehaviour
         {
             bool aHasRight = cellA.partData.HasAttachment(1, cellA.Rotation);
             bool bHasLeft = cellB.partData.HasAttachment(3, cellB.Rotation);
-
             canAttach = aHasRight && bHasLeft;
         }
         else if (yB > yA)
         {
             bool aHasUp = cellA.partData.HasAttachment(0, cellA.Rotation);
             bool bHasDown = cellB.partData.HasAttachment(2, cellB.Rotation);
-
             canAttach = aHasUp && bHasDown;
         }
 
@@ -316,6 +294,7 @@ public class GridManager : MonoBehaviour
             CreateJoint(spawnedParts[xA, yA], spawnedParts[xB, yB]);
         }
     }
+
     private void CreateJoint(GameObject partA, GameObject partB)
     {
         Rigidbody2D rbA = partA.GetComponentInChildren<Rigidbody2D>();
@@ -337,11 +316,11 @@ public class GridManager : MonoBehaviour
         {
             Destroy(toggle.gameObject);
         }
+        
         actionToggles.Clear();
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
         grid.ClearAllTiles();
 
-        // Fix the camera snap back to the build target on restart
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
         if (buildCameraTarget != null)
         {

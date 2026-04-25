@@ -13,4 +13,8 @@ public class LevelData : ScriptableObject
 
     [Header("Starting Inventory")]
     public List<InventoryEntry> startingItems;
+
+    [Header("Finish Line Settings")]
+    public Vector3 finishLinePosition;
+    public Vector3 finishLineScale = Vector3.one;
 }

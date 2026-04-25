@@ -8,6 +8,7 @@ public class LevelLoader : MonoBehaviour
     [SerializeField] private GridManager gridManager;
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private PanelManager panelManager;
+    [SerializeField] private Transform finishLine;
 
     private GameObject currentMapInstance;
 
@@ -30,6 +31,14 @@ public class LevelLoader : MonoBehaviour
         currentMapInstance = Instantiate(levelData.mapPrefab, environmentParent);
         currentMapInstance.transform.localPosition = Vector3.zero; 
         currentMapInstance.transform.localRotation = Quaternion.identity;
+
+        if (finishLine != null)
+        {
+            finishLine.position = levelData.finishLinePosition;
+            finishLine.localScale = levelData.finishLineScale;
+
+            finishLine.gameObject.SetActive(true);
+        }
 
         // 3. Initialize the Inventory
         inventoryManager.InitializeLevel(levelData.startingItems);

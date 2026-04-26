@@ -75,12 +75,44 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2800000, guid: e9da9397ffdb7ac4395f8d03d4874b46, type: 3}
     - target: {fileID: 835932062699099420, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 835932062699099420, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -26256415
+      objectReference: {fileID: 0}
+    - target: {fileID: 835932062699099420, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
       propertyPath: m_DynamicOccludee
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1473490358235826920, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1473490358235826920, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -720387015
+      objectReference: {fileID: 0}
+    - target: {fileID: 1725075306218958015, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1725075306218958015, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -26256415
       objectReference: {fileID: 0}
     - target: {fileID: 1725075306218958015, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
       propertyPath: m_DynamicOccludee
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4080950326351414668, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4080950326351414668, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -26256415
       objectReference: {fileID: 0}
     - target: {fileID: 4080950326351414668, guid: 237882605b7ca3e48b3f1dc233baf15e, type: 3}
       propertyPath: m_DynamicOccludee

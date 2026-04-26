@@ -105,7 +105,6 @@ public class GridManager : MonoBehaviour
             {
                 Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
                 
-                // Merged from Main: Keeps placed parts visible if the grid is redrawn
                 if (partDataGrid[x, y].partData == null)
                 {
                     grid.SetTile(tilePosition, tile);
@@ -331,14 +330,7 @@ public class GridManager : MonoBehaviour
         grid.ClearAllTiles();
 
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
-        if (buildCameraTarget != null)
-        {
-            targetGroup.AddMember(buildCameraTarget, 1f, 0f);
-        }
-        else
-        {
-            targetGroup.AddMember(transform, 1f, 0f);
-        }
+        targetGroup.AddMember(buildCameraTarget, 1f, 0f);
 
         BuildGrid();
     }

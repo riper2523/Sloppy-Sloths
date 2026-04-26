@@ -46,5 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
   partButtonPrefab: {fileID: 7026260599908969885, guid: 82ef8314f48f8aa4db4ca951b4a4543d, type: 3}
   buttonParent: {fileID: 0}
+  removePartButtonPrefab: {fileID: 7026260599908969885, guid: 14ca6350c60ed384ab947ed802a26eac, type: 3}
   inventory: {fileID: 11400000, guid: d62eb77c916179d47b52fe5dfb41f387, type: 2}
   gridManager: {fileID: 0}

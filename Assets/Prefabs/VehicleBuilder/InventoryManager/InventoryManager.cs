@@ -1,18 +1,18 @@
 using System.Collections.Generic;
-using System.Data;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
     [SerializeField] GameObject partButtonPrefab;
     [SerializeField] GameObject buttonParent;
+    [SerializeField] GameObject removePartButtonPrefab;
     [SerializeField] Inventory inventory;
     [SerializeField] GridManager gridManager;
     private Dictionary<PartData, PartButtonScript> itemsMap = new Dictionary<PartData, PartButtonScript>();
 
     void Start()
     {
+        CreateRemovePartButton();
         foreach (var entry in inventory.itemsMap)
         {
             CreateButtonForPart(entry.Key, entry.Value);
@@ -56,5 +56,11 @@ public class InventoryManager : MonoBehaviour
         button.Initialize(part, gridManager);
         button.SetPartCount(count);
         itemsMap.Add(part, button);
+    }
+    private void CreateRemovePartButton()
+    {
+        GameObject buttonObj = Instantiate(removePartButtonPrefab, buttonParent.transform);
+        RemovePartButtonScript button = buttonObj.GetComponent<RemovePartButtonScript>();
+        button.Initialize(gridManager);
     }
 }

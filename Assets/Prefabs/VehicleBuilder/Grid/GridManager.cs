@@ -29,7 +29,6 @@ public class GridManager : MonoBehaviour
 
     private GridCell[,] partDataGrid;
     private InputAction clickAction;
-    private Vector3 cameraPosition;
     private PartData actPartData;
 
     void Start()
@@ -55,7 +54,6 @@ public class GridManager : MonoBehaviour
                 int y = tilePos.y - offsetY;
 
                 PlacePart(x, y);
-                actPartData = null;
             }
             else
             {
@@ -76,7 +74,14 @@ public class GridManager : MonoBehaviour
             for (int y = 0; y < gridSizeY; y++)
             {
                 Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
-                grid.SetTile(tilePosition, tile);
+                if (partDataGrid[x, y].partData == null)
+                {
+                    grid.SetTile(tilePosition, tile);
+                }
+                else
+                {
+                    grid.SetTile(tilePosition, partDataGrid[x, y].partData.partTile);
+                }
             }
         }
     }
@@ -165,7 +170,6 @@ public class GridManager : MonoBehaviour
 
     public void Build()
     {
-        cameraPosition = targetGroup.transform.position;
         GameObject[,] spawnedParts = new GameObject[gridSizeX, gridSizeY];
         var newTargets = new System.Collections.Generic.List<CinemachineTargetGroup.Target>();
 
@@ -295,8 +299,6 @@ public class GridManager : MonoBehaviour
             Destroy(toggle.gameObject);
         }
         actionToggles.Clear();
-        partDataGrid = new GridCell[gridSizeX, gridSizeY];
-        grid.ClearAllTiles();
 
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
         targetGroup.AddMember(transform, 1f, 0f);

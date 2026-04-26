@@ -12,12 +12,17 @@ public class InventoryManager : MonoBehaviour
 
     public void InitializeLevel(Inventory levelInventory)
     {
-        foreach (Transform child in buttonParent.transform) Destroy(child.gameObject);
+        foreach (Transform child in buttonParent.transform) 
+        {
+            Destroy(child.gameObject);
+        }
         itemsMap.Clear();
         inventory = levelInventory;
         CreateRemovePartButton();
-        Debug.Log($"Initializing inventory with {inventory.itemsMap.Count} items.");
-        foreach (var entry in inventory.itemsMap) CreateButtonForPart(entry.Key, entry.Value);
+        foreach (var entry in inventory.itemsMap) 
+        {
+            CreateButtonForPart(entry.Key, entry.Value);
+        }
     }
     public bool TryUsePart(PartData part)
     {

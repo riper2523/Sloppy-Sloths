@@ -131,6 +131,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: VehicleBuilder
       objectReference: {fileID: 0}
+    - target: {fileID: 1517542740764448496, guid: 9243a0a2b6121fb4ebf80e64828403bc, type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1517542740764448496, guid: 9243a0a2b6121fb4ebf80e64828403bc, type: 3}
+      propertyPath: buttonParent
+      value: 
+      objectReference: {fileID: 1320684129}
+    - target: {fileID: 2485891098192372977, guid: 9243a0a2b6121fb4ebf80e64828403bc, type: 3}
+      propertyPath: targetGroup
+      value: 
+      objectReference: {fileID: 718099010}
+    - target: {fileID: 2485891098192372977, guid: 9243a0a2b6121fb4ebf80e64828403bc, type: 3}
+      propertyPath: gameToggleParent
+      value: 
+      objectReference: {fileID: 809121317}
     - target: {fileID: 8658418913961371011, guid: 9243a0a2b6121fb4ebf80e64828403bc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.40915
@@ -223,6 +239,22 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8658418913961371011, guid: 9243a0a2b6121fb4ebf80e64828403bc, type: 3}
   m_PrefabInstance: {fileID: 244778526}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &718099010 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7374679424639045657, guid: acac46a1b5c5a7b47a9f5a992e8a8767, type: 3}
+  m_PrefabInstance: {fileID: 943156852}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5eb80d8e62d9d145bb50fb783c0f731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineTargetGroup
+--- !u!1 &809121317 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6498586304424451181, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+  m_PrefabInstance: {fileID: 1859642501}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &943156852
 PrefabInstance:
@@ -318,6 +350,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 434969277}
     m_Modifications:
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1750498582}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowWinPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PanelManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662554592959528137, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+      propertyPath: finishLineCrossed.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4557566678025298572, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
       propertyPath: m_Name
       value: FinishLine
@@ -367,6 +427,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fae6e8bfe4c43f79d40e27355fd6a60, type: 3}
+--- !u!1 &1320684129 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1486806593197511252, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+  m_PrefabInstance: {fileID: 1859642501}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1412907839 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2485891098192372977, guid: 9243a0a2b6121fb4ebf80e64828403bc, type: 3}
@@ -492,6 +557,14 @@ PrefabInstance:
     - target: {fileID: 2057502682486699738, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LevelLoader, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157542099347747425, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1412907839}
+    - target: {fileID: 5157542099347747425, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Build
       objectReference: {fileID: 0}
     - target: {fileID: 5238168169520266306, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

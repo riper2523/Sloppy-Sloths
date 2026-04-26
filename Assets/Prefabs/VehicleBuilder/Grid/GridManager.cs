@@ -46,8 +46,6 @@ public class GridManager : MonoBehaviour
         offsetX = data.positionX;
         offsetY = data.positionY;
 
-        // transform.position = Vector3.zero;
-
         float centerX = offsetX + (gridSizeX / 2f);
         float centerY = offsetY + (gridSizeY / 2f);
 

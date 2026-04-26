@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5145421176698583032}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -154,7 +154,7 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.05}
+  m_Offset: {x: 0, y: 0}
   m_Radius: 0.38
 --- !u!1 &5578516441331180695
 GameObject:
@@ -345,7 +345,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0.09}
-  m_ConnectedAnchor: {x: 0, y: 0.09}
+  m_ConnectedAnchor: {x: -0.00000000786805, y: 6.878468e-16}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems; // Required for IsPointerOverGameObject
 using Assets.Prefabs.MapBuilder;
 
 class InputInformation : MonoBehaviour, IInputInformation
@@ -27,5 +28,34 @@ class InputInformation : MonoBehaviour, IInputInformation
     public bool WeClickedThisFrame()
     {
         return Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
+    }
+
+    public bool IsCtrlPressed()
+    {
+        return Keyboard.current != null && Keyboard.current.ctrlKey.isPressed;
+    }
+
+    public bool EscapeKeyWasClicked()
+    {
+        return Keyboard.current != null && Keyboard.current.escapeKey.isPressed;
+    }
+
+    public bool VoidWasClicked()
+    {
+        if (WeClickedThisFrame() == false)
+        {
+            return false;
+        }
+
+        if (EventSystem.current == null)
+        {
+            Debug.LogError(
+                    "Event system is null");
+        }
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return false;
+        }
+        return true;
     }
 }

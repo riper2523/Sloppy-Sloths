@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 using Assets.Prefabs.MapBuilder;
 using Assets.Prefabs.MapBuilder.Node;
+using UnityEngine.EventSystems;
 
 //TODO: Check how are GameObjects identified, read about
 // - **Instance ID** (runtime, unique per session):  
@@ -31,8 +32,11 @@ class DoubledAreaAndBaseLength : IComparable<DoubledAreaAndBaseLength>
     }
 }
 
-public class PolygonBuilder : MonoBehaviour, INodeContainer
+public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerClickHandler
 {
+    NodesContainerActivityState ActivityState = NodesContainerActivityState.ContainerInactive;
+    NodesContainerActivityState INodeContainer.ActivityState => ActivityState;
+
     private SpriteShapeController shape;
     private Spline spline;
     private Camera mainCam;
@@ -40,80 +44,65 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer
 
     private readonly List<INodeHandle> nodes = new();
 
-
-    [SerializeField] private GameObject nodeManagerSource;
+    [SerializeField]
+    private GameObject nodePrefab;
 
     public INodeManager nodeManager;
 
-    [SerializeField]
-    public float addingPointThreeshold = 1f;
+    private Color originalColor;
 
-    public IInputInformation inputInformation;
+    [SerializeField]
+    public Color tintColor = Color.gray;
+
+
+    private SpriteShapeRenderer spriteRenderer;
+
+    public event NodeInContainerTriggeredHandler NodeSelected;
+    public event NodeAdditionRequestedHandler NodeAdditionRequested;
+    public event Action ContainerSelected;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        nodeManager = nodeManagerSource.GetComponent<INodeManager>();
-        inputInformation = nodeManagerSource.GetComponent<IInputInformation>();
-
-        if (nodeManager == null)
-            Debug.LogError("The assigned object does not implement INodeManager!");
-
-        if (inputInformation == null)
-            Debug.LogError("The assigned object does not implement IInputInformation!");
-
-
         shape = GetComponent<SpriteShapeController>();
+        spriteRenderer = GetComponent<SpriteShapeRenderer>();
+        originalColor = spriteRenderer.color;
+
         spline = shape.spline;
         mainCam = Camera.main;
         splineCollider = GetComponent<Collider2D>();
         Debug.Log("Awake");
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log($"Was clicked, is active {ActivityState.IsContainerActive()}");
+        if (!ActivityState.IsContainerActive())
+        {
+            ContainerSelected?.Invoke();
+        }
+    }
+
     void Start()
     {
+        Debug.Log("Started the NodeContainer");
         for (int i = 0; i < spline.GetPointCount(); i++)
         {
             var splinePoint = spline.GetPosition(i) + shape.transform.position;
-            var controller = nodeManager.TryAddingNodeAtPoint(splinePoint);
-            if (controller == null)
-            {
-                Debug.LogError($"This controller shouldn't be null!!! index: {i}");
-            }
-            else
-            {
-                AddToSpline(controller);
-            }
+            NodeAdditionRequested?.Invoke(this, splinePoint);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector2 mousePos = inputInformation.GetMouseWorldPos();
-        var closestOnCollider = GetClosestPointOnCollider(mousePos);
-
-        if (inputInformation.WeClickedThisFrame())
+        var nextColor = ActivityState.IsContainerActive() ? tintColor : originalColor;
+        if (spriteRenderer.color != nextColor)
         {
-            Debug.Log($"Closest on collider: {closestOnCollider}");
-            if (Vector2.Distance(mousePos, closestOnCollider) > addingPointThreeshold || nodeManager.GetActiveNode() != null)
-            {
-                return;
-            }
-
-            //TODO: Prevent the symoultaneous addition and selection, prevent addition of more than one node at a time
-            var newNodeController = nodeManager.TryAddingNodeAtPoint(closestOnCollider);
-
-            if (newNodeController == null)
-            {
-                return;
-            }
-
-            AddToSplineAndRebuild(newNodeController);
+            spriteRenderer.color = nextColor;
         }
     }
 
-    private Vector2 GetClosestPointOnCollider(Vector2 point)
+    public Vector2 GetClosestPointOnCollider(Vector2 point)
     {
         return splineCollider.ClosestPoint(point);
     }
@@ -172,16 +161,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer
     {
         //TODO: check whether the attached script objects change during the runtime
         Debug.Log($"Adding to spline: {nodeController.GetCoordinates()}");
-        //TODO: change this
-        nodeController.SetTheNodeUp(this, inputInformation);
-        nodeController.Active = true;
         nodes.Insert(FindIndex(nodeController), nodeController);
-    }
-
-    private void AddToSplineAndRebuild(INodeHandle nodeController)
-    {
-        AddToSpline(nodeController);
-        RebuildTheSpline();
     }
 
     private void RebuildTheSpline()
@@ -205,39 +185,115 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer
         Debug.Log($"Removing from spline: {nodeController.GetCoordinates()}");
     }
 
-    bool INodeContainer.TryDeletingThis(INodeHandle node)
-    {
-        if (nodes.Count <= 3 || nodeManager.TryDelete(node) == false)
-        {
-            return false;
-        }
-
-        if (!nodes.Remove(node))
-        {
-            Debug.LogError($"Trying to remove node that is not present the PolygonBuilder structures: {node}");
-            return false;
-        }
-        RemoveFromSpline(node);
-        return true;
-    }
-
-    public bool CanNodeMove(INodeHandle node)
-    {
-        return IsThisNodeActive(node);
-    }
-
-    public bool IsThisNodeActive(INodeHandle node)
-    {
-        return nodeManager.GetActiveNode() == node;
-    }
-
-    public bool TryActivatingTheNode(INodeHandle node)
-    {
-        return nodeManager.TryActivatingNode(node);
-    }
-
     public void NodeMoved(INodeHandle _)
     {
         RebuildTheSpline();
+    }
+
+    public bool DeletePrimaryNode()
+    {
+        if (nodes.Count <= 3)
+        {
+            return false;
+        }
+
+        if (ActivityState.IsContainerActive() == false)
+        {
+            Debug.LogError("Trying to delete a node from an inactive container");
+            return false;
+        }
+
+        if (ActivityState.ActiveNodes.Count == 0)
+        {
+            Debug.LogError("No primary node selected");
+            return false;
+        }
+
+        var node = ActivityState.ActiveNodes[0];
+        if (!nodes.Remove(node))
+        {
+            Debug.LogError($"Node: {node} not found in NodesContainer: {this} structures");
+            return false;
+        }
+
+        node.Delete();
+        ActivityState.ActiveNodes.Remove(node);
+        RebuildTheSpline();
+        return true;
+    }
+
+    public INodeHandle CreateNode(Vector2 position)
+    {
+        GameObject newClone = Instantiate(nodePrefab, position, Quaternion.identity, transform);
+        var controller = newClone.GetComponent<INodeHandle>();
+        if (controller is null)
+        {
+            Debug.LogError($"Prefab '{nodePrefab.name}' is missing NodeController.", newClone);
+            Destroy(newClone);
+            return null;
+        }
+
+        return controller;
+    }
+
+    public INodeHandle TryAddingNodeAtPoint(Vector2 position)
+    {
+        var controller = CreateNode(position);
+        if (controller is null)
+        {
+            Debug.LogError("The addition was not succesfull");
+            return null;
+        }
+
+        controller.NodeSelected += controller => NodeSelected?.Invoke(this, controller);
+        controller.NodeMoved += _ => RebuildTheSpline();
+
+        AddToSpline(controller);
+        if (nodes.Count >= 3)
+        {
+            RebuildTheSpline();
+        }
+        return controller;
+    }
+
+    public void HandleNodeSelection(INodeHandle nodeHandle)
+    {
+        if (!nodes.Contains(nodeHandle))
+        {
+            Debug.LogError($"Node: {nodeHandle} not found in NodeContainer: {this} structures");
+            return;
+        }
+
+        if (!ActivityState.IsContainerActive())
+        {
+            ActivityState = new NodesContainerActivityState(new() { nodeHandle });
+        }
+        else if (!nodeHandle.Active)
+        {
+            ActivityState.ActiveNodes.Add(nodeHandle);
+        }
+        nodeHandle.Active = true;
+    }
+
+    public void ResetActivityState()
+    {
+        if (ActivityState.ActiveNodes != null)
+        {
+            foreach (var node in ActivityState.ActiveNodes)
+            {
+                node.Active = false;
+            }
+        }
+        ActivityState = NodesContainerActivityState.ContainerInactive;
+    }
+
+    public void Delete()
+    {
+        Destroy(gameObject);
+    }
+
+    public void HandleContainerSelection()
+    {
+        ActivityState = NodesContainerActivityState.ContainerActiveButNoNodesSelected;
     }
 }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8219a7041cee212439191d12343c14c2
+guid: 9ffaa69c591282243827ffc60c459061
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6387977727153438705
-    second: Wheel_0
+      213: 9060302992342359800
+    second: MotorWheel_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Wheel_0
+      name: MotorWheel_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f0089e32a185957a0800000000000000
-      internalID: -6387977727153438705
+      spriteID: 8fe99f76199acbd70800000000000000
+      internalID: 9060302992342359800
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3a96441249089704b933bce2590a67ca
+    spriteID: 5333aa8286c3c1645831874d93b08c5c
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Wheel_0: -6387977727153438705
+      MotorWheel_0: 9060302992342359800
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

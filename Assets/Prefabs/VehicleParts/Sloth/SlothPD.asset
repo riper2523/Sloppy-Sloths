@@ -16,3 +16,4 @@ MonoBehaviour:
   partSpriteUI: {fileID: 6025285105372068174, guid: d9a02e7b0af469840b8b483b85895c1e, type: 3}
   partName: Sloth
   partTile: {fileID: 11400000, guid: 58a86332ebc63db4d9ed29c63d2b45e4, type: 2}
+  attachable: 01010101

@@ -2,19 +2,14 @@ using UnityEngine;
 
 public class PanelManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject gamePanel;
-    [SerializeField]
-    private GameObject buildPanel;
-    [SerializeField]
-    private GameObject winPanel;
-
-    [SerializeField]
-    private GameObject startPanel;
+    [SerializeField] private GameObject gamePanel;
+    [SerializeField] private GameObject buildPanel;
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private GameObject startPanel;
 
     private GameObject activePanel;
 
-    void Start()
+    private void Awake()
     {
         gamePanel.SetActive(false);
         buildPanel.SetActive(false);
@@ -24,27 +19,18 @@ public class PanelManager : MonoBehaviour
         activePanel = startPanel;
     }
 
-    public void ShowGamePanel()
-    {
-        if (activePanel != null)
-            activePanel.SetActive(false);
-        gamePanel.SetActive(true);
-        activePanel = gamePanel;
-    }
+    public void ShowGamePanel() => SwitchPanel(gamePanel);
+    public void ShowBuildPanel() => SwitchPanel(buildPanel);
+    public void ShowWinPanel() => SwitchPanel(winPanel);
 
-    public void ShowBuildPanel()
+    private void SwitchPanel(GameObject newPanel)
     {
         if (activePanel != null)
+        {
             activePanel.SetActive(false);
-        buildPanel.SetActive(true);
-        activePanel = buildPanel;
-    }
-
-    public void ShowWinPanel()
-    {
-        if (activePanel != null)
-            activePanel.SetActive(false);
-        winPanel.SetActive(true);
-        activePanel = winPanel;
+        }
+        
+        newPanel.SetActive(true);
+        activePanel = newPanel;
     }
 }

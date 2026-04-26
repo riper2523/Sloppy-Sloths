@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
+  m_Name: Sample Level Data
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  mapPrefab: {fileID: 6255040595238325873, guid: de690671225b1a34d824d0113b4378b9, type: 3}
+  gridSizeX: 4
+  gridSizeY: 3
+  positionX: 6
+  positionY: 6
+  startingItems: {fileID: 11400000, guid: 24808778af07e934e9353fad66a22b4e, type: 2}
+  finishLinePosition: {x: 1.63, y: -2.8, z: 0}
+  finishLineScale: {x: 1, y: 1, z: 1}

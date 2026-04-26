@@ -10,13 +10,14 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] GridManager gridManager;
     private Dictionary<PartData, PartButtonScript> itemsMap = new Dictionary<PartData, PartButtonScript>();
 
-    void Start()
+    public void InitializeLevel(Inventory levelInventory)
     {
+        foreach (Transform child in buttonParent.transform) Destroy(child.gameObject);
+        itemsMap.Clear();
+        inventory = levelInventory;
         CreateRemovePartButton();
-        foreach (var entry in inventory.itemsMap)
-        {
-            CreateButtonForPart(entry.Key, entry.Value);
-        }
+        Debug.Log($"Initializing inventory with {inventory.itemsMap.Count} items.");
+        foreach (var entry in inventory.itemsMap) CreateButtonForPart(entry.Key, entry.Value);
     }
     public bool TryUsePart(PartData part)
     {

@@ -58,14 +58,14 @@ public class GridManager : MonoBehaviour
             buildCameraTarget = new GameObject("BuildCameraTarget").transform;
             buildCameraTarget.SetParent(this.transform);
         }
-        
+
         buildCameraTarget.position = new Vector3(centerX, centerY, 0);
 
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
         targetGroup.AddMember(buildCameraTarget, 1f, 0f);
-        
+
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
-        
+
         grid.ClearAllTiles();
         BuildGrid();
     }
@@ -170,25 +170,25 @@ public class GridManager : MonoBehaviour
         if (y + 1 < gridSizeY && partDataGrid[x, y + 1].partData != null)
         {
             hasAnyNeighbor = true;
-            if (part.HasAttachment(0, rotation)) isSuccessfullyAttached = true;
+            if (part.HasAttachment(0, rotation) && partDataGrid[x, y + 1].partData.HasAttachment(2, partDataGrid[x, y + 1].Rotation)) isSuccessfullyAttached = true;
         }
 
         if (x + 1 < gridSizeX && partDataGrid[x + 1, y].partData != null)
         {
             hasAnyNeighbor = true;
-            if (part.HasAttachment(1, rotation)) isSuccessfullyAttached = true;
+            if (part.HasAttachment(1, rotation) && partDataGrid[x + 1, y].partData.HasAttachment(3, partDataGrid[x + 1, y].Rotation)) isSuccessfullyAttached = true;
         }
 
         if (y - 1 >= 0 && partDataGrid[x, y - 1].partData != null)
         {
             hasAnyNeighbor = true;
-            if (part.HasAttachment(2, rotation)) isSuccessfullyAttached = true;
+            if (part.HasAttachment(2, rotation) && partDataGrid[x, y - 1].partData.HasAttachment(0, partDataGrid[x, y - 1].Rotation)) isSuccessfullyAttached = true;
         }
 
         if (x - 1 >= 0 && partDataGrid[x - 1, y].partData != null)
         {
             hasAnyNeighbor = true;
-            if (part.HasAttachment(3, rotation)) isSuccessfullyAttached = true;
+            if (part.HasAttachment(3, rotation) && partDataGrid[x - 1, y].partData.HasAttachment(1, partDataGrid[x - 1, y].Rotation)) isSuccessfullyAttached = true;
         }
 
         if (!hasAnyNeighbor)

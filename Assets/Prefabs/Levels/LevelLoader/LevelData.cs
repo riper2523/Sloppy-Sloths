@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections.Generic;[CreateAssetMenu(fileName = "LevelData", menuName = "Scriptable Objects/LevelData")]
+[CreateAssetMenu(fileName = "LevelData", menuName = "Scriptable Objects/LevelData")]
 public class LevelData : ScriptableObject
 {
     [Header("Environment")]

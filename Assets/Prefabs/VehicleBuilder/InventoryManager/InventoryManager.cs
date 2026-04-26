@@ -22,7 +22,7 @@ public class InventoryManager : MonoBehaviour
         inventory = levelInventory;
         CreateRemovePartButton();
 
-        inventory.OnAfterDeserialize(); 
+        inventory.ResetInventory(); 
         foreach (var entry in inventory.itemsMap)
         {
             CreateButtonForPart(entry.Key, entry.Value);

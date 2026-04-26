@@ -19,6 +19,7 @@ public class TNTBlock : MonoBehaviour
 
     public void Explode()
     {
+        if (exploded) return;
         exploded = true;
 
         if (explosionEffect != null) 

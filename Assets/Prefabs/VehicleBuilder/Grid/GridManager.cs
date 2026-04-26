@@ -21,6 +21,8 @@ public class GridManager : MonoBehaviour
     private Dictionary<ActionType, GameToggleScript> actionToggles = new Dictionary<ActionType, GameToggleScript>();
     private Transform vehicleParent;
 
+    private Transform buildCameraTarget;
+
     struct GridCell
     {
         public PartData partData;
@@ -31,16 +33,43 @@ public class GridManager : MonoBehaviour
     private InputAction clickAction;
     private PartData actPartData;
 
-    void Start()
+    public void InitializeLevel(LevelData levelData)
     {
-        GameObject vehicleGO = new GameObject("Vehicle");
-        vehicleParent = vehicleGO.transform;
-
+        vehicleParent = new GameObject("Vehicle").transform;
         clickAction = InputSystem.actions.FindAction("Click");
-        partDataGrid = new GridCell[gridSizeX, gridSizeY];
 
+        LoadLevelSettings(levelData);
+    }
+
+    public void LoadLevelSettings(LevelData data)
+    {
+        gridSizeX = data.gridSizeX;
+        gridSizeY = data.gridSizeY;
+        offsetX = data.positionX;
+        offsetY = data.positionY;
+
+        transform.position = Vector3.zero;
+
+        float centerX = offsetX + (gridSizeX / 2f);
+        float centerY = offsetY + (gridSizeY / 2f);
+
+        if (buildCameraTarget == null)
+        {
+            buildCameraTarget = new GameObject("BuildCameraTarget").transform;
+            buildCameraTarget.SetParent(this.transform);
+        }
+        
+        buildCameraTarget.position = new Vector3(centerX, centerY, 0);
+
+        targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
+        targetGroup.AddMember(buildCameraTarget, 1f, 0f);
+        
+        partDataGrid = new GridCell[gridSizeX, gridSizeY];
+        
+        grid.ClearAllTiles();
         BuildGrid();
     }
+
     void Update()
     {
         if (clickAction.WasPressedThisFrame())
@@ -301,7 +330,7 @@ public class GridManager : MonoBehaviour
         actionToggles.Clear();
 
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
-        targetGroup.AddMember(transform, 1f, 0f);
+        targetGroup.AddMember(buildCameraTarget, 1f, 0f);
         BuildGrid();
     }
 }

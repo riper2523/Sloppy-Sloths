@@ -18,6 +18,18 @@ public class Inventory : ScriptableObject, ISerializationCallbackReceiver
         }
     }
 
+    public void ResetInventory()
+    {
+        itemsMap.Clear();
+        foreach (var entry in initialItemsList)
+        {
+            if (entry.part != null && !itemsMap.ContainsKey(entry.part))
+            {
+                itemsMap.Add(entry.part, entry.amount);
+            }
+        }
+    }
+
     public void OnBeforeSerialize()
     {
     }

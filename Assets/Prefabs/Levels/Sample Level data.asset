@@ -17,14 +17,6 @@ MonoBehaviour:
   gridSizeY: 3
   positionX: -5
   positionY: 6
-  startingItems:
-  - part: {fileID: 11400000, guid: f92733de55663fc458994e1cbf95b82d, type: 2}
-    amount: 4
-  - part: {fileID: 11400000, guid: 2492618dd932f4f4fb2805ddcc47389d, type: 2}
-    amount: 1
-  - part: {fileID: 11400000, guid: d2afacbd0fad9064fab12fbee55170c5, type: 2}
-    amount: 2
-  - part: {fileID: 11400000, guid: 9adcb29132f44fc40892a762a23622c1, type: 2}
-    amount: 2
+  startingItems: {fileID: 11400000, guid: 180fe5aa388019d448be0c70899dfe1c, type: 2}
   finishLinePosition: {x: -13, y: -5.7, z: 0}
   finishLineScale: {x: 1, y: 1, z: 1}

@@ -33,16 +33,8 @@ public class GridManager : MonoBehaviour
 
     public void InitializeLevel(LevelData data)
     {
-        if (vehicleParent == null)
-        {
-            GameObject vehicleGO = new GameObject("Vehicle");
-            vehicleParent = vehicleGO.transform;
-        }
-
-        if (clickAction == null)
-        {
-            clickAction = InputSystem.actions.FindAction("Click");
-        }
+        vehicleParent = new GameObject("Vehicle").transform;
+        clickAction = InputSystem.actions.FindAction("Click");
 
         LoadLevelSettings(data);
     }
@@ -54,7 +46,7 @@ public class GridManager : MonoBehaviour
         offsetX = data.positionX;
         offsetY = data.positionY;
 
-        transform.position = Vector3.zero;
+        // transform.position = Vector3.zero;
 
         float centerX = offsetX + (gridSizeX / 2f);
         float centerY = offsetY + (gridSizeY / 2f);
@@ -316,22 +308,15 @@ public class GridManager : MonoBehaviour
 
     public void Restart()
     {
-        foreach (Transform child in vehicleParent)
-        {
-            Destroy(child.gameObject);
-        }
-        foreach (var toggle in actionToggles.Values)
-        {
-            Destroy(toggle.gameObject);
-        }
+        foreach (Transform child in vehicleParent) Destroy(child.gameObject);
+        foreach (var toggle in actionToggles.Values) Destroy(toggle.gameObject);
         
         actionToggles.Clear();
-        
         grid.ClearAllTiles();
 
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
         targetGroup.AddMember(buildCameraTarget, 1f, 0f);
 
-        BuildGrid();
+        BuildGrid(); 
     }
 }

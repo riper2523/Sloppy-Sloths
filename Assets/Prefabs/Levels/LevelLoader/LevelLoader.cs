@@ -13,46 +13,38 @@ public class LevelLoader : MonoBehaviour
 
     private void Start()
     {
-        if (currentLevelToLoad != null)
-        {
-            LoadLevel(currentLevelToLoad);
-        }
+        LoadLevel(currentLevelToLoad);
     }
 
     public void LoadLevel(LevelData levelData)
     {
         currentLevelToLoad = levelData;
 
-        if (currentMapInstance != null)
-        {
-            Destroy(currentMapInstance);
-        }
-
-        currentMapInstance = Instantiate(levelData.mapPrefab, environmentParent);
-        currentMapInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-
-        if (finishLine != null)
-        {
-            finishLine.position = levelData.finishLinePosition;
-            finishLine.localScale = levelData.finishLineScale;
-            finishLine.gameObject.SetActive(true);
-        }
+        RespawnMap();
 
         inventoryManager.InitializeLevel(levelData.startingItems);
         gridManager.InitializeLevel(levelData);
 
-        if (panelManager != null)
-        {
-            panelManager.ShowBuildPanel();
-        }
+        panelManager.ShowBuildPanel();
     }
 
     public void ReloadCurrentLevel()
     {
-        if (currentLevelToLoad != null)
-        {
-            LoadLevel(currentLevelToLoad);
-            gridManager.Restart();
-        }
+        RespawnMap();
+        gridManager.Restart();
+
+        panelManager.ShowBuildPanel();
+    }
+
+    private void RespawnMap()
+    {
+        if (currentMapInstance != null) Destroy(currentMapInstance);
+
+        currentMapInstance = Instantiate(currentLevelToLoad.mapPrefab, environmentParent);
+        currentMapInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+
+        finishLine.position = currentLevelToLoad.finishLinePosition;
+        finishLine.localScale = currentLevelToLoad.finishLineScale;
+        finishLine.gameObject.SetActive(true);
     }
 }

@@ -6,17 +6,7 @@ public class Inventory : ScriptableObject, ISerializationCallbackReceiver
 {
     [SerializeField] private List<InventoryEntry> initialItemsList = new List<InventoryEntry>();
     public Dictionary<PartData, int> itemsMap = new Dictionary<PartData, int>();
-    public void OnAfterDeserialize()
-    {
-        itemsMap.Clear();
-        foreach (var entry in initialItemsList)
-        {
-            if (entry.part != null && !itemsMap.ContainsKey(entry.part))
-            {
-                itemsMap.Add(entry.part, entry.amount);
-            }
-        }
-    }
+    public void OnAfterDeserialize() => ResetInventory();
 
     public void ResetInventory()
     {

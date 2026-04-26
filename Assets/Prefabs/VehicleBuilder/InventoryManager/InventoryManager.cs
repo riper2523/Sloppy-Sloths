@@ -19,22 +19,16 @@ public class InventoryManager : MonoBehaviour
         
         itemsMap.Clear();
 
-        if (levelInventory != null)
-        {
-            inventory = levelInventory;
-            inventory.ResetInventory();
-        }
-
+        inventory = levelInventory;
         CreateRemovePartButton();
 
-        if (inventory != null)
+        inventory.OnAfterDeserialize(); 
+        foreach (var entry in inventory.itemsMap)
         {
-            foreach (var entry in inventory.itemsMap)
-            {
-                CreateButtonForPart(entry.Key, entry.Value);
-            }
+            CreateButtonForPart(entry.Key, entry.Value);
         }
     }
+
     public bool TryUsePart(PartData part)
     {
         if (inventory.itemsMap.TryGetValue(part, out int count) && count > 0)

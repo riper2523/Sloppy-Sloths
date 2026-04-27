@@ -12,5 +12,6 @@ public class BuildButton : MonoBehaviour
     private void HandleClick()
     {
         GameEvents.OnBuild?.Invoke();
+        GameEvents.OnPlayStarted?.Invoke();
     }
 }

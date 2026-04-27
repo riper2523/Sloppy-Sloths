@@ -13,7 +13,6 @@ public class CollectibleStar : MonoBehaviour
 
     public void Collect()
     {
-        Debug.Log($"Star {starID} collected!");
         GameEvents.OnStarCollected?.Invoke(starID);
         Destroy(gameObject);
     }

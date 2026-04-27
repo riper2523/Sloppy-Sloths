@@ -31,6 +31,11 @@ public class TNTBlock : MonoBehaviour
 
         foreach (Collider2D obj in objects)
         {
+            if (obj.TryGetComponent(out CollectibleStar star))
+            {
+                star.Collect();
+                continue;
+            }
             Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
             if (rb != null)
             {

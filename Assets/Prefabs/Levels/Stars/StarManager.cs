@@ -10,16 +10,12 @@ public class StarManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.OnFinishLineCrossed += HandleLevelFinished;
         GameEvents.OnStarCollected += HandleStarCollected;
-        GameEvents.OnPlayStarted += StartDrivingTimer;
     }
 
     private void OnDisable()
     {
-        GameEvents.OnFinishLineCrossed -= HandleLevelFinished;
         GameEvents.OnStarCollected -= HandleStarCollected;
-        GameEvents.OnPlayStarted -= StartDrivingTimer;
     }
 
     public void InitializeLevel(LevelData data)
@@ -55,14 +51,7 @@ public class StarManager : MonoBehaviour
         collectedStarIDs.Add(starID);
     }
 
-    private void HandleLevelFinished()
-    {
-        isDriving = false;
-        bool[] earnedStars = EvaluateStars();
-        GameEvents.OnLevelWon?.Invoke(earnedStars);
-    }
-
-    private bool[] EvaluateStars()
+    public bool[] EvaluateStars()
     {
         bool[] earnedStars = new bool[currentLevel.starGoals.Length];
 

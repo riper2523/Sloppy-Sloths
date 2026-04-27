@@ -7,7 +7,6 @@ public class LevelLoader : MonoBehaviour
     [SerializeField] private GridManager gridManager;
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private PanelManager panelManager;
-    // [SerializeField] private Transform finishLine;
     [SerializeField] private StarManager starManager;
 
     private GameObject currentMapInstance;
@@ -15,6 +14,16 @@ public class LevelLoader : MonoBehaviour
     private void Start()
     {
         LoadLevel(currentLevelToLoad);
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.OnRestartLevel += ReloadCurrentLevel;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnRestartLevel -= ReloadCurrentLevel;
     }
 
     public void LoadLevel(LevelData levelData)
@@ -45,9 +54,5 @@ public class LevelLoader : MonoBehaviour
 
         currentMapInstance = Instantiate(currentLevelToLoad.mapPrefab, environmentParent);
         currentMapInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-
-        // finishLine.position = currentLevelToLoad.finishLinePosition;
-        // finishLine.localScale = currentLevelToLoad.finishLineScale;
-        // finishLine.gameObject.SetActive(true);
     }
 }

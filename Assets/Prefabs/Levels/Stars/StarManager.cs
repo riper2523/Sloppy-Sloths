@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StarManager : MonoBehaviour
-{
-    [SerializeField] private PanelManager panelManager;
-    
+{   
     private LevelData currentLevel;
     private List<int> collectedStarIDs = new List<int>();
     private float levelTimer = 0f;
@@ -14,12 +12,14 @@ public class StarManager : MonoBehaviour
     {
         GameEvents.OnFinishLineCrossed += HandleLevelFinished;
         GameEvents.OnStarCollected += HandleStarCollected;
+        GameEvents.OnPlayStarted += StartDrivingTimer;
     }
 
     private void OnDisable()
     {
         GameEvents.OnFinishLineCrossed -= HandleLevelFinished;
         GameEvents.OnStarCollected -= HandleStarCollected;
+        GameEvents.OnPlayStarted -= StartDrivingTimer;
     }
 
     public void InitializeLevel(LevelData data)
@@ -58,12 +58,11 @@ public class StarManager : MonoBehaviour
     private void HandleLevelFinished()
     {
         isDriving = false;
-        EvaluateStars();
-        
-        if (panelManager != null) panelManager.ShowWinPanel();
+        bool[] earnedStars = EvaluateStars();
+        GameEvents.OnLevelWon?.Invoke(earnedStars);
     }
 
-    private void EvaluateStars()
+    private bool[] EvaluateStars()
     {
         bool[] earnedStars = new bool[currentLevel.starGoals.Length];
 
@@ -84,7 +83,6 @@ public class StarManager : MonoBehaviour
                     break;
             }
         }
-
-        // TODO: pass the stars to win panel or somewhere
+        return earnedStars;
     }
 }

@@ -33,4 +33,21 @@ public class PanelManager : MonoBehaviour
         newPanel.SetActive(true);
         activePanel = newPanel;
     }
+
+    private void OnEnable()
+    {
+        GameEvents.OnPlayStarted += ShowGamePanel;
+        GameEvents.OnLevelWon += HandleLevelWon;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnPlayStarted -= ShowGamePanel;
+        GameEvents.OnLevelWon -= HandleLevelWon;
+    }
+
+    private void HandleLevelWon(bool[] earnedStars)
+    {
+        ShowWinPanel();
+    }
 }

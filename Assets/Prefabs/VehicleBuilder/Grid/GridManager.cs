@@ -17,7 +17,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private GameObject gameToggleParent;
     [SerializeField] private GameObject gameTogglePrefab;
-
+    [SerializeField] private StarManager starManager;
     private Dictionary<ActionType, GameToggleScript> actionToggles = new Dictionary<ActionType, GameToggleScript>();
     private Transform vehicleParent;
 
@@ -278,6 +278,7 @@ public class GridManager : MonoBehaviour
         }
 
         grid.ClearAllTiles();
+        starManager.StartDrivingTimer();
     }
     private void TryCreateJoint(int xA, int yA, int xB, int yB, GameObject[,] spawnedParts)
     {

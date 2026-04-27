@@ -12,7 +12,9 @@ public class LevelData : ScriptableObject
     [Header("Starting Inventory")]
     public Inventory startingItems;
 
-    [Header("Finish Line Settings")]
-    public Vector3 finishLinePosition;
-    public Vector3 finishLineScale = Vector3.one;
+    // [Header("Finish Line Settings")]
+    // public Vector3 finishLinePosition;
+    // public Vector3 finishLineScale = Vector3.one;
+    [Header("Star Goals")]
+    public StarGoal[] starGoals;
 }

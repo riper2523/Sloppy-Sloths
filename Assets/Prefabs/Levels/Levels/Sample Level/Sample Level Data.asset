@@ -19,8 +19,6 @@ MonoBehaviour:
   positionY: 6
   startingItems: {fileID: 11400000, guid: 24808778af07e934e9353fad66a22b4e, type: 2}
   starGoals:
-  - goalType: 0
-    timeLimit: 0
   - goalType: 1
     timeLimit: 0
   - goalType: 1

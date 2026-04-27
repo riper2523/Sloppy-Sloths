@@ -21,7 +21,11 @@ public class PanelManager : MonoBehaviour
 
     public void ShowGamePanel() => SwitchPanel(gamePanel);
     public void ShowBuildPanel() => SwitchPanel(buildPanel);
-    public void ShowWinPanel() => SwitchPanel(winPanel);
+    public void ShowWinPanel(bool[] earnedStars)
+    {
+        SwitchPanel(winPanel);
+        winPanel.GetComponent<WinPanelUI>().DisplayResults(earnedStars);
+    }
 
     private void SwitchPanel(GameObject newPanel)
     {
@@ -32,22 +36,5 @@ public class PanelManager : MonoBehaviour
         
         newPanel.SetActive(true);
         activePanel = newPanel;
-    }
-
-    private void OnEnable()
-    {
-        GameEvents.OnPlayStarted += ShowGamePanel;
-        GameEvents.OnLevelWon += HandleLevelWon;
-    }
-
-    private void OnDisable()
-    {
-        GameEvents.OnPlayStarted -= ShowGamePanel;
-        GameEvents.OnLevelWon -= HandleLevelWon;
-    }
-
-    private void HandleLevelWon(bool[] earnedStars)
-    {
-        ShowWinPanel();
     }
 }

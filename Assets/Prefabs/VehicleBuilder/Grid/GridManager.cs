@@ -68,15 +68,6 @@ public class GridManager : MonoBehaviour
         grid.ClearAllTiles();
         BuildGrid();
     }
-    private void OnEnable()
-    {
-        GameEvents.OnBuild += Build;
-    }
-
-    private void OnDisable()
-    {
-        GameEvents.OnBuild -= Build;
-    }
 
     void Update()
     {

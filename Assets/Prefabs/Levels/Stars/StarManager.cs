@@ -3,75 +3,88 @@ using UnityEngine;
 
 public class StarManager : MonoBehaviour
 {   
+    [Header("Listening To")]
+    [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
+    [SerializeField] private VoidEventChannelSO playLevelEvent;
+    [SerializeField] private VoidEventChannelSO finishLineCrossedEvent;
+    [SerializeField] private IntEventChannelSO starCollectedEvent;
+    [Header("Broadcasting To")]
+    [SerializeField] private LevelResultEventChannelSO levelCompletedEvent;
+
     private LevelData currentLevel;
     private List<int> collectedStarIDs = new List<int>();
     private float levelTimer = 0f;
     private bool isDriving = false;
+    private int starsCollected = 0;
 
     private void OnEnable()
     {
-        GameEvents.OnStarCollected += HandleStarCollected;
+        loadLevelEvent.OnEventRaised += InitializeLevel;
+        playLevelEvent.OnEventRaised += StartDrivingTimer;
+        finishLineCrossedEvent.OnEventRaised += HandleLevelFinished;
+        starCollectedEvent.OnEventRaised += HandleStarCollected;
     }
 
     private void OnDisable()
     {
-        GameEvents.OnStarCollected -= HandleStarCollected;
+        loadLevelEvent.OnEventRaised -= InitializeLevel;
+        playLevelEvent.OnEventRaised -= StartDrivingTimer;
+        finishLineCrossedEvent.OnEventRaised -= HandleLevelFinished;
+        starCollectedEvent.OnEventRaised -= HandleStarCollected;
     }
 
-    public void InitializeLevel(LevelData data)
+    private void InitializeLevel(LevelData data)
     {
         currentLevel = data;
         collectedStarIDs.Clear();
         levelTimer = 0f;
         isDriving = false;
+        starsCollected = 0;
     }
 
-    public void ReloadLevel()
+    private void StartDrivingTimer() => isDriving = true;
+    private void HandleStarCollected(int starID) 
     {
-        collectedStarIDs.Clear();
-        levelTimer = 0f;
-        isDriving = false;
-    }
-
-    public void StartDrivingTimer()
-    {
-        isDriving = true;
+        Debug.Log($"Star Collected: {starID}");
+        collectedStarIDs.Add(starID);
+        starsCollected++;
     }
 
     private void Update()
     {
-        if (isDriving)
+        if (isDriving) 
         {
             levelTimer += Time.deltaTime;
         }
     }
 
-    private void HandleStarCollected(int starID)
+    private void HandleLevelFinished()
     {
-        collectedStarIDs.Add(starID);
-    }
+        isDriving = false;
+        int starsAvailable = starsCollected;
+        
+        LevelResult result = new LevelResult
+        {
+            completionTime = levelTimer,
+            starResults = new List<StarResult>()
+        };
 
-    public bool[] EvaluateStars()
-    {
-        bool[] earnedStars = new bool[currentLevel.starGoals.Length];
-
-        for (int i = 0; i < currentLevel.starGoals.Length; i++)
+        for (int i = 0; i < currentLevel.starGoals.Count; i++)
         {
             StarGoal goal = currentLevel.starGoals[i];
+            bool earned = false;
 
             switch (goal.goalType)
             {
-                case StarGoalType.FinishLevel:
-                    earnedStars[i] = true;
-                    break;
-                case StarGoalType.CollectStar:
-                    earnedStars[i] = collectedStarIDs.Contains(i);
-                    break;
-                case StarGoalType.TimeLimit:
-                    earnedStars[i] = levelTimer <= goal.timeLimit;
-                    break;
+                case StarGoalType.FinishLevel: earned = true; break;
+                case StarGoalType.CollectStar: earned = collectedStarIDs.Contains(i); break;
+                case StarGoalType.TimeLimit: earned = levelTimer <= goal.timeLimit; break;
+                case StarGoalType.NoDamage: earned = true; break; // Placeholder
             }
+
+            result.starResults.Add(new StarResult { goalType = goal.goalType, achieved = earned });
         }
-        return earnedStars;
+
+        levelCompletedEvent.RaiseEvent(result);
     }
 }

@@ -8,16 +8,23 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] GameObject removePartButtonPrefab;
     [SerializeField] Inventory inventory;
     [SerializeField] GridManager gridManager;
+
+    [Header("Listening To")]
+    [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
+
     private Dictionary<PartData, PartButtonScript> itemsMap = new Dictionary<PartData, PartButtonScript>();
 
-    public void InitializeLevel(Inventory levelInventory)
+    private void OnEnable() => loadLevelEvent.OnEventRaised += InitializeLevel;
+    private void OnDisable() => loadLevelEvent.OnEventRaised -= InitializeLevel;
+
+    public void InitializeLevel(LevelData levelData)
     {
         foreach (Transform child in buttonParent.transform) 
         {
             Destroy(child.gameObject);
         }
         itemsMap.Clear();
-        inventory = levelInventory;
+        inventory = levelData.startingItems;
         CreateRemovePartButton();
         foreach (var entry in inventory.itemsMap) 
         {

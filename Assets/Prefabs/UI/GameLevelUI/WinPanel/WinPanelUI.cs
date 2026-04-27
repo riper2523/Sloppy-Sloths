@@ -5,15 +5,15 @@ public class WinPanelUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text resultText; 
 
-    public void DisplayResults(bool[] earnedStars)
+    public void DisplayResults(LevelResult result)
     {
         int count = 0;
 
-        foreach (bool earned in earnedStars)
+        foreach (StarResult starResult in result.starResults)
         {
-            if (earned) count++;
+            if (starResult.achieved) count++;
         }
 
-        resultText.text = "You won with " + count + " Stars Collected!";
+        resultText.text = "You won with " + count + " Stars Collected!\nTime: " + result.completionTime.ToString("F2") + " seconds";
     }
 }

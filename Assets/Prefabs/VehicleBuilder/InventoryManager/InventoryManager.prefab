@@ -49,3 +49,4 @@ MonoBehaviour:
   removePartButtonPrefab: {fileID: 7026260599908969885, guid: 14ca6350c60ed384ab947ed802a26eac, type: 3}
   inventory: {fileID: 11400000, guid: d62eb77c916179d47b52fe5dfb41f387, type: 2}
   gridManager: {fileID: 0}
+  loadLevelEvent: {fileID: 11400000, guid: 3dc1b0389daecac48bf97d73cbefd9fd, type: 2}

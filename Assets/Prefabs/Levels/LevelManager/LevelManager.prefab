@@ -44,9 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2ed89afa4e38ba44869340410a6059e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  mapLoader: {fileID: 0}
-  gridManager: {fileID: 0}
-  starManager: {fileID: 0}
-  panelManager: {fileID: 0}
-  inventoryManager: {fileID: 0}
-  levelData: {fileID: 11400000, guid: c98c23c2300c8a9428a9142b01274603, type: 2}
+  currentLevelData: {fileID: 0}
+  loadLevelEvent: {fileID: 11400000, guid: 3dc1b0389daecac48bf97d73cbefd9fd, type: 2}
+  restartLevelEvent: {fileID: 11400000, guid: 020fa9327bd39934dbbf0aa7f2ee3c49, type: 2}

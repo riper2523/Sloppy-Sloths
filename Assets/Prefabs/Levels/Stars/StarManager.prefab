@@ -44,4 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65996f1ab55ab074687b8f37fe784e37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarManager
-  panelManager: {fileID: 0}
+  loadLevelEvent: {fileID: 11400000, guid: 3dc1b0389daecac48bf97d73cbefd9fd, type: 2}
+  playLevelEvent: {fileID: 11400000, guid: 0196888eb81668e4fb20e44969a70749, type: 2}
+  finishLineCrossedEvent: {fileID: 11400000, guid: e6f35687b8698ca4fbd80601627bc3ef, type: 2}
+  starCollectedEvent: {fileID: 11400000, guid: 99bd8a16239575b4b8ca02c024d65ef1, type: 2}
+  levelCompletedEvent: {fileID: 11400000, guid: 5a3f6ef6afc8d2d4783cd4752c3f75ee, type: 2}

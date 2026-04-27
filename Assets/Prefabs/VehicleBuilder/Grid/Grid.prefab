@@ -195,3 +195,6 @@ MonoBehaviour:
   inventoryManager: {fileID: 0}
   gameToggleParent: {fileID: 0}
   gameTogglePrefab: {fileID: 0}
+  loadLevelEvent: {fileID: 11400000, guid: 3dc1b0389daecac48bf97d73cbefd9fd, type: 2}
+  playLevelEvent: {fileID: 11400000, guid: 0196888eb81668e4fb20e44969a70749, type: 2}
+  restartLevelEvent: {fileID: 11400000, guid: 020fa9327bd39934dbbf0aa7f2ee3c49, type: 2}

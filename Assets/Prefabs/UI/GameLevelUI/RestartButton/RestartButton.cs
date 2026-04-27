@@ -4,6 +4,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class RestartButton : MonoBehaviour
 {
+    [SerializeField] private VoidEventChannelSO restartLevelEvent;
     private void Awake()
     {
         GetComponent<Button>().onClick.AddListener(HandleClick);
@@ -11,6 +12,6 @@ public class RestartButton : MonoBehaviour
 
     private void HandleClick()
     {
-        GameEvents.OnRestartLevel?.Invoke();
+        restartLevelEvent.RaiseEvent();
     }
 }

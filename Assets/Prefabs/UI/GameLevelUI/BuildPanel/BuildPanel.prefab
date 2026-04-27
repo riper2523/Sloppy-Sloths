@@ -134,6 +134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6faefe0853a6588449fc7ba6ab8051bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildButton
+  buildEvent: {fileID: 11400000, guid: 54b4a2dbe0d57cf4986a1d72613f2c8e, type: 2}
+  playStartedEvent: {fileID: 11400000, guid: 0196888eb81668e4fb20e44969a70749, type: 2}
 --- !u!1 &5264172599315338322
 GameObject:
   m_ObjectHideFlags: 0

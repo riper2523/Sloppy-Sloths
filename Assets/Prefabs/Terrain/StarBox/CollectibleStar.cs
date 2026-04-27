@@ -3,6 +3,7 @@ using UnityEngine;
 public class CollectibleStar : MonoBehaviour
 {
     [SerializeField] private int starID; 
+    [SerializeField] private IntEventChannelSO starCollectedEvent;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Sloth") || other.CompareTag("Vehicle"))
@@ -13,7 +14,7 @@ public class CollectibleStar : MonoBehaviour
 
     public void Collect()
     {
-        GameEvents.OnStarCollected?.Invoke(starID);
+        starCollectedEvent.RaiseEvent(starID);
         Destroy(gameObject);
     }
 }

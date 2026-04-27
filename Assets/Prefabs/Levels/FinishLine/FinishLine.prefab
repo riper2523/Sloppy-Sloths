@@ -151,6 +151,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51562b2993f84cafeb4acaaf509091df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FinishLineHandler
-  finishLineCrossed:
-    m_PersistentCalls:
-      m_Calls: []
+  finishLineCrossedEvent: {fileID: 11400000, guid: e6f35687b8698ca4fbd80601627bc3ef, type: 2}

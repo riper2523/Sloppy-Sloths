@@ -17,9 +17,13 @@ public class GridManager : MonoBehaviour
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private GameObject gameToggleParent;
     [SerializeField] private GameObject gameTogglePrefab;
+    [Header("Listening To")]
+    [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
+    [SerializeField] private VoidEventChannelSO playLevelEvent;
+    [SerializeField] private VoidEventChannelSO restartLevelEvent;
+
     private Dictionary<ActionType, GameToggleScript> actionToggles = new Dictionary<ActionType, GameToggleScript>();
     private Transform vehicleParent;
-
     private Transform buildCameraTarget;
 
     struct GridCell
@@ -31,6 +35,20 @@ public class GridManager : MonoBehaviour
     private GridCell[,] partDataGrid;
     private InputAction clickAction;
     private PartData actPartData;
+
+    private void OnEnable()
+    {
+        loadLevelEvent.OnEventRaised += InitializeLevel;
+        playLevelEvent.OnEventRaised += Build;
+        restartLevelEvent.OnEventRaised += Restart;
+    }
+
+    private void OnDisable()
+    {
+        loadLevelEvent.OnEventRaised -= InitializeLevel;
+        playLevelEvent.OnEventRaised -= Build;
+        restartLevelEvent.OnEventRaised -= Restart;
+    }
 
     public void InitializeLevel(LevelData levelData)
     {

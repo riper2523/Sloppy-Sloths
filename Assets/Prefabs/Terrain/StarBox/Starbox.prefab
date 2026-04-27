@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollectibleStar
   starID: 0
+  starCollectedEvent: {fileID: 11400000, guid: 99bd8a16239575b4b8ca02c024d65ef1, type: 2}
 --- !u!50 &-6775424736703234618
 Rigidbody2D:
   serializedVersion: 5

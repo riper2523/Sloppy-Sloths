@@ -271,3 +271,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a30ec5770410a2d4abb7db1cfd6f6931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RestartButton
+  restartLevelEvent: {fileID: 11400000, guid: 020fa9327bd39934dbbf0aa7f2ee3c49, type: 2}

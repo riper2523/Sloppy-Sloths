@@ -431,6 +431,10 @@ PrefabInstance:
       propertyPath: environmentParent
       value: 
       objectReference: {fileID: 434969277}
+    - target: {fileID: 7067468446493386451, guid: 7b922a83d42412d4893b5a73687532c3, type: 3}
+      propertyPath: restartLevelEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 020fa9327bd39934dbbf0aa7f2ee3c49, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

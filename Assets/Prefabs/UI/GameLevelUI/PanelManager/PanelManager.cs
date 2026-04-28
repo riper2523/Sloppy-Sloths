@@ -7,6 +7,12 @@ public class PanelManager : MonoBehaviour
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject startPanel;
 
+    [Header("Listening To")]
+    [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
+    [SerializeField] private VoidEventChannelSO playLevelEvent;
+    [SerializeField] private VoidEventChannelSO levelCompletedEvent;
+    [SerializeField] private VoidEventChannelSO restartLevelEvent;
+
     private GameObject activePanel;
 
     private void Awake()
@@ -19,9 +25,29 @@ public class PanelManager : MonoBehaviour
         activePanel = startPanel;
     }
 
+    private void OnEnable()
+    {
+        loadLevelEvent.OnEventRaised += onLoadLevel;
+        playLevelEvent.OnEventRaised += ShowGamePanel;
+        levelCompletedEvent.OnEventRaised += ShowWinPanel;
+        restartLevelEvent.OnEventRaised += ShowBuildPanel;
+    }
+
+    private void OnDisable()
+    {
+        loadLevelEvent.OnEventRaised -= onLoadLevel;
+        playLevelEvent.OnEventRaised -= ShowGamePanel;
+        levelCompletedEvent.OnEventRaised -= ShowWinPanel;
+        restartLevelEvent.OnEventRaised -= ShowBuildPanel;
+    }
+
     public void ShowGamePanel() => SwitchPanel(gamePanel);
     public void ShowBuildPanel() => SwitchPanel(buildPanel);
-    public void ShowWinPanel() => SwitchPanel(winPanel);
+    public void ShowWinPanel()
+    {
+        SwitchPanel(winPanel);
+        winPanel.GetComponent<WinPanelUI>().DisplayResults();
+    }
 
     private void SwitchPanel(GameObject newPanel)
     {
@@ -33,4 +59,6 @@ public class PanelManager : MonoBehaviour
         newPanel.SetActive(true);
         activePanel = newPanel;
     }
+
+    private void onLoadLevel(LevelData data) => ShowBuildPanel();
 }

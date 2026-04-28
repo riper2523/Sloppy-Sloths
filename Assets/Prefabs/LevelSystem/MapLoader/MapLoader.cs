@@ -5,6 +5,8 @@ public class MapLoader : MonoBehaviour
     [SerializeField] private Transform environmentParent;
     [Header("Listening To")]
     [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
+    [Header("Broadcasting On")]
+    [SerializeField] private GridAnchorEventChannelSO anchorFoundEvent;
     
     private GameObject currentMapInstance;
 
@@ -16,6 +18,9 @@ public class MapLoader : MonoBehaviour
         ClearMap();
 
         currentMapInstance = Instantiate(levelData.mapPrefab, environmentParent);
+
+        GridAnchor anchor = currentMapInstance.GetComponentInChildren<GridAnchor>();
+        anchorFoundEvent.RaiseEvent(anchor);
     }
 
     private void ClearMap()

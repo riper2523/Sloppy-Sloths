@@ -160,6 +160,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 0196888eb81668e4fb20e44969a70749, type: 2}
     - target: {fileID: 2485891098192372977, guid: 9243a0a2b6121fb4ebf80e64828403bc, type: 3}
+      propertyPath: anchorFoundEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 8897fa8662a463a4daf9a5adc741b753, type: 2}
+    - target: {fileID: 2485891098192372977, guid: 9243a0a2b6121fb4ebf80e64828403bc, type: 3}
       propertyPath: gameToggleParent
       value: 
       objectReference: {fileID: 809121317}
@@ -419,6 +423,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapLoader
       objectReference: {fileID: 0}
+    - target: {fileID: 7067468446493386451, guid: 7b922a83d42412d4893b5a73687532c3, type: 3}
+      propertyPath: anchorFoundEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 8897fa8662a463a4daf9a5adc741b753, type: 2}
     - target: {fileID: 7067468446493386451, guid: 7b922a83d42412d4893b5a73687532c3, type: 3}
       propertyPath: environmentParent
       value: 

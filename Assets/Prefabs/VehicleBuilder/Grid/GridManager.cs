@@ -18,9 +18,9 @@ public class GridManager : MonoBehaviour
     [SerializeField] private GameObject gameToggleParent;
     [SerializeField] private GameObject gameTogglePrefab;
     [Header("Listening To")]
-    [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
     [SerializeField] private VoidEventChannelSO playLevelEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
+    [SerializeField] private GridAnchorEventChannelSO anchorFoundEvent;
 
     private Dictionary<ActionType, GameToggleScript> actionToggles = new Dictionary<ActionType, GameToggleScript>();
     private Transform vehicleParent;
@@ -38,48 +38,40 @@ public class GridManager : MonoBehaviour
 
     private void OnEnable()
     {
-        loadLevelEvent.OnEventRaised += InitializeLevel;
         playLevelEvent.OnEventRaised += Build;
         restartLevelEvent.OnEventRaised += Restart;
+        anchorFoundEvent.OnEventRaised += InitializeLevel;
     }
 
     private void OnDisable()
     {
-        loadLevelEvent.OnEventRaised -= InitializeLevel;
+        anchorFoundEvent.OnEventRaised -= InitializeLevel;
         playLevelEvent.OnEventRaised -= Build;
         restartLevelEvent.OnEventRaised -= Restart;
     }
 
-    public void InitializeLevel(LevelData levelData)
+    public void InitializeLevel(GridAnchor anchor)
     {
         vehicleParent = new GameObject("Vehicle").transform;
         clickAction = InputSystem.actions.FindAction("Click");
 
-        LoadLevelSettings(levelData);
+        LoadLevelSettings(anchor);
     }
 
-    public void LoadLevelSettings(LevelData data)
+    public void LoadLevelSettings(GridAnchor anchor)
     {
-        gridSizeX = data.gridSizeX;
-        gridSizeY = data.gridSizeY;
-        offsetX = data.positionX;
-        offsetY = data.positionY;
+        gridSizeX = anchor.gridSizeX;
+        gridSizeY = anchor.gridSizeY;
+        offsetX = Mathf.RoundToInt(anchor.transform.position.x);
+        offsetY = Mathf.RoundToInt(anchor.transform.position.y);
 
         transform.position = Vector3.zero;
 
-        float centerX = offsetX + (gridSizeX / 2f);
-        float centerY = offsetY + (gridSizeY / 2f);
-
-        if (buildCameraTarget == null)
-        {
-            buildCameraTarget = new GameObject("BuildCameraTarget").transform;
-            buildCameraTarget.SetParent(this.transform);
-        }
-
-        buildCameraTarget.position = new Vector3(centerX, centerY, 0);
+        buildCameraTarget = anchor.transform;
+        buildCameraTarget.position += new Vector3(gridSizeX / 2f, gridSizeY / 2f, -10);
 
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
-        targetGroup.AddMember(buildCameraTarget, 1f, 0f);
+        targetGroup.AddMember(anchor.transform, 1f, 0f);
 
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
 

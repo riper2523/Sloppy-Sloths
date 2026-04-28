@@ -67,11 +67,16 @@ public class GridManager : MonoBehaviour
 
         transform.position = Vector3.zero;
 
-        buildCameraTarget = anchor.transform;
-        buildCameraTarget.position += new Vector3(gridSizeX / 2f, gridSizeY / 2f, -10);
+        if (buildCameraTarget == null)
+        {
+            buildCameraTarget = new GameObject("BuildCameraTarget").transform;
+            buildCameraTarget.SetParent(transform);
+        }
+        Vector3 gridCenter = new Vector3(offsetX + gridSizeX / 2f, offsetY + gridSizeY / 2f, 0);
+        buildCameraTarget.position = gridCenter;
 
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
-        targetGroup.AddMember(anchor.transform, 1f, 0f);
+        targetGroup.AddMember(buildCameraTarget, 1f, 0f);
 
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
 

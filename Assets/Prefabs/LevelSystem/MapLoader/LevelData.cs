@@ -6,6 +6,7 @@ public class LevelData : ScriptableObject
 {
     [Header("Map")]
     public GameObject mapPrefab;
+    
     [Header("Starting Inventory")]
     public Inventory startingItems;
 

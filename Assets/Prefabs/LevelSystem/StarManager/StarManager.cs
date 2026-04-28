@@ -61,7 +61,6 @@ public class StarManager : MonoBehaviour
     private void HandleLevelFinished()
     {
         isDriving = false;
-        int starsAvailable = starsCollected;
         
         LevelResult result = new LevelResult
         {

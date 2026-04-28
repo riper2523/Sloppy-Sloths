@@ -1,15 +1,13 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public class FinishLineHandler : MonoBehaviour
 {
-    public UnityEvent finishLineCrossed;
-
+    [SerializeField] private VoidEventChannelSO finishLineCrossedEvent;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Sloth"))
         {
-            finishLineCrossed.Invoke();
+            finishLineCrossedEvent.RaiseEvent();
         }
     }
 }

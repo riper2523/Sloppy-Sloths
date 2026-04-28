@@ -46,7 +46,7 @@ public class TNTBlock : MonoBehaviour
             
             if (obj.TryGetComponent(out TNTBlock otherTNT))
             {
-                otherTNT.Invoke("Explode", 0.1f);
+                otherTNT.Explode();
             }
         }
 

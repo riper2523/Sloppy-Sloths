@@ -4,7 +4,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class BuildButton : MonoBehaviour
 {
-    [SerializeField] private VoidEventChannelSO buildEvent;
     [SerializeField] private VoidEventChannelSO playStartedEvent;
     private void Awake()
     {
@@ -13,7 +12,6 @@ public class BuildButton : MonoBehaviour
 
     private void HandleClick()
     {
-        buildEvent.RaiseEvent();
         playStartedEvent.RaiseEvent();
     }
 }

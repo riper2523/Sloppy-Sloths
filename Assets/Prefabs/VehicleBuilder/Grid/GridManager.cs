@@ -214,7 +214,7 @@ public class GridManager : MonoBehaviour
     public void Build()
     {
         GameObject[,] spawnedParts = new GameObject[gridSizeX, gridSizeY];
-        var newTargets = new System.Collections.Generic.List<CinemachineTargetGroup.Target>();
+        var newTargets = new List<CinemachineTargetGroup.Target>();
 
         for (int x = 0; x < gridSizeX; x++)
         {

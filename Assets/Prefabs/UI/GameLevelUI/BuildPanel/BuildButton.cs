@@ -7,11 +7,6 @@ public class BuildButton : MonoBehaviour
     [SerializeField] private VoidEventChannelSO playStartedEvent;
     private void Awake()
     {
-        GetComponent<Button>().onClick.AddListener(HandleClick);
-    }
-
-    private void HandleClick()
-    {
-        playStartedEvent.RaiseEvent();
+        GetComponent<Button>().onClick.AddListener(() => playStartedEvent.RaiseEvent());
     }
 }

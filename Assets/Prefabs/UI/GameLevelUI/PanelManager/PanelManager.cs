@@ -9,7 +9,7 @@ public class PanelManager : MonoBehaviour
 
     [Header("Listening To")]
     [SerializeField] private VoidEventChannelSO playLevelEvent;
-    [SerializeField] private VoidEventChannelSO levelCompletedEvent;
+    [SerializeField] private LevelResultEventChannelSO levelCompletedEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
 
     private GameObject activePanel;
@@ -40,10 +40,10 @@ public class PanelManager : MonoBehaviour
 
     public void ShowGamePanel() => SwitchPanel(gamePanel);
     public void ShowBuildPanel() => SwitchPanel(buildPanel);
-    public void ShowWinPanel()
+    public void ShowWinPanel(LevelResult result)
     {
         SwitchPanel(winPanel);
-        winPanel.GetComponent<WinPanelUI>().DisplayResults();
+        winPanel.GetComponent<WinPanelUI>().DisplayResults(result);
     }
 
     private void SwitchPanel(GameObject newPanel)

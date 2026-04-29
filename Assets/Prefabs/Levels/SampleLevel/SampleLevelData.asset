@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: SampleLevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   mapPrefab: {fileID: 6255040595238325873, guid: de690671225b1a34d824d0113b4378b9, type: 3}
-  gridSizeX: 4
-  gridSizeY: 3
-  positionX: 6
-  positionY: 6
   startingItems: {fileID: 11400000, guid: 24808778af07e934e9353fad66a22b4e, type: 2}
-  finishLinePosition: {x: 1.63, y: -2.8, z: 0}
-  finishLineScale: {x: 1, y: 1, z: 1}
+  starGoals:
+  - goalType: 0
+    timeLimit: 0
+  - goalType: 1
+    timeLimit: 0
+  - goalType: 1
+    timeLimit: 0
+  - goalType: 1
+    timeLimit: 0
+  - goalType: 2
+    timeLimit: 10

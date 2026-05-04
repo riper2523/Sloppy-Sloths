@@ -1,0 +1,10 @@
+{
+    "name": "MainProject",
+    "references": [
+        "Unity.InputSystem",
+        "Unity.TextMeshPro",
+        "Unity.2D.SpriteShape.Runtime",
+        "Unity.Cinemachine"
+    ],
+    "autoReferenced": true
+}

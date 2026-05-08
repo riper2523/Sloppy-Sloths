@@ -9,7 +9,7 @@ public class CollectibleStar : MonoBehaviour
     public int starID;
     private bool isCollected = false;
 
-    private void OnEnable()
+    private void Start()
     {
         starSpawnedEvent.RaiseEvent(this);
     }

@@ -16,4 +16,5 @@ MonoBehaviour:
   partSpriteUI: {fileID: -6387977727153438705, guid: 8219a7041cee212439191d12343c14c2, type: 3}
   partName: Wheel
   partTile: {fileID: 11400000, guid: 05b2665d4d0f01042918039643fb4251, type: 2}
+  jointStrength: 3000
   attachable: 01000000

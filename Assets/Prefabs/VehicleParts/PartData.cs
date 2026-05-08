@@ -9,6 +9,7 @@ public class PartData : ScriptableObject
     public Sprite partSpriteUI;
     public string partName;
     public Tile partTile;
+    public float jointStrength = 200f;
     [Tooltip("0: Up, 1: Right, 2: Down, 3: Left")]
     public bool[] attachable = new bool[4];
     private void OnValidate()

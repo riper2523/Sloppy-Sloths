@@ -6,7 +6,6 @@ public class MapLoader : MonoBehaviour
     [Header("Listening To")]
     [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
-    [Header("Broadcasting On")]
     [SerializeField] private GridManager gridManager;
     
     private GameObject currentMapInstance;

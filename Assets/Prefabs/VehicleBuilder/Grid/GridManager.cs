@@ -9,7 +9,6 @@ public class GridManager : MonoBehaviour
     [Header("Listening To")]
     [SerializeField] private VoidEventChannelSO playLevelEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
-    [SerializeField] private GridAnchorEventChannelSO anchorFoundEvent;
     [SerializeField] private int offsetX = 3;
     [SerializeField] private int offsetY = 3;
     [SerializeField] private int gridSizeX = 5;
@@ -41,14 +40,12 @@ public class GridManager : MonoBehaviour
     {
         playLevelEvent.OnEventRaised += Build;
         restartLevelEvent.OnEventRaised += Restart;
-        anchorFoundEvent.OnEventRaised += InitializeLevel;
     }
 
     private void OnDisable()
     {
         playLevelEvent.OnEventRaised -= Build;
         restartLevelEvent.OnEventRaised -= Restart;
-        anchorFoundEvent.OnEventRaised -= InitializeLevel;
     }
 
     public void InitializeLevel(GridAnchor anchor)

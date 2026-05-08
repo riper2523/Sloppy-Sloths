@@ -8,7 +8,6 @@ public class PanelManager : MonoBehaviour
     [SerializeField] private GameObject startPanel;
 
     [Header("Listening To")]
-    [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
     [SerializeField] private VoidEventChannelSO playLevelEvent;
     [SerializeField] private VoidEventChannelSO levelCompletedEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
@@ -27,7 +26,6 @@ public class PanelManager : MonoBehaviour
 
     private void OnEnable()
     {
-        loadLevelEvent.OnEventRaised += onLoadLevel;
         playLevelEvent.OnEventRaised += ShowGamePanel;
         levelCompletedEvent.OnEventRaised += ShowWinPanel;
         restartLevelEvent.OnEventRaised += ShowBuildPanel;
@@ -35,7 +33,6 @@ public class PanelManager : MonoBehaviour
 
     private void OnDisable()
     {
-        loadLevelEvent.OnEventRaised -= onLoadLevel;
         playLevelEvent.OnEventRaised -= ShowGamePanel;
         levelCompletedEvent.OnEventRaised -= ShowWinPanel;
         restartLevelEvent.OnEventRaised -= ShowBuildPanel;
@@ -59,6 +56,4 @@ public class PanelManager : MonoBehaviour
         newPanel.SetActive(true);
         activePanel = newPanel;
     }
-
-    private void onLoadLevel(LevelData data) => ShowBuildPanel();
 }

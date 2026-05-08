@@ -10,9 +10,6 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        if (currentLevelData != null)
-        {
-            loadLevelEvent.RaiseEvent(currentLevelData);
-        }
+        loadLevelEvent.RaiseEvent(currentLevelData);
     }
 }

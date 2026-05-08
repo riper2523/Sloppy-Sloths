@@ -303,10 +303,11 @@ public class GridManager : MonoBehaviour
 
         if (canAttach)
         {
-            CreateJoint(spawnedParts[xA, yA], spawnedParts[xB, yB]);
+            float strength = (cellA.partData.jointStrength + cellB.partData.jointStrength) / 2f;
+            CreateJoint(spawnedParts[xA, yA], spawnedParts[xB, yB], strength);
         }
     }
-    private void CreateJoint(GameObject partA, GameObject partB)
+    private void CreateJoint(GameObject partA, GameObject partB, float strength = 100f)
     {
         Rigidbody2D rbA = partA.GetComponentInChildren<Rigidbody2D>();
         Rigidbody2D rbB = partB.GetComponentInChildren<Rigidbody2D>();
@@ -315,6 +316,7 @@ public class GridManager : MonoBehaviour
 
         FixedJoint2D joint = rbA.gameObject.AddComponent<FixedJoint2D>();
         joint.connectedBody = rbB;
+        joint.breakForce = strength;
     }
 
     public void Restart()

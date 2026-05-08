@@ -7,7 +7,6 @@ public class MapLoader : MonoBehaviour
     [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
     [Header("Broadcasting On")]
-    [SerializeField] private GridAnchorEventChannelSO anchorFoundEvent;
     [SerializeField] private GridManager gridManager;
     
     private GameObject currentMapInstance;

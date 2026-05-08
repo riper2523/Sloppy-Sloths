@@ -601,6 +601,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7803428817658707078, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7905988375675490683, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_Name
       value: UI

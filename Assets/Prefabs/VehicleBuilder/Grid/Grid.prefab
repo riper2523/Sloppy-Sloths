@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8048434617575487438}
   - component: {fileID: 7264889568269119955}
   - component: {fileID: 976633727549422238}
+  - component: {fileID: 963367893546876213}
+  - component: {fileID: 4172597663874605190}
   m_Layer: 0
   m_Name: BuildTileMap
   m_TagString: Untagged
@@ -127,6 +129,87 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
+--- !u!114 &963367893546876213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4153246576758274447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ec88ae9a3c09e439394da2fa3eab0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileMapClicker
+  onTileClicked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5469125150765599570}
+        m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
+        m_MethodName: OnSingleClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTileDoubleClicked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5469125150765599570}
+        m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
+        m_MethodName: OnDoubleClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  doubleClickThreshold: 150
+--- !u!19719996 &4172597663874605190
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4153246576758274447}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0
+  m_UseDelaunayMesh: 0
 --- !u!1 &6697092817488480993
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,7 +275,7 @@ MonoBehaviour:
   offsetY: -3
   gridSizeX: 6
   gridSizeY: 6
-  grid: {fileID: 7264889568269119955}
+  tilemap: {fileID: 7264889568269119955}
   tile: {fileID: 11400000, guid: ee588fd79641f7849bd080656cfc064d, type: 2}
   targetGroup: {fileID: 0}
   inventoryManager: {fileID: 0}

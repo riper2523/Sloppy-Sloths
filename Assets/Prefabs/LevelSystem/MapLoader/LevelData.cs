@@ -9,4 +9,7 @@ public class LevelData : ScriptableObject
     
     [Header("Starting Inventory")]
     public Inventory startingItems;
+
+    [Header("Star Goals")]
+    public List<StarGoal> starGoals;
 }

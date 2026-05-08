@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8873830216872439999
+--- !u!1 &3849381239574576660
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2498534312177673312}
-  - component: {fileID: 2798587774578126191}
-  m_Layer: 5
-  m_Name: PanelManager
+  - component: {fileID: 2314494974053921430}
+  - component: {fileID: 7067468446493386451}
+  m_Layer: 0
+  m_Name: MapLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &2498534312177673312
-RectTransform:
+--- !u!4 &2314494974053921430
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8873830216872439999}
+  m_GameObject: {fileID: 3849381239574576660}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,28 +32,19 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2798587774578126191
+--- !u!114 &7067468446493386451
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8873830216872439999}
+  m_GameObject: {fileID: 3849381239574576660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cd7ef48e4e6b8f4a9d0c1f87b043b8d, type: 3}
+  m_Script: {fileID: 11500000, guid: f50913592b4096142a685f985afbc9de, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PanelManager
-  gamePanel: {fileID: 0}
-  buildPanel: {fileID: 0}
-  winPanel: {fileID: 0}
-  startPanel: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::LevelLoader
+  environmentParent: {fileID: 0}
   loadLevelEvent: {fileID: 11400000, guid: 3dc1b0389daecac48bf97d73cbefd9fd, type: 2}
-  playLevelEvent: {fileID: 11400000, guid: 0196888eb81668e4fb20e44969a70749, type: 2}
-  levelCompletedEvent: {fileID: 11400000, guid: e6f35687b8698ca4fbd80601627bc3ef, type: 2}
   restartLevelEvent: {fileID: 11400000, guid: 020fa9327bd39934dbbf0aa7f2ee3c49, type: 2}
+  anchorFoundEvent: {fileID: 11400000, guid: 8897fa8662a463a4daf9a5adc741b753, type: 2}

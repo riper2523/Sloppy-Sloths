@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 public class GridManager : MonoBehaviour
 {
+    [Header("Listening To")]
+    [SerializeField] private VoidEventChannelSO playLevelEvent;
+    [SerializeField] private VoidEventChannelSO restartLevelEvent;
     [SerializeField] private int offsetX = 3;
     [SerializeField] private int offsetY = 3;
     [SerializeField] private int gridSizeX = 5;
@@ -33,33 +36,42 @@ public class GridManager : MonoBehaviour
     private InputAction clickAction;
     private PartData actPartData;
 
-    public void InitializeLevel(LevelData levelData)
+    private void OnEnable()
+    {
+        playLevelEvent.OnEventRaised += Build;
+        restartLevelEvent.OnEventRaised += Restart;
+    }
+
+    private void OnDisable()
+    {
+        playLevelEvent.OnEventRaised -= Build;
+        restartLevelEvent.OnEventRaised -= Restart;
+    }
+
+    public void InitializeLevel(GridAnchor anchor)
     {
         vehicleParent = new GameObject("Vehicle").transform;
         clickAction = InputSystem.actions.FindAction("Click");
 
-        LoadLevelSettings(levelData);
+        LoadLevelSettings(anchor);
     }
 
-    public void LoadLevelSettings(LevelData data)
+    public void LoadLevelSettings(GridAnchor anchor)
     {
-        gridSizeX = data.gridSizeX;
-        gridSizeY = data.gridSizeY;
-        offsetX = data.positionX;
-        offsetY = data.positionY;
+        gridSizeX = anchor.gridSizeX;
+        gridSizeY = anchor.gridSizeY;
+        offsetX = Mathf.RoundToInt(anchor.transform.position.x);
+        offsetY = Mathf.RoundToInt(anchor.transform.position.y);
 
         transform.position = Vector3.zero;
-
-        float centerX = offsetX + (gridSizeX / 2f);
-        float centerY = offsetY + (gridSizeY / 2f);
 
         if (buildCameraTarget == null)
         {
             buildCameraTarget = new GameObject("BuildCameraTarget").transform;
-            buildCameraTarget.SetParent(this.transform);
+            buildCameraTarget.SetParent(transform);
         }
-
-        buildCameraTarget.position = new Vector3(centerX, centerY, 0);
+        Vector3 gridCenter = new Vector3(offsetX + gridSizeX / 2f, offsetY + gridSizeY / 2f, 0);
+        buildCameraTarget.position = gridCenter;
 
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
         targetGroup.AddMember(buildCameraTarget, 1f, 0f);

@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a86fbe57feb8da940afd017c849b9edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
+  loadLevelEvent: {fileID: 11400000, guid: 3dc1b0389daecac48bf97d73cbefd9fd, type: 2}
   partButtonPrefab: {fileID: 7026260599908969885, guid: 82ef8314f48f8aa4db4ca951b4a4543d, type: 3}
   buttonParent: {fileID: 0}
   removePartButtonPrefab: {fileID: 7026260599908969885, guid: 14ca6350c60ed384ab947ed802a26eac, type: 3}

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    [Header("Listening To")]
+    [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
     [SerializeField] GameObject partButtonPrefab;
     [SerializeField] GameObject buttonParent;
     [SerializeField] GameObject removePartButtonPrefab;
@@ -10,14 +12,17 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] GridManager gridManager;
     private Dictionary<PartData, PartButtonScript> itemsMap = new Dictionary<PartData, PartButtonScript>();
 
-    public void InitializeLevel(Inventory levelInventory)
+    private void OnEnable() => loadLevelEvent.OnEventRaised += InitializeLevel;
+    private void OnDisable() => loadLevelEvent.OnEventRaised -= InitializeLevel;
+
+    public void InitializeLevel(LevelData levelData)
     {
         foreach (Transform child in buttonParent.transform) 
         {
             Destroy(child.gameObject);
         }
         itemsMap.Clear();
-        inventory = levelInventory;
+        inventory = levelData.startingItems;
         CreateRemovePartButton();
         foreach (var entry in inventory.itemsMap) 
         {

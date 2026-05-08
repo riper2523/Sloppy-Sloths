@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
-  m_Name: Sample Level Data
+  m_Name: SampleLevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   mapPrefab: {fileID: 6255040595238325873, guid: de690671225b1a34d824d0113b4378b9, type: 3}
   gridSizeX: 4

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 543f0a3ddb5301541a32ae24ae9bd107, type: 3}
-  m_Name: Sample Inventory
+  m_Name: SampleInventory
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
   initialItemsList:
   - part: {fileID: 11400000, guid: 2492618dd932f4f4fb2805ddcc47389d, type: 2}

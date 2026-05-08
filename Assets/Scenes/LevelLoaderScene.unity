@@ -245,6 +245,10 @@ PrefabInstance:
       value: MapLoader
       objectReference: {fileID: 0}
     - target: {fileID: 7067468446493386451, guid: 7b922a83d42412d4893b5a73687532c3, type: 3}
+      propertyPath: gridManager
+      value: 
+      objectReference: {fileID: 1412907839}
+    - target: {fileID: 7067468446493386451, guid: 7b922a83d42412d4893b5a73687532c3, type: 3}
       propertyPath: environmentParent
       value: 
       objectReference: {fileID: 434969277}

@@ -8,6 +8,7 @@ public class MapLoader : MonoBehaviour
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
     [Header("Broadcasting On")]
     [SerializeField] private GridAnchorEventChannelSO anchorFoundEvent;
+    [SerializeField] private GridManager gridManager;
     
     private GameObject currentMapInstance;
     private GameObject mapPrefab;
@@ -29,7 +30,7 @@ public class MapLoader : MonoBehaviour
         mapPrefab = levelData.mapPrefab;
         currentMapInstance = Instantiate(mapPrefab, environmentParent);
         GridAnchor anchor = currentMapInstance.GetComponentInChildren<GridAnchor>();
-        anchorFoundEvent.RaiseEvent(anchor);
+        gridManager.InitializeLevel(anchor);
     }
 
     public void ReloadMap()

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.InputSystem;
 using Unity.Cinemachine;
 using System.Collections.Generic;
 
@@ -14,7 +13,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int gridSizeX = 5;
     [SerializeField] private int gridSizeY = 5;
 
-    [SerializeField] private Tilemap grid;
+    [SerializeField] private Tilemap tilemap;
     [SerializeField] private Tile tile;
     [SerializeField] private CinemachineTargetGroup targetGroup;
     [SerializeField] private InventoryManager inventoryManager;
@@ -33,7 +32,6 @@ public class GridManager : MonoBehaviour
     }
 
     private GridCell[,] partDataGrid;
-    private InputAction clickAction;
     private PartData actPartData;
 
     private void OnEnable()
@@ -51,7 +49,6 @@ public class GridManager : MonoBehaviour
     public void InitializeLevel(GridAnchor anchor)
     {
         vehicleParent = new GameObject("Vehicle").transform;
-        clickAction = InputSystem.actions.FindAction("Click");
 
         LoadLevelSettings(anchor);
     }
@@ -78,35 +75,28 @@ public class GridManager : MonoBehaviour
 
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
 
-        grid.ClearAllTiles();
+        tilemap.ClearAllTiles();
         BuildGrid();
     }
 
-    void Update()
+    public void OnSingleClick(Vector3Int tilePos)
     {
-        if (clickAction.WasPressedThisFrame())
+        int x = tilePos.x - offsetX;
+        int y = tilePos.y - offsetY;
+        if (actPartData != null)
         {
-            if (actPartData != null)
-            {
-                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                Vector3Int tilePos = grid.WorldToCell(mouseWorldPos);
-
-                int x = tilePos.x - offsetX;
-                int y = tilePos.y - offsetY;
-
-                PlacePart(x, y);
-            }
-            else
-            {
-                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                Vector3Int tilePos = grid.WorldToCell(mouseWorldPos);
-
-                int x = tilePos.x - offsetX;
-                int y = tilePos.y - offsetY;
-
-                RemovePart(x, y);
-            }
+            PlacePart(x, y);
         }
+        else
+        {
+            RemovePart(x, y);
+        }
+    }
+    public void OnDoubleClick(Vector3Int tilePos)
+    {
+        int x = tilePos.x - offsetX;
+        int y = tilePos.y - offsetY;
+        RotatePart(x, y);
     }
     private void BuildGrid()
     {
@@ -117,11 +107,11 @@ public class GridManager : MonoBehaviour
                 Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
                 if (partDataGrid[x, y].partData == null)
                 {
-                    grid.SetTile(tilePosition, tile);
+                    tilemap.SetTile(tilePosition, tile);
                 }
                 else
                 {
-                    grid.SetTile(tilePosition, partDataGrid[x, y].partData.partTile);
+                    tilemap.SetTile(tilePosition, partDataGrid[x, y].partData.partTile);
                 }
             }
         }
@@ -148,7 +138,8 @@ public class GridManager : MonoBehaviour
         partDataGrid[x, y] = new GridCell { partData = actPartData, Rotation = rotation };
 
         Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
-        grid.SetTile(tilePosition, actPartData.partTile);
+        tilemap.SetTile(tilePosition, actPartData.partTile);
+        ApplyRotation(tilePosition, rotation);
     }
     public void RemovePart(int x, int y)
     {
@@ -161,9 +152,35 @@ public class GridManager : MonoBehaviour
         partDataGrid[x, y] = new GridCell { partData = null, Rotation = 0 };
 
         Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
-        grid.SetTile(tilePosition, tile);
+        tilemap.SetTile(tilePosition, tile);
+    }
+    public void RotatePart(int x, int y)
+    {
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY || partDataGrid[x, y].partData == null)
+        {
+            return;
+        }
+
+        int newRotation = (partDataGrid[x, y].Rotation + 1) % 4;
+        partDataGrid[x, y].Rotation = newRotation;
+        Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
+        ApplyRotation(tilePosition, newRotation);
     }
 
+    private void ApplyRotation(Vector3Int tilePosition, int rotationIndex)
+    {
+        tilemap.SetTileFlags(tilePosition, TileFlags.None);
+
+        float angle = rotationIndex * -90f;
+
+        Matrix4x4 matrix = Matrix4x4.TRS(
+            Vector3.zero,
+            Quaternion.Euler(0, 0, angle),
+            Vector3.one
+        );
+
+        tilemap.SetTransformMatrix(tilePosition, matrix);
+    }
     private int FindBestRotation(int x, int y, PartData partToPlace)
     {
         for (int r = 0; r < 4; r++)
@@ -220,13 +237,13 @@ public class GridManager : MonoBehaviour
             {
                 if (partDataGrid[x, y].partData != null)
                 {
-                    Vector3 worldPos = grid.CellToWorld(new Vector3Int(x + offsetX, y + offsetY, 0));
-                    worldPos.y += grid.cellSize.y / 2;
-                    worldPos.x += grid.cellSize.x / 2;
+                    Vector3 worldPos = tilemap.CellToWorld(new Vector3Int(x + offsetX, y + offsetY, 0));
+                    worldPos.y += tilemap.cellSize.y / 2;
+                    worldPos.x += tilemap.cellSize.x / 2;
 
 
                     Quaternion finalRotation = partDataGrid[x, y].partData.partPrefab.transform.rotation
-                                                                 * Quaternion.Euler(0, 0, -partDataGrid[x, y].Rotation * 90);
+                                                                 * Quaternion.Euler(0, 0, partDataGrid[x, y].Rotation * -90f);
                     GameObject newPart = Instantiate(partDataGrid[x, y].partData.partPrefab, worldPos, finalRotation);
                     Rigidbody2D rb = newPart.GetComponentInChildren<Rigidbody2D>();
 
@@ -289,7 +306,7 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        grid.ClearAllTiles();
+        tilemap.ClearAllTiles();
     }
     private void TryCreateJoint(int xA, int yA, int xB, int yB, GameObject[,] spawnedParts)
     {

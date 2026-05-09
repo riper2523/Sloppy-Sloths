@@ -9,6 +9,7 @@ public class GridManager : MonoBehaviour
     [Header("Listening To")]
     [SerializeField] private VoidEventChannelSO playLevelEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
+
     [SerializeField] private int offsetX = 3;
     [SerializeField] private int offsetY = 3;
     [SerializeField] private int gridSizeX = 5;
@@ -26,15 +27,18 @@ public class GridManager : MonoBehaviour
 
 
     private Transform vehicleParent;
-
     private Transform buildCameraTarget;
 
-    struct GridCell
+    public class PartInstance
     {
         public PartData partData;
         public int Rotation;
     }
 
+    struct GridCell
+    {
+        public Dictionary<int, PartInstance> parts;
+    }
     private GridCell[,] partDataGrid;
     private PartData actPartData;
 
@@ -78,6 +82,13 @@ public class GridManager : MonoBehaviour
         targetGroup.AddMember(buildCameraTarget, 1f, 0f);
 
         partDataGrid = new GridCell[gridSizeX, gridSizeY];
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                partDataGrid[x, y].parts = new Dictionary<int, PartInstance>();
+            }
+        }
 
         tilemap.ClearAllTiles();
         BuildGrid();
@@ -138,15 +149,7 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
-                if (partDataGrid[x, y].partData == null)
-                {
-                    tilemap.SetTile(tilePosition, tile);
-                }
-                else
-                {
-                    tilemap.SetTile(tilePosition, partDataGrid[x, y].partData.partTile);
-                }
+                UpdateTilemapForCell(x, y);
             }
         }
     }
@@ -163,56 +166,99 @@ public class GridManager : MonoBehaviour
             return;
         }
 
-        int rotation = FindBestRotation(x, y, actPartData);
+        var cellParts = partDataGrid[x, y].parts;
+        List<int> layersToRemove = new List<int>();
 
-        if (partDataGrid[x, y].partData != null)
+        foreach (var kvp in cellParts)
         {
-            inventoryManager.AddPart(partDataGrid[x, y].partData, 1);
-        }
-        partDataGrid[x, y] = new GridCell { partData = actPartData, Rotation = rotation };
+            PartData existingPart = kvp.Value.partData;
 
-        Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
-        tilemap.SetTile(tilePosition, actPartData.partTile);
-        ApplyRotation(tilePosition, rotation);
+            if (existingPart.layer == actPartData.layer ||
+                !actPartData.acceptedLayers.Contains(existingPart.layer) ||
+                !existingPart.acceptedLayers.Contains(actPartData.layer))
+            {
+                layersToRemove.Add(kvp.Key);
+            }
+        }
+
+        foreach (int layerId in layersToRemove)
+        {
+            inventoryManager.AddPart(cellParts[layerId].partData, 1);
+            cellParts.Remove(layerId);
+        }
+        int rotation = FindBestRotation(x, y, actPartData);
+        cellParts[actPartData.layer] = new PartInstance { partData = actPartData, Rotation = rotation };
+
+        UpdateTilemapForCell(x, y);
     }
     public void RemovePart(int x, int y)
     {
-        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY || partDataGrid[x, y].partData == null)
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY)
         {
             return;
         }
+        var cellParts = partDataGrid[x, y].parts;
+        if (cellParts.Count == 0) return;
 
-        inventoryManager.AddPart(partDataGrid[x, y].partData, 1);
-        partDataGrid[x, y] = new GridCell { partData = null, Rotation = 0 };
+        int topLayer = -1;
+        foreach (int layerId in cellParts.Keys)
+        {
+            if (layerId > topLayer) topLayer = layerId;
+        }
 
-        Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
-        tilemap.SetTile(tilePosition, tile);
+        inventoryManager.AddPart(cellParts[topLayer].partData, 1);
+        cellParts.Remove(topLayer);
+
+        UpdateTilemapForCell(x, y);
     }
     public void RotatePart(int x, int y)
     {
-        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY || partDataGrid[x, y].partData == null)
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY)
         {
             return;
         }
 
-        int newRotation = (partDataGrid[x, y].Rotation + 1) % 4;
-        partDataGrid[x, y].Rotation = newRotation;
-        Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
-        ApplyRotation(tilePosition, newRotation);
-    }
+        var cellParts = partDataGrid[x, y].parts;
+        if (cellParts.Count == 0) return;
 
+        int topLayer = -1;
+        foreach (int layerId in cellParts.Keys)
+        {
+            if (layerId > topLayer) topLayer = layerId;
+        }
+
+        int newRotation = (cellParts[topLayer].Rotation + 1) % 4;
+        cellParts[topLayer].Rotation = newRotation;
+
+        UpdateTilemapForCell(x, y);
+    }
+    private void UpdateTilemapForCell(int x, int y)
+    {
+        Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
+        var cellParts = partDataGrid[x, y].parts;
+
+        if (cellParts == null || cellParts.Count == 0)
+        {
+            tilemap.SetTile(tilePosition, tile);
+            tilemap.SetTransformMatrix(tilePosition, Matrix4x4.identity);
+            return;
+        }
+
+        int topLayer = -1;
+        foreach (int layerId in cellParts.Keys)
+        {
+            if (layerId > topLayer) topLayer = layerId;
+        }
+
+        var topPart = cellParts[topLayer];
+        tilemap.SetTile(tilePosition, topPart.partData.partTile);
+        ApplyRotation(tilePosition, topPart.Rotation);
+    }
     private void ApplyRotation(Vector3Int tilePosition, int rotationIndex)
     {
         tilemap.SetTileFlags(tilePosition, TileFlags.None);
-
         float angle = rotationIndex * -90f;
-
-        Matrix4x4 matrix = Matrix4x4.TRS(
-            Vector3.zero,
-            Quaternion.Euler(0, 0, angle),
-            Vector3.one
-        );
-
+        Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0, 0, angle), Vector3.one);
         tilemap.SetTransformMatrix(tilePosition, matrix);
     }
     private int FindBestRotation(int x, int y, PartData partToPlace)
@@ -229,115 +275,155 @@ public class GridManager : MonoBehaviour
     {
         bool hasAnyNeighbor = false;
         bool isSuccessfullyAttached = false;
+        int l = part.layer;
 
-        if (y + 1 < gridSizeY && partDataGrid[x, y + 1].partData != null)
+        if (y + 1 < gridSizeY && partDataGrid[x, y + 1].parts.ContainsKey(l))
         {
             hasAnyNeighbor = true;
-            if (part.HasAttachment(0, rotation) && partDataGrid[x, y + 1].partData.HasAttachment(2, partDataGrid[x, y + 1].Rotation)) isSuccessfullyAttached = true;
+            var neighbor = partDataGrid[x, y + 1].parts[l];
+            if (part.HasAttachment(0, rotation) && neighbor.partData.HasAttachment(2, neighbor.Rotation)) isSuccessfullyAttached = true;
         }
 
-        if (x + 1 < gridSizeX && partDataGrid[x + 1, y].partData != null)
+        if (x + 1 < gridSizeX && partDataGrid[x + 1, y].parts.ContainsKey(l))
         {
             hasAnyNeighbor = true;
-            if (part.HasAttachment(1, rotation) && partDataGrid[x + 1, y].partData.HasAttachment(3, partDataGrid[x + 1, y].Rotation)) isSuccessfullyAttached = true;
+            var neighbor = partDataGrid[x + 1, y].parts[l];
+            if (part.HasAttachment(1, rotation) && neighbor.partData.HasAttachment(3, neighbor.Rotation)) isSuccessfullyAttached = true;
         }
 
-        if (y - 1 >= 0 && partDataGrid[x, y - 1].partData != null)
+        if (y - 1 >= 0 && partDataGrid[x, y - 1].parts.ContainsKey(l))
         {
             hasAnyNeighbor = true;
-            if (part.HasAttachment(2, rotation) && partDataGrid[x, y - 1].partData.HasAttachment(0, partDataGrid[x, y - 1].Rotation)) isSuccessfullyAttached = true;
+            var neighbor = partDataGrid[x, y - 1].parts[l];
+            if (part.HasAttachment(2, rotation) && neighbor.partData.HasAttachment(0, neighbor.Rotation)) isSuccessfullyAttached = true;
         }
 
-        if (x - 1 >= 0 && partDataGrid[x - 1, y].partData != null)
+        if (x - 1 >= 0 && partDataGrid[x - 1, y].parts.ContainsKey(l))
         {
             hasAnyNeighbor = true;
-            if (part.HasAttachment(3, rotation) && partDataGrid[x - 1, y].partData.HasAttachment(1, partDataGrid[x - 1, y].Rotation)) isSuccessfullyAttached = true;
+            var neighbor = partDataGrid[x - 1, y].parts[l];
+            if (part.HasAttachment(3, rotation) && neighbor.partData.HasAttachment(1, neighbor.Rotation)) isSuccessfullyAttached = true;
         }
 
-        if (!hasAnyNeighbor)
-            return true;
-
+        if (!hasAnyNeighbor) return true;
         return isSuccessfullyAttached;
     }
 
     public void Build()
     {
-        GameObject[,] spawnedParts = new GameObject[gridSizeX, gridSizeY];
-        var newTargets = new System.Collections.Generic.List<CinemachineTargetGroup.Target>();
+        Dictionary<int, GameObject>[,] spawnedParts = new Dictionary<int, GameObject>[gridSizeX, gridSizeY];
+        var newTargets = new List<CinemachineTargetGroup.Target>();
 
+        // 1. SPAWNOWANIE
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if (partDataGrid[x, y].partData != null)
+                spawnedParts[x, y] = new Dictionary<int, GameObject>();
+                var cellParts = partDataGrid[x, y].parts;
+
+                if (cellParts.Count == 0) continue;
+
+                // Szukamy najniższej warstwy (najbardziej bazowej) w TEJ konkretnej kratce
+                int minLayerInCell = int.MaxValue;
+                foreach (int l in cellParts.Keys)
                 {
+                    if (l < minLayerInCell) minLayerInCell = l;
+                }
+
+                foreach (var kvp in cellParts)
+                {
+                    int layer = kvp.Key;
+                    PartInstance pInst = kvp.Value;
+
                     Vector3 worldPos = tilemap.CellToWorld(new Vector3Int(x + offsetX, y + offsetY, 0));
                     worldPos.y += tilemap.cellSize.y / 2;
                     worldPos.x += tilemap.cellSize.x / 2;
 
+                    Quaternion finalRotation = pInst.partData.partPrefab.transform.rotation
+                                             * Quaternion.Euler(0, 0, pInst.Rotation * -90f);
 
-                    Quaternion finalRotation = partDataGrid[x, y].partData.partPrefab.transform.rotation
-                                                                 * Quaternion.Euler(0, 0, partDataGrid[x, y].Rotation * -90f);
-                    GameObject newPart = Instantiate(partDataGrid[x, y].partData.partPrefab, worldPos, finalRotation);
+                    GameObject newPart = Instantiate(pInst.partData.partPrefab, worldPos, finalRotation);
+
+                    // WYŁĄCZANIE KOLIZJI DLA WYŻSZYCH WARSTW
+                    if (layer > minLayerInCell)
+                    {
+                        // Szukamy wszystkich colliderów na tym klocku i wyłączamy je
+                        Collider2D[] colliders = newPart.GetComponentsInChildren<Collider2D>();
+                        foreach (Collider2D col in colliders)
+                        {
+                            col.enabled = false;
+                        }
+                    }
+
                     Rigidbody2D rb = newPart.GetComponentInChildren<Rigidbody2D>();
-
                     if (rb != null)
                     {
-                        newTargets.Add(new CinemachineTargetGroup.Target
-                        {
-                            Object = rb.transform,
-                            Weight = 1f,
-                            Radius = 1f
-                        });
+                        newTargets.Add(new CinemachineTargetGroup.Target { Object = rb.transform, Weight = 1f, Radius = 1f });
                     }
 
                     newPart.transform.SetParent(vehicleParent, true);
-                    spawnedParts[x, y] = newPart;
+                    spawnedParts[x, y][layer] = newPart;
+
+                    // Obsługa logiki
+                    PartLogic logic = newPart.GetComponentInChildren<PartLogic>();
+                    if (logic != null)
+                    {
+                        foreach (var action in logic.actionReceivers)
+                        {
+                            action.startAction.AddListener(() => PartActivated(action.actionType));
+                            action.stopAction.AddListener(() => PartDeactivated(action.actionType));
+                            if (actionToggles.TryGetValue(action.actionType, out GameObject toggle))
+                            {
+                                GameToggleScript toggleScript = toggle.GetComponent<GameToggleScript>();
+                                toggleScript.startEvent.AddListener(() => action.startAction.Invoke());
+                                toggleScript.endEvent.AddListener(() => action.stopAction.Invoke());
+                            }
+                            else
+                            {
+                                GameObject toggleGO = Instantiate(gameTogglePrefab, gameToggleParent.transform);
+                                GameToggleScript toggleScript = toggleGO.GetComponent<GameToggleScript>();
+                                toggleScript.startEvent.AddListener(() => action.startAction.Invoke());
+                                toggleScript.endEvent.AddListener(() => action.stopAction.Invoke());
+                                actionToggles[action.actionType] = toggleGO;
+                            }
+                        }
+                    }
                 }
             }
         }
 
         targetGroup.Targets = newTargets;
 
+        // 2. TWORZENIE JOINTÓW (ŁĄCZENIE)
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if (spawnedParts[x, y] == null)
-                {
-                    continue;
-                }
+                var currentCellParts = spawnedParts[x, y];
+                if (currentCellParts.Count == 0) continue;
 
-                if (x + 1 < gridSizeX && spawnedParts[x + 1, y] != null)
+                // A) Łączenie Wewnętrzne (Części na tej samej kratce łączą się ze sobą)
+                if (currentCellParts.Count > 1)
                 {
-                    TryCreateJoint(x, y, x + 1, y, spawnedParts);
-                }
-
-                if (y + 1 < gridSizeY && spawnedParts[x, y + 1] != null)
-                {
-                    TryCreateJoint(x, y, x, y + 1, spawnedParts);
-                }
-                PartLogic logic = spawnedParts[x, y].GetComponentInChildren<PartLogic>();
-                if (logic != null)
-                {
-                    foreach (var action in logic.actionReceivers)
+                    List<GameObject> partsInCell = new List<GameObject>(currentCellParts.Values);
+                    for (int i = 1; i < partsInCell.Count; i++)
                     {
-                        action.startAction.AddListener(() => PartActivated(action.actionType));
-                        action.stopAction.AddListener(() => PartDeactivated(action.actionType));
-                        if (actionToggles.TryGetValue(action.actionType, out GameObject toggle))
-                        {
-                            GameToggleScript toggleScript = toggle.GetComponent<GameToggleScript>();
-                            toggleScript.startEvent.AddListener(() => action.startAction.Invoke());
-                            toggleScript.endEvent.AddListener(() => action.stopAction.Invoke());
-                        }
-                        else
-                        {
-                            GameObject toggleGO = Instantiate(gameTogglePrefab, gameToggleParent.transform);
-                            GameToggleScript toggleScript = toggleGO.GetComponent<GameToggleScript>();
-                            toggleScript.startEvent.AddListener(() => action.startAction.Invoke());
-                            toggleScript.endEvent.AddListener(() => action.stopAction.Invoke());
-                            actionToggles[action.actionType] = toggleGO;
-                        }
+                        CreateJoint(partsInCell[0], partsInCell[i], 50000f);
+                    }
+                }
+
+                // B) Łączenie z sąsiadami (TYLKO jeśli mają ten sam Layer)
+                foreach (int layer in currentCellParts.Keys)
+                {
+                    if (x + 1 < gridSizeX && spawnedParts[x + 1, y].ContainsKey(layer))
+                    {
+                        TryCreateJointLayer(x, y, x + 1, y, layer, spawnedParts);
+                    }
+
+                    if (y + 1 < gridSizeY && spawnedParts[x, y + 1].ContainsKey(layer))
+                    {
+                        TryCreateJointLayer(x, y, x, y + 1, layer, spawnedParts);
                     }
                 }
             }
@@ -345,32 +431,30 @@ public class GridManager : MonoBehaviour
 
         tilemap.ClearAllTiles();
     }
-    private void TryCreateJoint(int xA, int yA, int xB, int yB, GameObject[,] spawnedParts)
+    private void TryCreateJointLayer(int xA, int yA, int xB, int yB, int layer, Dictionary<int, GameObject>[,] spawnedParts)
     {
-        GridCell cellA = partDataGrid[xA, yA];
-        GridCell cellB = partDataGrid[xB, yB];
+        PartInstance pA = partDataGrid[xA, yA].parts[layer];
+        PartInstance pB = partDataGrid[xB, yB].parts[layer];
 
         bool canAttach = false;
 
         if (xB > xA)
         {
-            bool aHasRight = cellA.partData.HasAttachment(1, cellA.Rotation);
-            bool bHasLeft = cellB.partData.HasAttachment(3, cellB.Rotation);
-
+            bool aHasRight = pA.partData.HasAttachment(1, pA.Rotation);
+            bool bHasLeft = pB.partData.HasAttachment(3, pB.Rotation);
             canAttach = aHasRight && bHasLeft;
         }
         else if (yB > yA)
         {
-            bool aHasUp = cellA.partData.HasAttachment(0, cellA.Rotation);
-            bool bHasDown = cellB.partData.HasAttachment(2, cellB.Rotation);
-
+            bool aHasUp = pA.partData.HasAttachment(0, pA.Rotation);
+            bool bHasDown = pB.partData.HasAttachment(2, pB.Rotation);
             canAttach = aHasUp && bHasDown;
         }
 
         if (canAttach)
         {
-            float strength = (cellA.partData.jointStrength + cellB.partData.jointStrength) / 2f;
-            CreateJoint(spawnedParts[xA, yA], spawnedParts[xB, yB], strength);
+            float strength = (pA.partData.jointStrength + pB.partData.jointStrength) / 2f;
+            CreateJoint(spawnedParts[xA, yA][layer], spawnedParts[xB, yB][layer], strength);
         }
     }
     private void CreateJoint(GameObject partA, GameObject partB, float strength = 100f)

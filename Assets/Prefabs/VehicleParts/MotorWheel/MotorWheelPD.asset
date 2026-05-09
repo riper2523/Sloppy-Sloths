@@ -17,4 +17,6 @@ MonoBehaviour:
   partName: MotorWheel
   partTile: {fileID: 11400000, guid: 9c505c6d4ca5880409a11f8faf884ee1, type: 2}
   jointStrength: 5000
+  layer: 0
+  acceptedLayers: 
   attachable: 01000000

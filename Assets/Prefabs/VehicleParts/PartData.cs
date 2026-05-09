@@ -10,6 +10,9 @@ public class PartData : ScriptableObject
     public string partName;
     public Tile partTile;
     public float jointStrength = 200f;
+    public int layer = 0;
+    [Tooltip("List of layers that can be with this part on same square")]
+    public List<int> acceptedLayers = new List<int>();
     [Tooltip("0: Up, 1: Right, 2: Down, 3: Left")]
     public bool[] attachable = new bool[4];
     private void OnValidate()

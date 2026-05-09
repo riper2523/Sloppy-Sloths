@@ -16,7 +16,6 @@ public class MotorWheel : MonoBehaviour
     public void StartMotor()
     {
         hinge.useMotor = true;
-
     }
     public void StopMotor()
     {

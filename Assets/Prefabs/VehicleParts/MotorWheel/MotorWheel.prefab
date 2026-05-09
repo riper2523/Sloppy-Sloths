@@ -366,6 +366,7 @@ GameObject:
   - component: {fileID: 2562856846963897997}
   - component: {fileID: 35009340052912991}
   - component: {fileID: 9175531997070321749}
+  - component: {fileID: 5755092849795319607}
   m_Layer: 0
   m_Name: MotorWheel
   m_TagString: Untagged
@@ -448,3 +449,15 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &5755092849795319607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8574444926399471992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f3d20b1e3086f47a750176fca79ab3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickablePart

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Cinemachine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
@@ -20,7 +21,10 @@ public class GridManager : MonoBehaviour
     [SerializeField] private GameObject gameToggleParent;
     [SerializeField] private GameObject gameTogglePrefab;
 
-    private Dictionary<ActionType, GameToggleScript> actionToggles = new Dictionary<ActionType, GameToggleScript>();
+    private Dictionary<ActionType, GameObject> actionToggles = new Dictionary<ActionType, GameObject>();
+    private Dictionary<ActionType, int> activeActions = new Dictionary<ActionType, int>();
+
+
     private Transform vehicleParent;
 
     private Transform buildCameraTarget;
@@ -79,6 +83,36 @@ public class GridManager : MonoBehaviour
         BuildGrid();
     }
 
+    public void PartActivated(ActionType actionType)
+    {
+        if (activeActions.ContainsKey(actionType))
+        {
+            activeActions[actionType]++;
+        }
+        else
+        {
+            activeActions[actionType] = 1;
+        }
+        if (activeActions[actionType] == 1 && actionToggles.TryGetValue(actionType, out GameObject toggle))
+        {
+            toggle.GetComponent<Toggle>().SetIsOnWithoutNotify(true);
+        }
+    }
+    public void PartDeactivated(ActionType actionType)
+    {
+        if (activeActions.ContainsKey(actionType))
+        {
+            activeActions[actionType]--;
+            if (activeActions[actionType] <= 0)
+            {
+                activeActions[actionType] = 0;
+                if (actionToggles.TryGetValue(actionType, out GameObject toggle))
+                {
+                    toggle.GetComponent<Toggle>().SetIsOnWithoutNotify(false);
+                }
+            }
+        }
+    }
     public void OnSingleClick(Vector3Int tilePos)
     {
         int x = tilePos.x - offsetX;
@@ -288,10 +322,13 @@ public class GridManager : MonoBehaviour
                 {
                     foreach (var action in logic.actionReceivers)
                     {
-                        if (actionToggles.TryGetValue(action.actionType, out GameToggleScript toggle))
+                        action.startAction.AddListener(() => PartActivated(action.actionType));
+                        action.stopAction.AddListener(() => PartDeactivated(action.actionType));
+                        if (actionToggles.TryGetValue(action.actionType, out GameObject toggle))
                         {
-                            toggle.startEvent.AddListener(() => action.startAction.Invoke());
-                            toggle.endEvent.AddListener(() => action.stopAction.Invoke());
+                            GameToggleScript toggleScript = toggle.GetComponent<GameToggleScript>();
+                            toggleScript.startEvent.AddListener(() => action.startAction.Invoke());
+                            toggleScript.endEvent.AddListener(() => action.stopAction.Invoke());
                         }
                         else
                         {
@@ -299,7 +336,7 @@ public class GridManager : MonoBehaviour
                             GameToggleScript toggleScript = toggleGO.GetComponent<GameToggleScript>();
                             toggleScript.startEvent.AddListener(() => action.startAction.Invoke());
                             toggleScript.endEvent.AddListener(() => action.stopAction.Invoke());
-                            actionToggles[action.actionType] = toggleScript;
+                            actionToggles[action.actionType] = toggleGO;
                         }
                     }
                 }

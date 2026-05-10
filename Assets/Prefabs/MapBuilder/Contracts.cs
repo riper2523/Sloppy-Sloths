@@ -5,16 +5,15 @@ using System.Collections.Generic;
 
 namespace Assets.Prefabs.MapBuilder
 {
-    public delegate void NodeTriggeredHandler();
-
     public delegate void NodeDraggedHandler(Vector3 actPos, Vector3 offset);
 
     public interface INodeHandle
     {
-        public event NodeTriggeredHandler? NodeChangedSelectionState;
+        public event Action? NodeChangedSelectionState;
         // This is triggered for example when clicking the node
-        public event NodeTriggeredHandler? NodeTriggered;
+        public event Action? NodeTriggered;
         public event NodeDraggedHandler? NodeDragged;
+        public event Action? NodeDragEnded;
 
         Vector3 GetCoordinates();
         void MoveByOffset(Vector3 offset);
@@ -29,14 +28,13 @@ namespace Assets.Prefabs.MapBuilder
     public delegate void NodeInContainerChangedSelectionState(INodeHandle nodeHandle);
     public delegate void NodesInContainerDeletedHandler(ISet<INodeHandle> nodeHandles);
     public delegate void NodeAdditionRequestedHandler(Vector2 position);
-    public delegate void ContainerDeletedHandler();
 
     public interface INodeContainer
     {
         public event NodeInContainerChangedSelectionState? NodeChangedState;
         public event NodesInContainerDeletedHandler? NodesDeleted;
         public event Action? ContainerSelected;
-        public event ContainerDeletedHandler? ContainerDeleted;
+        public event Action? ContainerDeleted;
         public event NodeAdditionRequestedHandler? NodeAdditionRequested;
 
         INodeHandle? TryAddingNodeAtPoint(Vector2 point);

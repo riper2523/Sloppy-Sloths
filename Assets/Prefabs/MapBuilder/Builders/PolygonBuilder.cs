@@ -31,7 +31,9 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
     public event NodeAdditionRequestedHandler? NodeAdditionRequested;
     public event Action? ContainerSelected;
     public event NodesInContainerDeletedHandler? NodesDeleted;
-    public event ContainerDeletedHandler? ContainerDeleted;
+    public event Action? ContainerDeleted;
+
+    private bool ColliderNeedsRebuilding;
 
     private readonly NodesContainerActivityState ActivityState = NodesContainerActivityState.ContainerInactive();
     NodesContainerActivityState INodeContainer.ActivityState => ActivityState;
@@ -102,6 +104,12 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
 
     void Update()
     {
+        if (ColliderNeedsRebuilding)
+        {
+            RebuildTheCollider();
+            ColliderNeedsRebuilding = false;
+        }
+
         var nextColor = ActivityState.IsContainerActive() ? tintColor : originalColor;
         if (spriteRenderer.color != nextColor)
         {
@@ -135,7 +143,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
             }
             else
             {
-                RebuildTheSpline();
+                RebuildTheSplineAndCollider();
             }
         }
     }
@@ -216,7 +224,17 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
         }
 
         shape.RefreshSpriteShape();
+    }
+
+    private void RebuildTheCollider()
+    {
         shape.BakeCollider();
+    }
+
+    private void RebuildTheSplineAndCollider()
+    {
+        RebuildTheSpline();
+        RebuildTheCollider();
     }
 
     public void NodeMoved(INodeHandle node, Vector2 offset)
@@ -273,11 +291,16 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
 
         controller.NodeChangedSelectionState += () => NodeChangedState?.Invoke(controller);
 
+        controller.NodeDragEnded += () =>
+        {
+            ColliderNeedsRebuilding = true;
+        };
+
         var result = AddToSpline(controller, nodeIndex.Value);
 
         if (nodes.Count >= 3)
         {
-            RebuildTheSpline();
+            RebuildTheSplineAndCollider();
         }
         return controller;
     }
@@ -286,8 +309,6 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
     {
         Destroy(gameObject);
     }
-
-    // GRATULACJE UZYTKOWNIKU. ZDOBYLES ORDER UWAZNEGO REVIEWERA. TERAZ MOZESZ TO ZGLOSIC
 
     public void SelectContainer()
     {

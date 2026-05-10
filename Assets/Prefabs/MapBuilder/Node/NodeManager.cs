@@ -92,11 +92,10 @@ class NodeManager : MonoBehaviour, INodeManager
 
         containerController.NodeAdditionRequested += (position) =>
         {
-            // if (activeNodeContainer != containerController)
-            // {
-            //     Debug.LogError("Node addition requested by inactive container");
-            //     return;
-            // }
+            if (activeNodeContainer != containerController)
+            {
+                Debug.LogWarning("Node addition requested by inactive container");
+            }
 
             var node = containerController.TryAddingNodeAtPoint(position);
             if (node is null)

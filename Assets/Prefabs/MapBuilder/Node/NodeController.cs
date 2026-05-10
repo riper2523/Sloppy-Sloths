@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Assets.Prefabs.MapBuilder;
+using System;
 
 namespace Assets.Prefabs.MapBuilder.Node
 {
@@ -15,11 +16,10 @@ namespace Assets.Prefabs.MapBuilder.Node
 #nullable enable
         // Null object pattern
         private IDraggable? draggable;
-
-
-        public event NodeTriggeredHandler? NodeTriggered;
+        public event Action? NodeTriggered;
         public event NodeDraggedHandler? NodeDragged;
-        public event NodeTriggeredHandler? NodeChangedSelectionState;
+        public event Action? NodeChangedSelectionState;
+        public event Action? NodeDragEnded;
 
         void Awake()
         {
@@ -36,6 +36,8 @@ namespace Assets.Prefabs.MapBuilder.Node
             {
                 NodeDragged?.Invoke(oldPos, offset);
             };
+
+            draggable!.NodeDragEnded += () => NodeDragEnded?.Invoke();
         }
 
         private bool active;

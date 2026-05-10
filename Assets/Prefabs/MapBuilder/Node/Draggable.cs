@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -8,11 +9,12 @@ using Assets.Prefabs.MapBuilder;
 public interface IDraggable
 {
     event NodeDraggedHandler? nodeDragged;
+    event Action? NodeDragEnded;
     bool enabled { get; set; }
 }
 
 // enabled is implemented in GameObject
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IDraggable
+public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDraggable
 {
     private Camera? mainCamera;
     private float zDistance;
@@ -22,6 +24,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IDragga
     // [SerializeField] private float deltaMoved = 0.0001f;
 
     public event NodeDraggedHandler? nodeDragged;
+    public event Action? NodeDragEnded;
 
     void Awake()
     {
@@ -50,5 +53,10 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IDragga
 
         Vector3 mousePos3D = new(mousePos2D.x, mousePos2D.y, zDistance);
         return mainCamera!.ScreenToWorldPoint(mousePos3D);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        NodeDragEnded?.Invoke();
     }
 }

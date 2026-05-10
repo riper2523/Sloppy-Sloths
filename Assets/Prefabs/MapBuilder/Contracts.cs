@@ -34,7 +34,7 @@ namespace Assets.Prefabs.MapBuilder
         public event NodeInContainerChangedSelectionState? NodeChangedState;
         public event NodesInContainerDeletedHandler? NodesDeleted;
         public event Action? ContainerSelected;
-        public event Action? ContainerDeleted;
+        public event Action? ContainerDeletionRequested;
         public event NodeAdditionRequestedHandler? NodeAdditionRequested;
 
         INodeHandle? TryAddingNodeAtPoint(Vector2 point);

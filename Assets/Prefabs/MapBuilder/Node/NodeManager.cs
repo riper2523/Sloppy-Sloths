@@ -109,8 +109,12 @@ class NodeManager : MonoBehaviour, INodeManager
             SetActiveNodeContainer(containerController);
         };
 
-        containerController.ContainerDeleted += () =>
+        containerController.ContainerDeletionRequested += () =>
         {
+            if (activeNodeContainer == containerController)
+            {
+                SetActiveNodeContainer(null);
+            }
             containerController.Delete();
         };
 

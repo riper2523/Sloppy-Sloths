@@ -31,7 +31,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
     public event NodeAdditionRequestedHandler? NodeAdditionRequested;
     public event Action? ContainerSelected;
     public event NodesInContainerDeletedHandler? NodesDeleted;
-    public event Action? ContainerDeleted;
+    public event Action? ContainerDeletionRequested;
 
     private bool ColliderNeedsRebuilding;
 
@@ -139,7 +139,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
 
             if (deletingContainer)
             {
-                ContainerDeleted?.Invoke();
+                ContainerDeletionRequested?.Invoke();
             }
             else
             {

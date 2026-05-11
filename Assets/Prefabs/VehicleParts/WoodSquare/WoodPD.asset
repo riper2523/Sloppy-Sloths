@@ -17,4 +17,6 @@ MonoBehaviour:
   partName: Wood
   partTile: {fileID: 11400000, guid: af5276cb032cecb408e3212ed52d021d, type: 2}
   jointStrength: 3500
+  layer: 0
+  acceptedLayers: 01000000
   attachable: 01010101

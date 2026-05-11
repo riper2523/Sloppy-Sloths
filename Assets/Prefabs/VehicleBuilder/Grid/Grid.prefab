@@ -127,7 +127,7 @@ TilemapRenderer:
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
-  m_Mode: 0
+  m_Mode: 1
   m_DetectChunkCullingBounds: 0
 --- !u!114 &963367893546876213
 MonoBehaviour:
@@ -270,7 +270,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   playLevelEvent: {fileID: 11400000, guid: 0196888eb81668e4fb20e44969a70749, type: 2}
   restartLevelEvent: {fileID: 11400000, guid: 020fa9327bd39934dbbf0aa7f2ee3c49, type: 2}
-  anchorFoundEvent: {fileID: 11400000, guid: 8897fa8662a463a4daf9a5adc741b753, type: 2}
   offsetX: -3
   offsetY: -3
   gridSizeX: 6

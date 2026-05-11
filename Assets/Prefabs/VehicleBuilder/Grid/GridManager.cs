@@ -15,8 +15,9 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int gridSizeX = 5;
     [SerializeField] private int gridSizeY = 5;
 
-    [SerializeField] private Tilemap tilemap;
-    [SerializeField] private Tile tile;
+    [SerializeField] private Tilemap partsTilemap;
+    [SerializeField] private Tilemap backgroundTilemap;
+    [SerializeField] private Tile backgroundTile;
     [SerializeField] private CinemachineTargetGroup targetGroup;
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private GameObject gameToggleParent;
@@ -57,7 +58,6 @@ public class GridManager : MonoBehaviour
     public void InitializeLevel(GridAnchor anchor)
     {
         vehicleParent = new GameObject("Vehicle").transform;
-
         LoadLevelSettings(anchor);
     }
 
@@ -90,7 +90,9 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        tilemap.ClearAllTiles();
+        backgroundTilemap.ClearAllTiles();
+        partsTilemap.ClearAllTiles();
+
         BuildGrid();
     }
 
@@ -149,6 +151,9 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
+                Vector3Int bgPos = new Vector3Int(x + offsetX, y + offsetY, 0);
+                backgroundTilemap.SetTile(bgPos, backgroundTile);
+
                 UpdateTilemapForCell(x, y);
             }
         }
@@ -237,16 +242,14 @@ public class GridManager : MonoBehaviour
         for (int z = 0; z < 10; z++)
         {
             Vector3Int clearPos = new Vector3Int(x + offsetX, y + offsetY, z);
-            tilemap.SetTile(clearPos, null);
-            tilemap.SetTransformMatrix(clearPos, Matrix4x4.identity);
+            partsTilemap.SetTile(clearPos, null);
+            partsTilemap.SetTransformMatrix(clearPos, Matrix4x4.identity);
         }
 
         var cellParts = partDataGrid[x, y].parts;
 
         if (cellParts == null || cellParts.Count == 0)
         {
-            Vector3Int basePos = new Vector3Int(x + offsetX, y + offsetY, 0);
-            tilemap.SetTile(basePos, tile);
             return;
         }
 
@@ -257,16 +260,16 @@ public class GridManager : MonoBehaviour
 
             Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, layerId);
 
-            tilemap.SetTile(tilePosition, pInst.partData.partTile);
+            partsTilemap.SetTile(tilePosition, pInst.partData.partTile);
             ApplyRotation(tilePosition, pInst.Rotation);
         }
     }
     private void ApplyRotation(Vector3Int tilePosition, int rotationIndex)
     {
-        tilemap.SetTileFlags(tilePosition, TileFlags.None);
+        partsTilemap.SetTileFlags(tilePosition, TileFlags.None);
         float angle = rotationIndex * -90f;
         Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0, 0, angle), Vector3.one);
-        tilemap.SetTransformMatrix(tilePosition, matrix);
+        partsTilemap.SetTransformMatrix(tilePosition, matrix);
     }
     private int FindBestRotation(int x, int y, PartData partToPlace)
     {
@@ -318,6 +321,8 @@ public class GridManager : MonoBehaviour
 
     public void Build()
     {
+        backgroundTilemap.gameObject.SetActive(false);
+
         Dictionary<int, GameObject>[,] spawnedParts = new Dictionary<int, GameObject>[gridSizeX, gridSizeY];
         var newTargets = new List<CinemachineTargetGroup.Target>();
 
@@ -343,9 +348,9 @@ public class GridManager : MonoBehaviour
                     int layer = kvp.Key;
                     PartInstance pInst = kvp.Value;
 
-                    Vector3 worldPos = tilemap.CellToWorld(new Vector3Int(x + offsetX, y + offsetY, 0));
-                    worldPos.y += tilemap.cellSize.y / 2;
-                    worldPos.x += tilemap.cellSize.x / 2;
+                    Vector3 worldPos = partsTilemap.CellToWorld(new Vector3Int(x + offsetX, y + offsetY, 0));
+                    worldPos.y += partsTilemap.cellSize.y / 2;
+                    worldPos.x += partsTilemap.cellSize.x / 2;
 
                     Quaternion finalRotation = pInst.partData.partPrefab.transform.rotation
                                              * Quaternion.Euler(0, 0, pInst.Rotation * -90f);
@@ -436,7 +441,7 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        tilemap.ClearAllTiles();
+        partsTilemap.ClearAllTiles();
     }
     private void TryCreateJointLayer(int xA, int yA, int xB, int yB, int layer, Dictionary<int, GameObject>[,] spawnedParts)
     {
@@ -478,6 +483,7 @@ public class GridManager : MonoBehaviour
 
     public void Restart()
     {
+        backgroundTilemap.gameObject.SetActive(true);
         foreach (Transform child in vehicleParent)
         {
             Destroy(child.gameObject);

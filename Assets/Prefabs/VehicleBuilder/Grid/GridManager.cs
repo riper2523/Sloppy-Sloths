@@ -234,25 +234,32 @@ public class GridManager : MonoBehaviour
     }
     private void UpdateTilemapForCell(int x, int y)
     {
-        Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, 0);
+        for (int z = 0; z < 10; z++)
+        {
+            Vector3Int clearPos = new Vector3Int(x + offsetX, y + offsetY, z);
+            tilemap.SetTile(clearPos, null);
+            tilemap.SetTransformMatrix(clearPos, Matrix4x4.identity);
+        }
+
         var cellParts = partDataGrid[x, y].parts;
 
         if (cellParts == null || cellParts.Count == 0)
         {
-            tilemap.SetTile(tilePosition, tile);
-            tilemap.SetTransformMatrix(tilePosition, Matrix4x4.identity);
+            Vector3Int basePos = new Vector3Int(x + offsetX, y + offsetY, 0);
+            tilemap.SetTile(basePos, tile);
             return;
         }
 
-        int topLayer = -1;
-        foreach (int layerId in cellParts.Keys)
+        foreach (var kvp in cellParts)
         {
-            if (layerId > topLayer) topLayer = layerId;
-        }
+            int layerId = kvp.Key;
+            PartInstance pInst = kvp.Value;
 
-        var topPart = cellParts[topLayer];
-        tilemap.SetTile(tilePosition, topPart.partData.partTile);
-        ApplyRotation(tilePosition, topPart.Rotation);
+            Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, layerId);
+
+            tilemap.SetTile(tilePosition, pInst.partData.partTile);
+            ApplyRotation(tilePosition, pInst.Rotation);
+        }
     }
     private void ApplyRotation(Vector3Int tilePosition, int rotationIndex)
     {
@@ -352,7 +359,7 @@ public class GridManager : MonoBehaviour
                         Collider2D[] colliders = newPart.GetComponentsInChildren<Collider2D>();
                         foreach (Collider2D col in colliders)
                         {
-                            col.enabled = false;
+                            col.isTrigger = true;
                         }
                     }
 

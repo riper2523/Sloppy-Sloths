@@ -54,7 +54,6 @@ namespace Assets.Prefabs.MapBuilder.Node
                 }
 
                 NodeChangedSelectionState?.Invoke();
-                draggable!.enabled = value;
                 active = value;
                 selectedOutline.SetActive(value);
                 Debug.Log($"Node set to {value}");

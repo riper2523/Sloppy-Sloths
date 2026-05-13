@@ -71,7 +71,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
                 ActivityState.AddToActiveNodes(nodeHandle);
             }
         }
-        else
+        else if (!ActivityState.IsTheNodeActive(nodeHandle))
         {
             ActivityState.SetNewState(NodesContainerActivityState.ContainerActiveWithOnlyOneNode(nodeHandle));
         }

@@ -54,23 +54,20 @@ class NodeManager : MonoBehaviour, INodeManager
         }
 
         var mousePos = position;
-        if (!activeNodeContainer.ActivityState.AreAnyNodesActive())
+        var closestOnCollider = activeNodeContainer.GetClosestPointOnCollider(mousePos);
+        Debug.Log($"Closest on collider: {closestOnCollider}");
+        if (Vector2.Distance(mousePos, closestOnCollider) > addingPointThreshold)
         {
-            var closestOnCollider = activeNodeContainer.GetClosestPointOnCollider(mousePos);
-            Debug.Log($"Closest on collider: {closestOnCollider}");
-            if (Vector2.Distance(mousePos, closestOnCollider) > addingPointThreshold)
-            {
-                SetActiveNodeContainer(null);
-                return;
-            }
+            SetActiveNodeContainer(null);
+            return;
+        }
 
-            var newNodeController = activeNodeContainer.TryAddingNodeAtPoint(closestOnCollider);
+        var newNodeController = activeNodeContainer.TryAddingNodeAtPoint(closestOnCollider);
 
-            if (newNodeController == null)
-            {
-                Debug.LogError($"Failed to add point to container: {activeNodeContainer}");
-                return;
-            }
+        if (newNodeController == null)
+        {
+            Debug.LogError($"Failed to add point to container: {activeNodeContainer}");
+            return;
         }
     }
 

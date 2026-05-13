@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2176773111512583411}
   - component: {fileID: 3488639646827356390}
   - component: {fileID: 8829311918335186337}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CircularNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4770585558245940015}
   - component: {fileID: 8893524788903288087}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: OutlineCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -257,7 +257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8956220099114628488}
   - component: {fileID: 3843182566752509279}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

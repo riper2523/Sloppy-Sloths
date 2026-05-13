@@ -121,14 +121,14 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
             var deletedNodes = ActivityState.ActiveNodes;
             var deletingContainer = false;
 
-            // This has to happen before the nodes deletion since it accesses INodeHandles which will be lost after deletion
-            ActivityState.SetNewState(NodesContainerActivityState.ContainerActiveButNoNodesSelected());
-
             if (!ActivityState.AreAnyNodesActive() || nodes.Count - deletedNodes.Count < 3)
             {
                 deletedNodes = new HashSet<INodeHandle>(nodes);
                 deletingContainer = true;
             }
+
+            // This has to happen before the nodes deletion since it accesses INodeHandles which will be lost after deletion
+            ActivityState.SetNewState(NodesContainerActivityState.ContainerActiveButNoNodesSelected());
 
             foreach (var node in deletedNodes)
             {

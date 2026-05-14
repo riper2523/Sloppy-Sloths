@@ -63,11 +63,11 @@ namespace Assets.Prefabs.MapBuilder.Node
         // OnPointerDown is necessary for OnPointerUp to function
         public void OnPointerDown(PointerEventData eventData)
         {
+            NodeTriggered?.Invoke();
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            NodeTriggered?.Invoke();
         }
 
         public Vector3 GetCoordinates()

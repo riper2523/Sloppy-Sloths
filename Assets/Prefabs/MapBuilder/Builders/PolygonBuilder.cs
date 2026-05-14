@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -25,6 +26,10 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
 
     [SerializeField]
     public Color tintColor = Color.gray;
+
+    // After adding a point which is closer than that to an existing node the addition will fail
+    [SerializeField]
+    private float distanceThreshold = 0.05f;
 
 #nullable enable
     public event NodeInContainerChangedSelectionState? NodeChangedState;
@@ -269,6 +274,13 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
 
     public INodeHandle? TryAddingNodeAtPoint(Vector2 position)
     {
+        var minDistance = nodes.Select(x => Vector2.Distance(position, x.GetCoordinates())).DefaultIfEmpty(float.PositiveInfinity).Min();
+        if (minDistance < distanceThreshold)
+        {
+            Debug.Log($"There is a node which is {minDistance} close to the node you are trying to add");
+            return null;
+        }
+
         var nodeIndex = FindIndex(position);
         if (nodeIndex is null)
         {

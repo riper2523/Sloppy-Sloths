@@ -97,7 +97,7 @@ class NodeManager : MonoBehaviour, INodeManager
             var node = containerController.TryAddingNodeAtPoint(position);
             if (node is null)
             {
-                Debug.LogError($"Failed to add point add position {position}");
+                Debug.Log($"Failed to add point add position {position}");
             }
         };
 

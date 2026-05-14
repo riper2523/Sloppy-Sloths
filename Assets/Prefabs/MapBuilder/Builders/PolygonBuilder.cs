@@ -166,6 +166,14 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
         {
             ContainerSelected?.Invoke();
         }
+
+        if (inputInformation.IsCtrlPressed())
+        {
+            foreach (var node in nodes)
+            {
+                ActivityState.AddToActiveNodes(node);
+            }
+        }
     }
 
     public Vector2 GetClosestPointOnCollider(Vector2 point)

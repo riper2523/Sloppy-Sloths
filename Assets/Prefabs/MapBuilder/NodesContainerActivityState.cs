@@ -81,8 +81,10 @@ namespace Assets.Prefabs.MapBuilder
             }
 
             Debug.Assert(IsContainerActive());
-            activeNodes!.Add(node);
-            node.Active = true;
+            if (activeNodes!.Add(node))
+            {
+                node.Active = true;
+            }
         }
 
         public bool RemoveFromActiveNodes(INodeHandle node)

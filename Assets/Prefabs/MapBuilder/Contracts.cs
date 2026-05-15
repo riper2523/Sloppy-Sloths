@@ -94,6 +94,8 @@ namespace Assets.Prefabs.MapBuilder
         bool DelKeyWasClicked();
         bool EscapeKeyWasClicked();
         bool IsCtrlPressed();
-        bool VoidWasClicked();
+        bool AreWeOverAGameObject();
+        bool IsPressed();
+        float ScrollValue();
     }
 }

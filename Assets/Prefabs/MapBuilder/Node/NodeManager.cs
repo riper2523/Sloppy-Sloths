@@ -5,68 +5,54 @@ using Assets.Prefabs.MapBuilder;
 [RequireComponent(typeof(IInputInformation))]
 class NodeManager : MonoBehaviour, INodeManager
 {
-    //TODO: Fix tightly coupled code
-    private INodeContainer? activeNodeContainer;
-
-    private void SetActiveNodeContainer(INodeContainer? nodeContainer = null)
+    private INodeContainer? _ActiveNodeContainer;
+    private INodeContainer? ActiveNodeContainer
     {
-        Debug.Log($"Selecting container {activeNodeContainer} {nodeContainer}");
-        if (activeNodeContainer == nodeContainer)
+        get => _ActiveNodeContainer;
+        set
         {
-            return;
-        }
+            if (_ActiveNodeContainer == value)
+            {
+                return;
+            }
 
-        activeNodeContainer?.ResetActivityState();
-        activeNodeContainer = nodeContainer;
-        activeNodeContainer?.SelectContainer();
+            _ActiveNodeContainer?.ResetActivityState();
+            _ActiveNodeContainer = value;
+            _ActiveNodeContainer?.SelectContainer();
+            SelectedContainerChanged?.Invoke(_ActiveNodeContainer);
+        }
     }
 
     [SerializeField] public float addingPointThreshold = 1f;
 
-    //TODO: think about making this a [SerializeField]
-    private IInputInformation? inputInformation;
+    public event SelectedContainerChangedHandler? SelectedContainerChanged;
 
-    void Awake()
+    public void ResetActivityState()
     {
-        inputInformation = GetComponent<IInputInformation>();
+        ActiveNodeContainer = null;
     }
 
-    void Update()
+    public void HandleVoidWasClicked(Vector3 position)
     {
-        if (inputInformation!.EscapeKeyWasClicked())
-        {
-            Debug.Log($"Escape was clicked activeNodeContainer: {activeNodeContainer}");
-            SetActiveNodeContainer();
-            return;
-        }
-
-        if (inputInformation.VoidWasClicked())
-        {
-            HandleVoidWasClicked(inputInformation.GetMouseWorldPos());
-        }
-    }
-
-    private void HandleVoidWasClicked(Vector2 position)
-    {
-        if (activeNodeContainer is null)
+        if (ActiveNodeContainer is null)
         {
             return;
         }
 
         var mousePos = position;
-        var closestOnCollider = activeNodeContainer.GetClosestPointOnCollider(mousePos);
+        var closestOnCollider = ActiveNodeContainer.GetClosestPointOnCollider(mousePos);
         Debug.Log($"Closest on collider: {closestOnCollider}");
         if (Vector2.Distance(mousePos, closestOnCollider) > addingPointThreshold)
         {
-            SetActiveNodeContainer(null);
+            ActiveNodeContainer = null;
             return;
         }
 
-        var newNodeController = activeNodeContainer.TryAddingNodeAtPoint(closestOnCollider);
+        var newNodeController = ActiveNodeContainer.TryAddingNodeAtPoint(closestOnCollider);
 
         if (newNodeController == null)
         {
-            Debug.LogError($"Failed to add point to container: {activeNodeContainer}");
+            Debug.Log($"Failed to add point to container: {ActiveNodeContainer}");
             return;
         }
     }
@@ -84,12 +70,12 @@ class NodeManager : MonoBehaviour, INodeManager
 
         containerController.NodeChangedState += (node) =>
         {
-            SetActiveNodeContainer(containerController);
+            ActiveNodeContainer = containerController;
         };
 
         containerController.NodeAdditionRequested += (position) =>
         {
-            if (activeNodeContainer != containerController)
+            if (ActiveNodeContainer != containerController)
             {
                 Debug.LogWarning("Node addition requested by inactive container");
             }
@@ -103,21 +89,26 @@ class NodeManager : MonoBehaviour, INodeManager
 
         containerController.ContainerSelected += () =>
         {
-            SetActiveNodeContainer(containerController);
+            ActiveNodeContainer = containerController;
         };
 
         containerController.ContainerDeletionRequested += () =>
         {
-            if (activeNodeContainer == containerController)
+            if (ActiveNodeContainer == containerController)
             {
-                SetActiveNodeContainer(null);
+                ActiveNodeContainer = null;
             }
             containerController.Delete();
         };
 
-        SetActiveNodeContainer(containerController);
+        ActiveNodeContainer = containerController;
         container.SetActive(true);
 
         return containerController;
+    }
+
+    public void ApplyTransformation(IContainerStateTransformation transformation)
+    {
+        ActiveNodeContainer?.ApplyTransformation(transformation);
     }
 }

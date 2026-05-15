@@ -14,12 +14,13 @@ namespace Assets.Prefabs.MapBuilder.Node
 
         // This can't be null
 #nullable enable
-        // Null object pattern
         private IDraggable? draggable;
         public event Action? NodeTriggered;
         public event NodeDraggedHandler? NodeDragged;
         public event Action? NodeChangedSelectionState;
         public event Action? NodeDragEnded;
+
+        public Vector3 Coordinates { get => transform.position; set => transform.position = value; }
 
         void Awake()
         {
@@ -70,11 +71,6 @@ namespace Assets.Prefabs.MapBuilder.Node
         {
         }
 
-        public Vector3 GetCoordinates()
-        {
-            return transform.position;
-        }
-
         public void Delete()
         {
             Destroy(gameObject);
@@ -82,7 +78,7 @@ namespace Assets.Prefabs.MapBuilder.Node
 
         public void MoveByOffset(Vector3 offset)
         {
-            var actPos = GetCoordinates();
+            var actPos = Coordinates;
             Debug.Log($"Act pos: {actPos}, offset: {offset}");
             transform.position = actPos + offset;
         }

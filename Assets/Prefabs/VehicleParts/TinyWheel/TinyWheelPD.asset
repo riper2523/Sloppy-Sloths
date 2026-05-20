@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
   m_Name: TinyWheelPD
   m_EditorClassIdentifier: Assembly-CSharp::PartData
-  partPrefab: {fileID: 8574444926399471992, guid: 1d3f9615a87b1f04a91047edd84359f0, type: 3}
-  partSpriteUI: {fileID: -6387977727153438705, guid: 8219a7041cee212439191d12343c14c2, type: 3}
-  partName: Wheel
-  partTile: {fileID: 11400000, guid: 05b2665d4d0f01042918039643fb4251, type: 2}
+  partPrefab: {fileID: 8574444926399471992, guid: c85cf51b1e3b1b448a1d8f9022b26748, type: 3}
+  partSpriteUI: {fileID: -6387977727153438705, guid: f4135506e2c75a141bb6b304d5d12064, type: 3}
+  partName: TinyWheel
+  partTile: {fileID: 11400000, guid: 85e1a8b32783f6c4680df6f5d560762f, type: 2}
   jointStrength: 3000
+  layer: 0
+  acceptedLayers: 
   attachable: 01000000

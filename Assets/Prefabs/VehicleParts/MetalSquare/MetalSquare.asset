@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: MetalSquare
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
-  m_Sprite: {fileID: -2067898546876541913, guid: 431e02b2768d3eb4f8e87ea03c367329, type: 3}
+  m_Sprite: {fileID: -2067898546876541913, guid: bd8d6a8d05f50df4eaef01296f7adc18, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Wheel_0
+      name: WoodWheelFront_0
       rect:
         serializedVersion: 2
         x: 0
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Wheel_0: -6387977727153438705
+      WoodWheelFront_0: -6387977727153438705
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

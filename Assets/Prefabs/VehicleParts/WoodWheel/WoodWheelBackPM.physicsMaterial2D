@@ -6,7 +6,7 @@ PhysicsMaterial2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wheel2PM
+  m_Name: WoodWheelBackPM
   serializedVersion: 2
   friction: 1
   bounciness: 0

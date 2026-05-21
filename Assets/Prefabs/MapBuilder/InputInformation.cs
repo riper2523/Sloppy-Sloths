@@ -7,14 +7,13 @@ class InputInformation : MonoBehaviour, IInputInformation
 {
     private Camera mainCam;
 
-    [SerializeField]
     private float DistanceFromTheWorldToTheCamera;
 
     void Start()
     {
         mainCam = Camera.main;
-        DistanceFromTheWorldToTheCamera = -mainCam.transform.position.z;
         Debug.Assert(mainCam is not null);
+        DistanceFromTheWorldToTheCamera = -mainCam.transform.position.z;
     }
 
     public bool DelKeyWasClicked()

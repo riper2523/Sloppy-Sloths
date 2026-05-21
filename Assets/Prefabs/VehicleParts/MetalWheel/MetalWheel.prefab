@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6958040208604798537}
   - component: {fileID: 4818955141440828318}
   m_Layer: 0
-  m_Name: MetalWheel1
+  m_Name: MetalWheelFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 780f86dc9c491c345b2a91de49c60d18, type: 2}
+  m_Material: {fileID: 6200000, guid: 7a441baaed0a825409199cd5fe5a277c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 5292873327794204896}
   - component: {fileID: 2871179765715236392}
   m_Layer: 0
-  m_Name: MetalWheel2
+  m_Name: MetalWheelBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -266,7 +266,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 31c54cf1125c5bc468c12936bf4e4ab5, type: 2}
+  m_Material: {fileID: 6200000, guid: 3d30b689488b4534ca441b85905effc9, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

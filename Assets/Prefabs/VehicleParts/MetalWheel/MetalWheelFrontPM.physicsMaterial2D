@@ -6,7 +6,7 @@ PhysicsMaterial2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MetalWheel1PM
+  m_Name: MetalWheelFrontPM
   serializedVersion: 2
   friction: 1
   bounciness: 0

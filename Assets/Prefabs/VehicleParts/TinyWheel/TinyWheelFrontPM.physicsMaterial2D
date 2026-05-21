@@ -6,7 +6,7 @@ PhysicsMaterial2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TinyWheel2PM
+  m_Name: TinyWheelFrontPM
   serializedVersion: 2
   friction: 1
   bounciness: 0

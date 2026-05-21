@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MotorWheel_0
+      name: MotorWheelFront_0
       rect:
         serializedVersion: 2
         x: 0
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MotorWheel_0: 9060302992342359800
+      MotorWheelFront_0: 9060302992342359800
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

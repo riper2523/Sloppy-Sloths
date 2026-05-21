@@ -79,8 +79,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 736971997
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2067898546876541913, guid: bd8d6a8d05f50df4eaef01296f7adc18, type: 3}
@@ -109,7 +109,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: c9fe29d201d8c2f4bb1de6d9060b251b, type: 2}
+  m_Material: {fileID: 6200000, guid: aa5cced58a4f29d4a9594ade4020d998, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

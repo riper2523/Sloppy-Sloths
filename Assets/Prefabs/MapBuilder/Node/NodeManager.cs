@@ -5,21 +5,21 @@ using Assets.Prefabs.MapBuilder;
 [RequireComponent(typeof(IInputInformation))]
 class NodeManager : MonoBehaviour, INodeManager
 {
-    private INodeContainer? _ActiveNodeContainer;
+    private INodeContainer? _activeNodeContainer;
     private INodeContainer? ActiveNodeContainer
     {
-        get => _ActiveNodeContainer;
+        get => _activeNodeContainer;
         set
         {
-            if (_ActiveNodeContainer == value)
+            if (_activeNodeContainer == value)
             {
                 return;
             }
 
-            _ActiveNodeContainer?.ResetActivityState();
-            _ActiveNodeContainer = value;
-            _ActiveNodeContainer?.SelectContainer();
-            SelectedContainerChanged?.Invoke(_ActiveNodeContainer);
+            _activeNodeContainer?.ResetActivityState();
+            _activeNodeContainer = value;
+            _activeNodeContainer?.SelectContainer();
+            SelectedContainerChanged?.Invoke(_activeNodeContainer);
         }
     }
 

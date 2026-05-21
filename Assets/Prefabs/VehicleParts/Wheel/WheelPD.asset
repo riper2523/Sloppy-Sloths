@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: WheelPD
   m_EditorClassIdentifier: Assembly-CSharp::PartData
   partPrefab: {fileID: 8574444926399471992, guid: 1d3f9615a87b1f04a91047edd84359f0, type: 3}
-  partSpriteUI: {fileID: -6387977727153438705, guid: 8219a7041cee212439191d12343c14c2, type: 3}
+  partSpriteUI: {fileID: 2002302499793441681, guid: bf9087fd1bdf6f84e87acb12a931a1f3, type: 3}
   partName: Wheel
   partTile: {fileID: 11400000, guid: 05b2665d4d0f01042918039643fb4251, type: 2}
   jointStrength: 3000
+  layer: 0
+  acceptedLayers: 
   attachable: 01000000

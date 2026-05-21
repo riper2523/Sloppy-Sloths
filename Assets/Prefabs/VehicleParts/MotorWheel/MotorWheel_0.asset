@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: MotorWheel_0
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
-  m_Sprite: {fileID: 9060302992342359800, guid: 9ffaa69c591282243827ffc60c459061, type: 3}
+  m_Sprite: {fileID: -643209912010868259, guid: 93c37cc924f6b8e41824252bc6f7d955, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

@@ -403,8 +403,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3dcdbf62a697124781a8584f10ab96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MotorWheel
-  motorForce: 30
   hinge: {fileID: 2871179765715236392}
+  partLogic: {fileID: 9175531997070321749}
 --- !u!114 &9175531997070321749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,6 +417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 643f1981fff967440b1b48813dbc0c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartLogic
+  jointBreakEvent:
+    m_PersistentCalls:
+      m_Calls: []
   actionReceivers:
   - actionType: 0
     startAction:
@@ -449,6 +452,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  jointStrength: 5000
+  enginePower: 30
 --- !u!114 &5755092849795319607
 MonoBehaviour:
   m_ObjectHideFlags: 0

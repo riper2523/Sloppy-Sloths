@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Chapter1
   m_EditorClassIdentifier: Assembly-CSharp::ChapterData
   chapterName: DUI begins
+  icon: {fileID: 6025285105372068174, guid: a10da2c207faf0a4dbadaa5dd54733ae, type: 3}
   levels:
   - {fileID: 11400000, guid: c98c23c2300c8a9428a9142b01274603, type: 2}
   - {fileID: 11400000, guid: c98c23c2300c8a9428a9142b01274603, type: 2}

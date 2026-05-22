@@ -1,0 +1,82 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class CampaignUIBuilder : MonoBehaviour
+{
+    [Header("Data References")]
+    [SerializeField] private List<ChapterData> allChapters;
+    [SerializeField] private CurrentSessionSO currentSession;
+    [SerializeField] private string levelSceneName = "LevelScene";
+    
+    [Header("Controllers")]
+    [SerializeField] private MainMenuController menuController;
+    
+    [Header("Chapter Panel Elements")]
+    [SerializeField] private Transform chapterContainer;
+    [SerializeField] private GameObject chapterButtonPrefab;
+    
+    [Header("Level Panel Elements")]
+    [SerializeField] private Transform levelContainer;
+    [SerializeField] private GameObject levelButtonPrefab;
+
+    private void Start()
+    {
+        PopulateChapters();
+    }
+
+    private void PopulateChapters()
+    {
+        // Clear existing (in case of re-population)
+        foreach (Transform child in chapterContainer) Destroy(child.gameObject);
+
+        foreach (var chapter in allChapters)
+        {
+            var btnGo = Instantiate(chapterButtonPrefab, chapterContainer);
+            if (btnGo.TryGetComponent<ChapterButtonUI>(out var chapterUI))
+            {
+                chapterUI.Setup(chapter, OnChapterClicked);
+            }
+        }
+    }
+
+    private void OnChapterClicked(ChapterData chapter)
+    {
+        PopulateLevels(chapter);
+        if (menuController != null)
+        {
+            menuController.ShowLevelSelectionPanel();
+        }
+    }
+
+    private void PopulateLevels(ChapterData chapter)
+    {
+        // Clear existing levels from another chapter
+        foreach (Transform child in levelContainer) Destroy(child.gameObject);
+
+        for (int i = 0; i < chapter.levels.Count; i++)
+        {
+            var level = chapter.levels[i];
+            if (level == null) continue;
+
+            var btnGo = Instantiate(levelButtonPrefab, levelContainer);
+            if (btnGo.TryGetComponent<LevelButtonUI>(out var levelUI))
+            {
+                levelUI.Setup(level, i + 1, OnLevelClicked);
+            }
+        }
+    }
+
+    private void OnLevelClicked(LevelData level)
+    {
+        if (currentSession != null)
+        {
+            currentSession.activeLevel = level;
+            SceneManager.LoadScene(levelSceneName);
+        }
+        else
+        {
+            Debug.LogError("No CurrentSessionSO assigned. Cannot start level.");
+        }
+    }
+}

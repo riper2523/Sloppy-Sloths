@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5991146489346401783}
   - component: {fileID: 8732212497392152158}
   - component: {fileID: 7726627971461787393}
+  - component: {fileID: 3624861112218210688}
   m_Layer: 0
   m_Name: WoodSquare
   m_TagString: Untagged
@@ -166,3 +167,24 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &3624861112218210688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7586396994626127713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643f1981fff967440b1b48813dbc0c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PartLogic
+  jointBreakEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  gridPosition: {x: 0, y: 0, z: 0}
+  actionReceivers: []
+  jointStrength: 3500
+  enginePower: 0
+  actualJointStrength: 200
+  actualEnginePower: 0

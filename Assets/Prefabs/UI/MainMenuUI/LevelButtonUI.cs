@@ -10,17 +10,15 @@ public class LevelButtonUI : MonoBehaviour
 
     private Button button;
     private LevelData levelData;
-
-    private void Awake()
-    {
-        button = GetComponent<Button>();
-    }
-
     public void Setup(LevelData data, int levelNumber, UnityAction<LevelData> onClick)
     {
         levelData = data;
         if (titleText != null) titleText.text = levelNumber.ToString();
 
+        if (button == null)
+        {
+            button = GetComponent<Button>();
+        }
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => onClick?.Invoke(levelData));
     }

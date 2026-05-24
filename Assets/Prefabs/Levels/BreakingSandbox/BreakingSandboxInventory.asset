@@ -15,3 +15,15 @@ MonoBehaviour:
   initialItemsList:
   - part: {fileID: 11400000, guid: 2492618dd932f4f4fb2805ddcc47389d, type: 2}
     amount: 1
+  - part: {fileID: 11400000, guid: d2afacbd0fad9064fab12fbee55170c5, type: 2}
+    amount: 99
+  - part: {fileID: 11400000, guid: 6c50c696ed3c3504f80b60f7eff60f37, type: 2}
+    amount: 99
+  - part: {fileID: 11400000, guid: f92733de55663fc458994e1cbf95b82d, type: 2}
+    amount: 99
+  - part: {fileID: 11400000, guid: 9adcb29132f44fc40892a762a23622c1, type: 2}
+    amount: 99
+  - part: {fileID: 11400000, guid: b00aeb39d2de1bb419f3aec07754d4d2, type: 2}
+    amount: 99
+  - part: {fileID: 11400000, guid: b6490a910b9f92c40bddd915c1472e63, type: 2}
+    amount: 99

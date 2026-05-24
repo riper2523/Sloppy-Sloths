@@ -62,11 +62,11 @@ class InputInformation : MonoBehaviour, IInputInformation
 
     public bool IsPressed()
     {
-        return Mouse.current.leftButton.isPressed;
+        return Mouse.current is not null && Mouse.current.leftButton.isPressed;
     }
 
     public float ScrollValue()
     {
-        return Mouse.current.scroll.ReadValue().y;
+        return Mouse.current is not null ? Mouse.current.scroll.ReadValue().y : 0f;
     }
 }

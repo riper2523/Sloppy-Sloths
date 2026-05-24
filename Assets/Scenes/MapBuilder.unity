@@ -3717,10 +3717,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapBuilderManager
       objectReference: {fileID: 0}
-    - target: {fileID: 8074757992545501703, guid: 6e153abf0347beb9cabbbe749239f867, type: 3}
-      propertyPath: ZoomSpeed
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 8596369443131078638, guid: 6e153abf0347beb9cabbbe749239f867, type: 3}
       propertyPath: prefabSelector
       value: 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6958040208604798537}
   - component: {fileID: 4818955141440828318}
   m_Layer: 0
-  m_Name: Wheel1
+  m_Name: MotorWheelFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,8 +79,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 736971997
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 9060302992342359800, guid: 9ffaa69c591282243827ffc60c459061, type: 3}
@@ -109,7 +109,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 780f86dc9c491c345b2a91de49c60d18, type: 2}
+  m_Material: {fileID: 6200000, guid: d59988605c456324f8c03b840e1dc767, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 5292873327794204896}
   - component: {fileID: 2871179765715236392}
   m_Layer: 0
-  m_Name: Wheel2
+  m_Name: MotorWheelBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,8 +236,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1760092317
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6186855400393422167, guid: 1fbd7123351f4b94a9c9b978fee6b348, type: 3}
@@ -266,7 +266,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 31c54cf1125c5bc468c12936bf4e4ab5, type: 2}
+  m_Material: {fileID: 6200000, guid: 3b825e0b7b7b687429644f547aac6c16, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -323,11 +323,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.49830493, y: -0.49766698}
-      - {x: 0.49863955, y: -0.49873734}
-      - {x: 0.4981753, y: -0.44811195}
-      - {x: 0.0020484664, y: 0.09653635}
-      - {x: -0.49834347, y: -0.44809243}
+    - - {x: -0.46, y: -0.5}
+      - {x: 0.46, y: -0.5}
+      - {x: 0.46, y: -0.46}
+      - {x: 0.06, y: 0.15}
+      - {x: -0.06, y: 0.15}
+      - {x: -0.46, y: -0.46}
   m_UseDelaunayMesh: 1
 --- !u!233 &2871179765715236392
 HingeJoint2D:
@@ -403,8 +404,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3dcdbf62a697124781a8584f10ab96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MotorWheel
-  motorForce: 30
   hinge: {fileID: 2871179765715236392}
+  partLogic: {fileID: 9175531997070321749}
 --- !u!114 &9175531997070321749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,6 +418,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 643f1981fff967440b1b48813dbc0c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartLogic
+  jointBreakEvent:
+    m_PersistentCalls:
+      m_Calls: []
   actionReceivers:
   - actionType: 0
     startAction:
@@ -449,6 +453,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  jointStrength: 5000
+  enginePower: 30
 --- !u!114 &5755092849795319607
 MonoBehaviour:
   m_ObjectHideFlags: 0

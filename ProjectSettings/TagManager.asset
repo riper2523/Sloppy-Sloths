@@ -43,6 +43,15 @@ TagManager:
   - name: Background
     uniqueID: 3961557795
     locked: 0
+  - name: Zones
+    uniqueID: 1210634225
+    locked: 0
+  - name: Vehicle part back
+    uniqueID: 1760092317
+    locked: 0
+  - name: Vehicle part front
+    uniqueID: 736971997
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

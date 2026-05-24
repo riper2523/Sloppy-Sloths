@@ -9,7 +9,6 @@ public class PartData : ScriptableObject
     public Sprite partSpriteUI;
     public string partName;
     public Tile partTile;
-    public float jointStrength = 200f;
     public int layer = 0;
     [Tooltip("List of layers that can be with this part on same square")]
     public List<int> acceptedLayers = new List<int>();

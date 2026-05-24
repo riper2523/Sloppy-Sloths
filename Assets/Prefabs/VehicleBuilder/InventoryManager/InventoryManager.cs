@@ -22,8 +22,10 @@ public class InventoryManager : MonoBehaviour
             Destroy(child.gameObject);
         }
         itemsMap.Clear();
-        inventory = new Inventory();
-        inventory.itemsMap = new Dictionary<PartData, int>(levelData.startingItems.itemsMap);
+        inventory = new Inventory
+        {
+            itemsMap = new Dictionary<PartData, int>(levelData.startingItems.itemsMap)
+        };
         CreateRemovePartButton();
         foreach (var entry in inventory.itemsMap) 
         {

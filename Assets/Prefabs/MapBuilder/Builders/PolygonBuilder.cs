@@ -27,7 +27,6 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
     [SerializeField]
     public Color tintColor = Color.gray;
 
-    // After adding a point which is closer than that to an existing node the addition will fail
     [SerializeField]
     private float distanceThreshold = 0.05f;
 
@@ -46,7 +45,6 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
     public void ResetActivityState()
     {
         ActivityState.SetNewState(NodesContainerActivityState.ContainerInactive());
-        Debug.Log($"ResetActivityState {ActivityState.IsContainerActive()}");
     }
 
     // Returns true if the deletion of the entire container is neccessary
@@ -194,7 +192,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
         }
 
         int? answer = null;
-        var b = nodes[0].GetCoordinates();
+        var b = nodes[0].Coordinates;
 
         var ourNodeCoords = position;
 
@@ -203,7 +201,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
         for (int i = 1; i <= nodes.Count; i++)
         {
             var a = b;
-            b = nodes[i % nodes.Count].GetCoordinates();
+            b = nodes[i % nodes.Count].Coordinates;
 
             if (GeometricUtils.ThereAreObtuseAnglesNearAB(a, b, ourNodeCoords))
             {
@@ -233,7 +231,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
         spline.Clear();
         for (int i = 0; i < nodes.Count; i++)
         {
-            spline.InsertPointAt(i, (Vector2)nodes[i].GetCoordinates() - (Vector2)shape.transform.position);
+            spline.InsertPointAt(i, (Vector2)nodes[i].Coordinates - (Vector2)shape.transform.position);
         }
 
         shape.RefreshSpriteShape();
@@ -282,7 +280,7 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
 
     public INodeHandle? TryAddingNodeAtPoint(Vector2 position)
     {
-        var minDistance = nodes.Select(x => Vector2.Distance(position, x.GetCoordinates())).DefaultIfEmpty(float.PositiveInfinity).Min();
+        var minDistance = nodes.Select(x => Vector2.Distance(position, x.Coordinates)).DefaultIfEmpty(float.PositiveInfinity).Min();
         if (minDistance < distanceThreshold)
         {
             Debug.Log($"There is a node which is {minDistance} close to the node you are trying to add");
@@ -333,5 +331,24 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
     public void SelectContainer()
     {
         ActivityState.SetNewState(NodesContainerActivityState.ContainerActiveButNoNodesSelected());
+    }
+
+    public NodeContainerState GetNodeContainerStateCopy()
+    {
+        return new NodeContainerState(nodes.Select(x => x.Coordinates).ToList());
+    }
+
+    public void ApplyTransformation(IContainerStateTransformation transformation)
+    {
+        var state = GetNodeContainerStateCopy();
+        transformation.TransformInPlace(state);
+
+        Debug.Assert(nodes.Count == state.Nodes.Count);
+        for (var i = 0; i < nodes.Count; i++)
+        {
+            nodes[i].Coordinates = state.Nodes[i];
+        }
+
+        RebuildTheSplineAndCollider();
     }
 }

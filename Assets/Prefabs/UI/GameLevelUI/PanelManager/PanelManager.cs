@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PanelManager : MonoBehaviour
 {
@@ -7,10 +8,13 @@ public class PanelManager : MonoBehaviour
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject startPanel;
 
+    [SerializeField] private string menuSceneName = "MenuScene";
+
     [Header("Listening To")]
     [SerializeField] private VoidEventChannelSO playLevelEvent;
     [SerializeField] private LevelResultEventChannelSO levelCompletedEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
+    [SerializeField] private VoidEventChannelSO exitLevelEvent;
 
     private GameObject activePanel;
 
@@ -29,6 +33,7 @@ public class PanelManager : MonoBehaviour
         playLevelEvent.OnEventRaised += ShowGamePanel;
         levelCompletedEvent.OnEventRaised += ShowWinPanel;
         restartLevelEvent.OnEventRaised += ShowBuildPanel;
+        exitLevelEvent.OnEventRaised += BackToMenu;
     }
 
     private void OnDisable()
@@ -36,6 +41,7 @@ public class PanelManager : MonoBehaviour
         playLevelEvent.OnEventRaised -= ShowGamePanel;
         levelCompletedEvent.OnEventRaised -= ShowWinPanel;
         restartLevelEvent.OnEventRaised -= ShowBuildPanel;
+        exitLevelEvent.OnEventRaised -= BackToMenu;
     }
 
     public void ShowGamePanel() => SwitchPanel(gamePanel);
@@ -56,4 +62,6 @@ public class PanelManager : MonoBehaviour
         newPanel.SetActive(true);
         activePanel = newPanel;
     }
+
+    public void BackToMenu() => SceneManager.LoadScene(menuSceneName);
 }

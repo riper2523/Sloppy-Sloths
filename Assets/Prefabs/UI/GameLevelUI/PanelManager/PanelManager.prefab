@@ -52,7 +52,8 @@ MonoBehaviour:
   buildPanel: {fileID: 0}
   winPanel: {fileID: 0}
   startPanel: {fileID: 0}
-  loadLevelEvent: {fileID: 11400000, guid: 3dc1b0389daecac48bf97d73cbefd9fd, type: 2}
+  menuSceneName: MenuScene
   playLevelEvent: {fileID: 11400000, guid: 0196888eb81668e4fb20e44969a70749, type: 2}
   levelCompletedEvent: {fileID: 11400000, guid: 5a3f6ef6afc8d2d4783cd4752c3f75ee, type: 2}
   restartLevelEvent: {fileID: 11400000, guid: 020fa9327bd39934dbbf0aa7f2ee3c49, type: 2}
+  exitLevelEvent: {fileID: 11400000, guid: e6f35687b8698ca4fbd80601627bc3ef, type: 2}

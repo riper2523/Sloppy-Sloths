@@ -569,6 +569,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1001300597379354752, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: menuSceneName
+      value: MainMenuScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 1001300597379354752, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: exitLevelEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: f1c6f52023333bc4e85ec7cd0f3e02a3, type: 2}
     - target: {fileID: 2057502682486699738, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

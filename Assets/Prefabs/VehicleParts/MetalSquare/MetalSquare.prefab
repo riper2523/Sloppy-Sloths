@@ -11,12 +11,11 @@ GameObject:
   - component: {fileID: 3139176467491551634}
   - component: {fileID: 5991146489346401783}
   - component: {fileID: 8732212497392152158}
-  - component: {fileID: 6112224261409256803}
-  - component: {fileID: -2559057065226518678}
-  - component: {fileID: 190983473130455996}
+  - component: {fileID: 7726627971461787393}
+  - component: {fileID: 644236973283140138}
   m_Layer: 0
-  m_Name: Sloth
-  m_TagString: Sloth
+  m_Name: MetalSquare
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,11 +80,11 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1760092317
-  m_SortingLayer: -2
+  m_SortingLayerID: 736971997
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 6025285105372068174, guid: d9a02e7b0af469840b8b483b85895c1e, type: 3}
+  m_Sprite: {fileID: -2067898546876541913, guid: bd8d6a8d05f50df4eaef01296f7adc18, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -107,11 +106,11 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
+  m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 71aefa3656928e3499b942607c533809, type: 2}
+  m_Material: {fileID: 6200000, guid: aa5cced58a4f29d4a9594ade4020d998, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -122,8 +121,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!58 &6112224261409256803
-CircleCollider2D:
+--- !u!61 &7726627971461787393
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -157,8 +156,18 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.37
---- !u!114 &-2559057065226518678
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &644236973283140138
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,15 +185,3 @@ MonoBehaviour:
   actionReceivers: []
   jointStrength: 3500
   enginePower: 0
---- !u!114 &190983473130455996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7586396994626127713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2b1207a812402649b8a6c7a63df49ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SlothModifier

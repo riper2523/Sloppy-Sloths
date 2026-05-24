@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 93c37cc924f6b8e41824252bc6f7d955
+guid: 016db862567cbf540b1d72119dd7f877
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -643209912010868259
-    second: MotorWheelCombined_0
+      213: 7382618147402341733
+    second: MetalWheelCombined_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MotorWheelCombined_0
+      name: MetalWheelCombined_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dd9f49e2efbd217f0800000000000000
-      internalID: -643209912010868259
+      spriteID: 56dd44c1714547660800000000000000
+      internalID: 7382618147402341733
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 069b501367fb54c42b56a511dcde60da
+    spriteID: dafea36e9b530094984da2c77f0c1788
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MotorWheelCombined_0: -643209912010868259
+      MetalWheelCombined_0: 7382618147402341733
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

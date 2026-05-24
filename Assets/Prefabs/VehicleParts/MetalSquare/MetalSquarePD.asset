@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
+  m_Name: MetalSquarePD
+  m_EditorClassIdentifier: Assembly-CSharp::PartData
+  partPrefab: {fileID: 7586396994626127713, guid: 4c501b483ab368846909a0eda9043e6a, type: 3}
+  partSpriteUI: {fileID: -2067898546876541913, guid: bd8d6a8d05f50df4eaef01296f7adc18, type: 3}
+  partName: MetalSquare
+  partTile: {fileID: 11400000, guid: 18f055b5b0fe50c419481d29eb2c7ac7, type: 2}
+  jointStrength: 3500
+  layer: 0
+  acceptedLayers: 01000000
+  attachable: 01010101

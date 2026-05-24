@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6958040208604798537}
   - component: {fileID: 4818955141440828318}
   m_Layer: 0
-  m_Name: MotorWheelFront
+  m_Name: TinyWheelFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5145421176698583032}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.06, z: 0}
+  m_LocalPosition: {x: 0, y: -0.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: -1
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 9060302992342359800, guid: 9ffaa69c591282243827ffc60c459061, type: 3}
+  m_Sprite: {fileID: -6387977727153438705, guid: f4135506e2c75a141bb6b304d5d12064, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -109,7 +109,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: d59988605c456324f8c03b840e1dc767, type: 2}
+  m_Material: {fileID: 6200000, guid: 50c3944bb25d1f5448d840404706fd6c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -155,7 +155,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.38
+  m_Radius: 0.16
 --- !u!1 &5578516441331180695
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 5292873327794204896}
   - component: {fileID: 2871179765715236392}
   m_Layer: 0
-  m_Name: MotorWheelBack
+  m_Name: TinyWheelBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -240,7 +240,7 @@ SpriteRenderer:
   m_SortingLayer: -2
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 6186855400393422167, guid: 1fbd7123351f4b94a9c9b978fee6b348, type: 3}
+  m_Sprite: {fileID: 1699452002307262520, guid: 1ac7eb1fcc3df9f4293370c43dc64a07, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -266,7 +266,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 3b825e0b7b7b687429644f547aac6c16, type: 2}
+  m_Material: {fileID: 6200000, guid: b85c53b62169b8147a5c9a7a7c97b3ce, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -323,12 +323,15 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.46, y: -0.5}
-      - {x: 0.46, y: -0.5}
-      - {x: 0.46, y: -0.46}
-      - {x: 0.06, y: 0.15}
-      - {x: -0.06, y: 0.15}
-      - {x: -0.46, y: -0.46}
+    - - {x: -0.24, y: -0.5}
+      - {x: 0.24, y: -0.5}
+      - {x: 0.24, y: -0.45}
+      - {x: 0.04, y: -0.37}
+      - {x: 0.12, y: -0.3}
+      - {x: 0.02, y: -0.14}
+      - {x: -0.03, y: -0.14}
+      - {x: -0.04, y: -0.37}
+      - {x: -0.24, y: -0.45}
   m_UseDelaunayMesh: 1
 --- !u!233 &2871179765715236392
 HingeJoint2D:
@@ -345,7 +348,7 @@ HingeJoint2D:
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 0
-  m_Anchor: {x: 0, y: 0.06}
+  m_Anchor: {x: 0, y: -0.17}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
@@ -365,11 +368,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2562856846963897997}
-  - component: {fileID: 35009340052912991}
-  - component: {fileID: 9175531997070321749}
-  - component: {fileID: 5755092849795319607}
+  - component: {fileID: -8530545542306716296}
   m_Layer: 0
-  m_Name: MotorWheel
+  m_Name: TinyWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -392,21 +393,7 @@ Transform:
   - {fileID: 6565049295935961597}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
---- !u!114 &35009340052912991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8574444926399471992}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3dcdbf62a697124781a8584f10ab96c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MotorWheel
-  hinge: {fileID: 2871179765715236392}
-  partLogic: {fileID: 9175531997070321749}
---- !u!114 &9175531997070321749
+--- !u!114 &-8530545542306716296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -421,49 +408,6 @@ MonoBehaviour:
   jointBreakEvent:
     m_PersistentCalls:
       m_Calls: []
-  actionReceivers:
-  - actionType: 0
-    startAction:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 35009340052912991}
-          m_TargetAssemblyTypeName: MotorWheel, Assembly-CSharp
-          m_MethodName: StartMotor
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    stopAction:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 35009340052912991}
-          m_TargetAssemblyTypeName: MotorWheel, Assembly-CSharp
-          m_MethodName: StopMotor
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  jointStrength: 5000
-  enginePower: 30
---- !u!114 &5755092849795319607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8574444926399471992}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67f3d20b1e3086f47a750176fca79ab3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ClickablePart
+  actionReceivers: []
+  jointStrength: 3000
+  enginePower: 0

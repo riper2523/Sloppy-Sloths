@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
+  m_Name: TinyWheelPD
+  m_EditorClassIdentifier: Assembly-CSharp::PartData
+  partPrefab: {fileID: 8574444926399471992, guid: c85cf51b1e3b1b448a1d8f9022b26748, type: 3}
+  partSpriteUI: {fileID: -3893686402000521292, guid: 7250555cc27d94e4eafc55d81044f608, type: 3}
+  partName: TinyWheel
+  partTile: {fileID: 11400000, guid: 85e1a8b32783f6c4680df6f5d560762f, type: 2}
+  layer: 0
+  acceptedLayers: 
+  attachable: 01000000

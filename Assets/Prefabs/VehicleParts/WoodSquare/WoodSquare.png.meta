@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 93c37cc924f6b8e41824252bc6f7d955
+guid: 431e02b2768d3eb4f8e87ea03c367329
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -643209912010868259
-    second: MotorWheelCombined_0
+      213: -2067898546876541913
+    second: Wood_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,11 +96,24 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MotorWheelCombined_0
+      name: WoodSquare_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dd9f49e2efbd217f0800000000000000
-      internalID: -643209912010868259
+      spriteID: 72490e15a395d43e0800000000000000
+      internalID: -2067898546876541913
       vertices: []
       indices: 
       edges: []
@@ -125,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 069b501367fb54c42b56a511dcde60da
+    spriteID: ae868364ee07acb48bc10e348f52377d
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MotorWheelCombined_0: -643209912010868259
+      WoodSquare_0: -2067898546876541913
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

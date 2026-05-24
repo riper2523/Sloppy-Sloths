@@ -44,4 +44,15 @@ public class MainMenuController : MonoBehaviour
         HideAllPanels();
         if (levelSelectionPanel) levelSelectionPanel.SetActive(true);
     }
+
+    public void QuitGame()
+    {
+        //build version
+        Application.Quit();
+
+        //in editor
+        UnityEditor.EditorApplication.isPlaying = false;
+
+        Debug.Log("The game should have shut down");
+    }
 }

@@ -6,6 +6,7 @@ public class CollectibleStar : MonoBehaviour
     [Header("Broadcasting On")]
     [SerializeField] private CollectibleStarEventChannelSO starSpawnedEvent;
     [SerializeField] private CollectibleStarEventChannelSO starCollectedEvent;
+    [SerializeField] private AudioClip collectSound;
     public int starID;
     private bool isCollected = false;
 
@@ -31,5 +32,9 @@ public class CollectibleStar : MonoBehaviour
     {
         if (isCollected) return;
         starCollectedEvent.RaiseEvent(this);
+        if (collectSound != null)
+        {
+            AudioSource.PlayClipAtPoint(collectSound, transform.position);
+        }
     }
 }

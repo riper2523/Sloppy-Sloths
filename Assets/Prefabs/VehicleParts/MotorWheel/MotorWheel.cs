@@ -4,6 +4,7 @@ public class MotorWheel : MonoBehaviour
 {
     [SerializeField] private HingeJoint2D hinge;
     [SerializeField] private PartLogic partLogic;
+    [SerializeField] private AudioSource motorSound;
 
     void Start()
     {
@@ -16,9 +17,17 @@ public class MotorWheel : MonoBehaviour
     public void StartMotor()
     {
         hinge.useMotor = true;
+        if (!motorSound.isPlaying)
+        {
+            motorSound.Play();
+        }
     }
     public void StopMotor()
     {
         hinge.useMotor = false;
+        if (motorSound.isPlaying)
+        {
+            motorSound.Stop();
+        }
     }
 }

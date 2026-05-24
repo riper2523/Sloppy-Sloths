@@ -153,7 +153,7 @@ public class MapBuilderManager : MonoBehaviour
     {
         if (State.StateType != StateID.GEAR_SELECT_MODE)
         {
-            State = stateProvider.GetBuilderModeState();
+            State = stateProvider.GetGearSelectModeState();
         }
     }
 

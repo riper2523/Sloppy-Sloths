@@ -63,4 +63,4 @@ namespace Assets.Prefabs.MapBuilder.MapBuilderManager
             }
         }
     }
-};
+}

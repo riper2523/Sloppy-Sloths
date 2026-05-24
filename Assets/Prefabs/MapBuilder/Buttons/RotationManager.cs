@@ -38,7 +38,7 @@ namespace Assets.Prefabs.MapBuilder.Buttons
             if (float.TryParse(InputField.text, out float rotationValue))
             {
                 var rotationTransform = new Rotation(rotationValue);
-                ProvidedEvent.Invoke(rotationTransform);
+                ProvidedEvent?.Invoke(rotationTransform);
             }
             else
             {

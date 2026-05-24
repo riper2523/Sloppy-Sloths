@@ -5,7 +5,7 @@ namespace Assets.Prefabs.MapBuilder.Utils
 {
     public class EnableMovementTriggered
     {
-        public static EnableMovementTriggered instance;
+        public static EnableMovementTriggered instance = new();
     }
 
     public abstract class EnableMovementButtonBase : MonoBehaviour, IEventProvider<EnableMovementTriggered>

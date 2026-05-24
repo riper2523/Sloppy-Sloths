@@ -8,7 +8,6 @@ public class PrefabSelectButton : MonoBehaviour
     [SerializeField]
     public GameObject Prefab;
 
-    [SerializeField]
     private PrefabSelector prefabSelector;
 
     void InitPrefabAndEnableIt(GameObject prefab)
@@ -21,9 +20,7 @@ public class PrefabSelectButton : MonoBehaviour
     {
         prefabSelector = GetComponentInParent<PrefabSelector>();
         Debug.Assert(prefabSelector is not null);
-        Debug.Assert(Prefab is not null);
-
-        prefabSelector.TriggerSelectPrefab(Prefab);
+        Debug.Assert(Prefab is not null, "PrefabSelectButton instance was not correctly set up, Prefab field is null");
     }
 
     public void SelectPrefab()

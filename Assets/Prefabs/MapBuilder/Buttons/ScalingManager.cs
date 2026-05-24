@@ -43,11 +43,11 @@ namespace Assets.Prefabs.MapBuilder.Buttons
             if (float.TryParse(InputField.text, out float scalingValue))
             {
                 var rotationTransform = new Scaling(scalingValue);
-                ProvidedEvent.Invoke(rotationTransform);
+                ProvidedEvent?.Invoke(rotationTransform);
             }
             else
             {
-                Debug.LogError("The privided value is invalid, this shouldn't happen");
+                Debug.LogError("The provided value is invalid, this shouldn't happen");
             }
         }
     }

@@ -59,6 +59,9 @@ public class BuilderModeState : MonoBehaviour, IMapBuilderManagerState
             ActivePrefab = null;
         };
 
+        Debug.Assert(_RotationManager is not null);
+        Debug.Assert(_ScalingManager is not null);
+
         _RotationManager!.ProvidedEvent += rotation =>
         {
             NodeManager.ApplyTransformation(rotation);

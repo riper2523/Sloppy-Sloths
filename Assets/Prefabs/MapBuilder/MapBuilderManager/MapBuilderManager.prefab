@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 8596369443131078638}
   - component: {fileID: 8370145019988492923}
   - component: {fileID: 7975948129077624431}
+  - component: {fileID: 560665152580383707}
+  - component: {fileID: 8074757992545501703}
   m_Layer: 0
   m_Name: MapBuilderManager
   m_TagString: Untagged
@@ -48,6 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eddd820139dd3175a3797b5e4a06485, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapBuilderManager
+  _movingTheMapRightNow: 0
+  enableMovementButton: {fileID: 0}
 --- !u!114 &2808749758281376729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,7 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a1307d23417c69eabbaee0a72d64ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuilderModeState
-  UpperLeftPannel: {fileID: 0}
+  UpperLeftPannelButtonList: {fileID: 0}
+  prefabSelector: {fileID: 0}
+  _RotationManager: {fileID: 0}
+  _ScalingManager: {fileID: 0}
   _ActivePrefab: {fileID: 0}
 --- !u!114 &8370145019988492923
 MonoBehaviour:
@@ -99,3 +106,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69bfe1fd45a97e92291d53b1ffd619a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputInformation
+--- !u!114 &560665152580383707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6122300933261123145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a47b8989103add0479e9d9d4a558c844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Prefabs.MapBuilder.Utils.MapMover
+--- !u!114 &8074757992545501703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6122300933261123145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66843f912f52b94b09e7155153f87d53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Prefabs.MapBuilder.Utils.MapScaler
+  ZoomSpeed: 100
+  MinZoom: 2
+  MaxZoom: 20

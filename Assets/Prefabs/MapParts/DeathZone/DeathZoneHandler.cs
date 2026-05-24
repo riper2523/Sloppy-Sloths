@@ -5,6 +5,9 @@ public class DeathZoneHandler : MonoBehaviour
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
     private void OnTriggerEnter2D(Collider2D other)
     {
-        restartLevelEvent.RaiseEvent();
+        if (other.CompareTag("Sloth") || other.transform.parent.CompareTag("Sloth"))
+        {
+            restartLevelEvent.RaiseEvent();
+        }
     }
 }

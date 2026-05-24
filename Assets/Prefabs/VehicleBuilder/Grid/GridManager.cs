@@ -381,6 +381,9 @@ public class GridManager : MonoBehaviour
                     PartLogic logic = newPart.GetComponentInChildren<PartLogic>();
                     if (logic != null)
                     {
+                        logic.gridPosition = new Vector3Int(x, y, layer);
+                        logic.jointBreakEvent.AddListener(HandleJointBreak);
+
                         foreach (var action in logic.actionReceivers)
                         {
                             action.startAction.AddListener(() => PartActivated(action.actionType));
@@ -421,7 +424,9 @@ public class GridManager : MonoBehaviour
                     List<GameObject> partsInCell = new List<GameObject>(currentCellParts.Values);
                     for (int i = 1; i < partsInCell.Count; i++)
                     {
-                        CreateJoint(partsInCell[0], partsInCell[i], 50000f);
+                        PartLogic logicA = partsInCell[0].GetComponentInChildren<PartLogic>();
+                        PartLogic logicB = partsInCell[i].GetComponentInChildren<PartLogic>();
+                        CreateJoint(logicA, logicB, Direction.Forward, 50000f);
                     }
                 }
 
@@ -442,6 +447,7 @@ public class GridManager : MonoBehaviour
         }
 
         partsTilemap.ClearAllTiles();
+        RecalculatePartsState();
     }
     private void TryCreateJointLayer(int xA, int yA, int xB, int yB, int layer, Dictionary<int, GameObject>[,] spawnedParts)
     {
@@ -449,38 +455,77 @@ public class GridManager : MonoBehaviour
         PartInstance pB = partDataGrid[xB, yB].parts[layer];
 
         bool canAttach = false;
+        Direction dirFromAToB = default;
 
         if (xB > xA)
         {
             bool aHasRight = pA.partData.HasAttachment(1, pA.Rotation);
             bool bHasLeft = pB.partData.HasAttachment(3, pB.Rotation);
-            canAttach = aHasRight && bHasLeft;
+            if (aHasRight && bHasLeft)
+            {
+                canAttach = true;
+                dirFromAToB = Direction.Right;
+            }
         }
         else if (yB > yA)
         {
             bool aHasUp = pA.partData.HasAttachment(0, pA.Rotation);
             bool bHasDown = pB.partData.HasAttachment(2, pB.Rotation);
-            canAttach = aHasUp && bHasDown;
+            if (aHasUp && bHasDown)
+            {
+                canAttach = true;
+                dirFromAToB = Direction.Up;
+            }
         }
 
         if (canAttach)
         {
-            float strength = (pA.partData.jointStrength + pB.partData.jointStrength) / 2f;
-            CreateJoint(spawnedParts[xA, yA][layer], spawnedParts[xB, yB][layer], strength);
+            PartLogic partLogicA = spawnedParts[xA, yA][layer].GetComponentInChildren<PartLogic>();
+            PartLogic partLogicB = spawnedParts[xB, yB][layer].GetComponentInChildren<PartLogic>();
+            float aStrength = partLogicA != null ? partLogicA.actualJointStrength : 0f;
+            float bStrength = partLogicB != null ? partLogicB.actualJointStrength : 0f;
+            float strength = (aStrength + bStrength) / 2f;
+            CreateJoint(partLogicA, partLogicB, dirFromAToB, strength);
         }
     }
-    private void CreateJoint(GameObject partA, GameObject partB, float strength = 100f)
+    private void CreateJoint(PartLogic logicA, PartLogic logicB, Direction dirFromAToB, float strength = 100f)
     {
-        Rigidbody2D rbA = partA.GetComponentInChildren<Rigidbody2D>();
-        Rigidbody2D rbB = partB.GetComponentInChildren<Rigidbody2D>();
+        if (logicA == null || logicB == null) return;
+
+        Rigidbody2D rbA = logicA.GetComponentInChildren<Rigidbody2D>();
+        Rigidbody2D rbB = logicB.GetComponentInChildren<Rigidbody2D>();
 
         if (rbA == null || rbB == null) return;
 
         FixedJoint2D joint = rbA.gameObject.AddComponent<FixedJoint2D>();
         joint.connectedBody = rbB;
         joint.breakForce = strength;
-    }
 
+        logicA.AddConnection(dirFromAToB, logicB, joint);
+        logicB.AddConnection(dirFromAToB.Opposite(), logicA, null);
+    }
+    private void HandleJointBreak(Vector3Int partPos, Direction breakDir)
+    {
+        Debug.Log($"Joint broken at {partPos} towards {breakDir}");
+        RecalculatePartsState();
+    }
+    public void RecalculatePartsState()
+    {
+        PartLogic[] activeParts = vehicleParent.GetComponentsInChildren<PartLogic>();
+
+        foreach (var part in activeParts)
+        {
+            part.ResetPart();
+        }
+        foreach (var part in activeParts)
+        {
+            part.ActivateEffects();
+        }
+        foreach (var part in activeParts)
+        {
+            part.ApplyModifiers();
+        }
+    }
     public void Restart()
     {
         backgroundTilemap.gameObject.SetActive(true);

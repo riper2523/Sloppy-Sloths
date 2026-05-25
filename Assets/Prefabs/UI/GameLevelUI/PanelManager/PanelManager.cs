@@ -25,6 +25,7 @@ public class PanelManager : MonoBehaviour
     private void Awake()
     {
         Time.timeScale = 1f;
+        AudioListener.pause = false;
 
         gamePanel.SetActive(false);
         buildPanel.SetActive(false);
@@ -85,6 +86,7 @@ public class PanelManager : MonoBehaviour
         sidebarMenuButton.SetActive(false);
         sidebarMenu.SetActive(true);
         Time.timeScale = 0f;
+        AudioListener.pause = true;
     }
 
     public void HideSidebarMenu()
@@ -93,6 +95,7 @@ public class PanelManager : MonoBehaviour
         sidebarMenuButton.SetActive(true);
         sidebarMenu.SetActive(false);
         Time.timeScale = 1f;
+        AudioListener.pause = false;
     }
 
     public void BackToMenu() => SceneManager.LoadScene(menuSceneName);

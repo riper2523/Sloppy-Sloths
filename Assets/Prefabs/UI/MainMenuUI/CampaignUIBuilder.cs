@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class CampaignUIBuilder : MonoBehaviour
 {
     [Header("Data References")]
-    [SerializeField] private List<ChapterData> allChapters;
+    [SerializeField] private CampaignData campaignData;
     [SerializeField] private CurrentSessionSO currentSession;
     [SerializeField] private string levelSceneName = "LevelScene";
     
@@ -27,10 +27,16 @@ public class CampaignUIBuilder : MonoBehaviour
 
     private void PopulateChapters()
     {
+        if (campaignData == null || campaignData.chapters == null)
+        {
+            Debug.LogWarning("CampaignData is not assigned or chapters list is null in CampaignUIBuilder.");
+            return;
+        }
+
         // Clear existing (in case of re-population)
         foreach (Transform child in chapterContainer) Destroy(child.gameObject);
 
-        foreach (var chapter in allChapters)
+        foreach (var chapter in campaignData.chapters)
         {
             var btnGo = Instantiate(chapterButtonPrefab, chapterContainer);
             if (btnGo.TryGetComponent<ChapterButtonUI>(out var chapterUI))

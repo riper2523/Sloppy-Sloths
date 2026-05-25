@@ -1,15 +1,22 @@
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class LevelStarter : MonoBehaviour
 {
-    [Header("Level Configuration")]
-    [SerializeField] private LevelData currentLevelData;
+    [Header("Shared Memory")]
+    [SerializeField] private CurrentSessionSO currentSession;
 
     [Header("Broadcasting On")]
     [SerializeField] private LevelDataEventChannelSO loadLevelEvent;
 
     private void Start()
     {
-        loadLevelEvent.RaiseEvent(currentLevelData);
+        if (currentSession != null && currentSession.activeLevel != null)
+        {
+            loadLevelEvent.RaiseEvent(currentSession.activeLevel);
+        }
+        else
+        {
+            Debug.LogWarning("No active level found in CurrentSessionSO! Map will not load automatically.");
+        }
     }
 }

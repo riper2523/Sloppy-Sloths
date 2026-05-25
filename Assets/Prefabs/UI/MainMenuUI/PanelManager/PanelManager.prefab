@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8873830216872439999
+--- !u!1 &9152215507861157036
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2498534312177673312}
-  - component: {fileID: 2798587774578126191}
+  - component: {fileID: 7920333676957475375}
+  - component: {fileID: 1397391541508180256}
   m_Layer: 5
   m_Name: PanelManager
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &2498534312177673312
+--- !u!224 &7920333676957475375
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8873830216872439999}
+  m_GameObject: {fileID: 9152215507861157036}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -36,24 +36,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2798587774578126191
+--- !u!114 &1397391541508180256
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8873830216872439999}
+  m_GameObject: {fileID: 9152215507861157036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cd7ef48e4e6b8f4a9d0c1f87b043b8d, type: 3}
+  m_Script: {fileID: 11500000, guid: ddb34a57abcf6db4fa9f356674dede67, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PanelManager
-  gamePanel: {fileID: 0}
-  buildPanel: {fileID: 0}
-  winPanel: {fileID: 0}
-  startPanel: {fileID: 0}
-  menuSceneName: MenuScene
-  playLevelEvent: {fileID: 11400000, guid: 0196888eb81668e4fb20e44969a70749, type: 2}
-  levelCompletedEvent: {fileID: 11400000, guid: 5a3f6ef6afc8d2d4783cd4752c3f75ee, type: 2}
-  restartLevelEvent: {fileID: 11400000, guid: 020fa9327bd39934dbbf0aa7f2ee3c49, type: 2}
-  exitLevelEvent: {fileID: 11400000, guid: e6f35687b8698ca4fbd80601627bc3ef, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenuController
+  mainPanel: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  campaignPanel: {fileID: 0}
+  levelSelectionPanel: {fileID: 0}

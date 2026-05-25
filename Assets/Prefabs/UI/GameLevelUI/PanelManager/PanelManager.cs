@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PanelManager : MonoBehaviour
 {
@@ -6,21 +7,33 @@ public class PanelManager : MonoBehaviour
     [SerializeField] private GameObject buildPanel;
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject startPanel;
+    [SerializeField] private GameObject sidebarMenu;
+    [SerializeField] private GameObject sidebarMenuButton;
+
+    [SerializeField] private string menuSceneName = "MenuScene";
 
     [Header("Listening To")]
     [SerializeField] private VoidEventChannelSO playLevelEvent;
     [SerializeField] private LevelResultEventChannelSO levelCompletedEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
+    [SerializeField] private VoidEventChannelSO pauseLevelEvent;
+    [SerializeField] private VoidEventChannelSO unpauseLevelEvent;
+    [SerializeField] private VoidEventChannelSO exitLevelEvent;
 
     private GameObject activePanel;
 
     private void Awake()
     {
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+
         gamePanel.SetActive(false);
         buildPanel.SetActive(false);
         winPanel.SetActive(false);
+        sidebarMenu.SetActive(false);
 
         startPanel.SetActive(true);
+        sidebarMenuButton.SetActive(true);
         activePanel = startPanel;
     }
 
@@ -29,6 +42,11 @@ public class PanelManager : MonoBehaviour
         playLevelEvent.OnEventRaised += ShowGamePanel;
         levelCompletedEvent.OnEventRaised += ShowWinPanel;
         restartLevelEvent.OnEventRaised += ShowBuildPanel;
+
+        pauseLevelEvent.OnEventRaised += ShowSidebarMenu;
+        unpauseLevelEvent.OnEventRaised += HideSidebarMenu;
+
+        exitLevelEvent.OnEventRaised += BackToMenu;
     }
 
     private void OnDisable()
@@ -36,6 +54,11 @@ public class PanelManager : MonoBehaviour
         playLevelEvent.OnEventRaised -= ShowGamePanel;
         levelCompletedEvent.OnEventRaised -= ShowWinPanel;
         restartLevelEvent.OnEventRaised -= ShowBuildPanel;
+
+        pauseLevelEvent.OnEventRaised -= ShowSidebarMenu;
+        unpauseLevelEvent.OnEventRaised -= HideSidebarMenu;
+
+        exitLevelEvent.OnEventRaised -= BackToMenu;
     }
 
     public void ShowGamePanel() => SwitchPanel(gamePanel);
@@ -56,4 +79,24 @@ public class PanelManager : MonoBehaviour
         newPanel.SetActive(true);
         activePanel = newPanel;
     }
+
+    public void ShowSidebarMenu()
+    {
+        Debug.Log("sidebar menu on");
+        sidebarMenuButton.SetActive(false);
+        sidebarMenu.SetActive(true);
+        Time.timeScale = 0f;
+        AudioListener.pause = true;
+    }
+
+    public void HideSidebarMenu()
+    {
+        Debug.Log("sidebar menu off");
+        sidebarMenuButton.SetActive(true);
+        sidebarMenu.SetActive(false);
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+    }
+
+    public void BackToMenu() => SceneManager.LoadScene(menuSceneName);
 }

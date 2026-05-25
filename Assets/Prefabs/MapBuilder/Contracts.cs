@@ -15,8 +15,11 @@ namespace Assets.Prefabs.MapBuilder
         public event NodeDraggedHandler? NodeDragged;
         public event Action? NodeDragEnded;
 
-        Vector3 GetCoordinates();
-        void MoveByOffset(Vector3 offset);
+        Vector3 Coordinates { get; set; }
+        void MoveByOffset(Vector3 offset)
+        {
+            Coordinates = Coordinates + offset;
+        }
         void Delete();
         bool Active { get; set; }
     }
@@ -29,6 +32,26 @@ namespace Assets.Prefabs.MapBuilder
     public delegate void NodesInContainerDeletedHandler(ISet<INodeHandle> nodeHandles);
     public delegate void NodeAdditionRequestedHandler(Vector2 position);
 
+    public class NodeContainerState
+    {
+        public List<Vector3> Nodes { get; }
+
+        public NodeContainerState(List<Vector3> nodes)
+        {
+            Nodes = new(nodes);
+        }
+
+        public NodeContainerState()
+        {
+            Nodes = new();
+        }
+    }
+
+    public interface IContainerStateTransformation
+    {
+        void TransformInPlace(NodeContainerState state);
+    }
+
     public interface INodeContainer
     {
         public event NodeInContainerChangedSelectionState? NodeChangedState;
@@ -36,6 +59,9 @@ namespace Assets.Prefabs.MapBuilder
         public event Action? ContainerSelected;
         public event Action? ContainerDeletionRequested;
         public event NodeAdditionRequestedHandler? NodeAdditionRequested;
+
+        public NodeContainerState GetNodeContainerStateCopy();
+        public void ApplyTransformation(IContainerStateTransformation transformation);
 
         INodeHandle? TryAddingNodeAtPoint(Vector2 point);
 
@@ -49,11 +75,16 @@ namespace Assets.Prefabs.MapBuilder
         NodesContainerActivityState ActivityState { get; }
     }
 
+    public delegate void SelectedContainerChangedHandler(INodeContainer? newSelected);
+
     public interface INodeManager
     {
+        event SelectedContainerChangedHandler? SelectedContainerChanged;
         INodeContainer? AddNodeContainerAtPos(GameObject nodeContainerPrefab, Vector3 position);
+        void HandleVoidWasClicked(Vector3 where);
+        void ResetActivityState();
+        void ApplyTransformation(IContainerStateTransformation transformation);
     }
-
 
     public interface IInputInformation
     {

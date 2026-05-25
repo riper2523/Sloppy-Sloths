@@ -3,10 +3,9 @@ using UnityEngine;
 public class TNTBlock : MonoBehaviour
 {
     [SerializeField] private float radius = 5f;
-    [SerializeField] private float power = 50f; 
+    [SerializeField] private float power = 50f;
     [SerializeField] private float impactThreshold = 4f;
     [SerializeField] private GameObject explosionEffect;
-
     private bool exploded = false;
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -22,7 +21,7 @@ public class TNTBlock : MonoBehaviour
         if (exploded) return;
         exploded = true;
 
-        if (explosionEffect != null) 
+        if (explosionEffect != null)
         {
             Instantiate(explosionEffect, transform.position, Quaternion.identity);
         }
@@ -36,14 +35,14 @@ public class TNTBlock : MonoBehaviour
             {
                 Vector2 dir = obj.transform.position - transform.position;
                 float distance = dir.magnitude;
-                
+
                 if (distance > 0)
                 {
                     float wearoff = 1 - (distance / radius);
                     rb.AddForce(dir.normalized * (power * wearoff), ForceMode2D.Impulse);
                 }
             }
-            
+
             if (obj.TryGetComponent(out TNTBlock otherTNT))
             {
                 otherTNT.Explode();

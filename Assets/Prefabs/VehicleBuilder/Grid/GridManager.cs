@@ -506,7 +506,7 @@ public class GridManager : MonoBehaviour
     }
     private void HandleJointBreak(Vector3Int partPos, Direction breakDir)
     {
-        Debug.Log($"Joint broken at {partPos} towards {breakDir}");
+        // Debug.Log($"Joint broken at {partPos} towards {breakDir}");
         RecalculatePartsState();
     }
     public void RecalculatePartsState()

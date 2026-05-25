@@ -23,6 +23,12 @@ public class CampaignUIBuilder : MonoBehaviour
     private void Start()
     {
         PopulateChapters();
+        
+        if (currentSession != null && currentSession.returnToLevelSelection && currentSession.activeChapter != null)
+        {
+            currentSession.returnToLevelSelection = false; // Reset for next time
+            OnChapterClicked(currentSession.activeChapter);
+        }
     }
 
     private void PopulateChapters()
@@ -48,6 +54,11 @@ public class CampaignUIBuilder : MonoBehaviour
 
     private void OnChapterClicked(ChapterData chapter)
     {
+        if (currentSession != null)
+        {
+            currentSession.activeChapter = chapter;
+        }
+
         PopulateLevels(chapter);
         if (menuController != null)
         {
@@ -78,6 +89,7 @@ public class CampaignUIBuilder : MonoBehaviour
         if (currentSession != null)
         {
             currentSession.activeLevel = level;
+            currentSession.returnToLevelSelection = true;
             SceneManager.LoadScene(levelSceneName);
         }
         else

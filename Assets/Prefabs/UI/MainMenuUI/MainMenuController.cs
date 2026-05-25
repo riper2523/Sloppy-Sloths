@@ -8,9 +8,19 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private GameObject campaignPanel;
     [SerializeField] private GameObject levelSelectionPanel;
 
-    private void Start()
+    [Header("Session Data")]
+    [SerializeField] private CurrentSessionSO currentSession;
+
+    private void Awake()
     {
-        ShowMainPanel();
+        if (currentSession != null && currentSession.returnToLevelSelection)
+        {
+            // Do not show main panel, let CampaignUIBuilder show the level selection panel
+        }
+        else
+        {
+            ShowMainPanel();
+        }
     }
 
     private void HideAllPanels()

@@ -7,10 +7,13 @@ class InputInformation : MonoBehaviour, IInputInformation
 {
     private Camera mainCam;
 
+    private float DistanceFromTheWorldToTheCamera;
+
     void Start()
     {
         mainCam = Camera.main;
         Debug.Assert(mainCam is not null);
+        DistanceFromTheWorldToTheCamera = -mainCam.transform.position.z;
     }
 
     public bool DelKeyWasClicked()
@@ -20,9 +23,9 @@ class InputInformation : MonoBehaviour, IInputInformation
 
     public Vector3 GetMouseWorldPos()
     {
-        Vector2 mousePos2D = Mouse.current.position.ReadValue();
+        var mousePos2D = Mouse.current.position.ReadValue();
+        Vector3 mousePos3D = new(mousePos2D.x, mousePos2D.y, DistanceFromTheWorldToTheCamera);
 
-        Vector3 mousePos3D = new(mousePos2D.x, mousePos2D.y, 0);
         return mainCam.ScreenToWorldPoint(mousePos3D);
     }
 

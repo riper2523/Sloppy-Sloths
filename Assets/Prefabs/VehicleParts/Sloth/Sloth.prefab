@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 5991146489346401783}
   - component: {fileID: 8732212497392152158}
   - component: {fileID: 6112224261409256803}
+  - component: {fileID: -2559057065226518678}
+  - component: {fileID: 190983473130455996}
   m_Layer: 0
   m_Name: Sloth
   m_TagString: Sloth
@@ -109,7 +111,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: c9fe29d201d8c2f4bb1de6d9060b251b, type: 2}
+  m_Material: {fileID: 6200000, guid: 71aefa3656928e3499b942607c533809, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -156,3 +158,33 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.37
+--- !u!114 &-2559057065226518678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7586396994626127713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643f1981fff967440b1b48813dbc0c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PartLogic
+  jointBreakEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  actionReceivers: []
+  jointStrength: 3500
+  enginePower: 0
+--- !u!114 &190983473130455996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7586396994626127713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2b1207a812402649b8a6c7a63df49ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlothModifier

@@ -7,6 +7,8 @@ public class PanelManager : MonoBehaviour
     [SerializeField] private GameObject buildPanel;
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject startPanel;
+    [SerializeField] private GameObject sidebarMenu;
+    [SerializeField] private GameObject sidebarMenuButton;
 
     [SerializeField] private string menuSceneName = "MenuScene";
 
@@ -14,6 +16,8 @@ public class PanelManager : MonoBehaviour
     [SerializeField] private VoidEventChannelSO playLevelEvent;
     [SerializeField] private LevelResultEventChannelSO levelCompletedEvent;
     [SerializeField] private VoidEventChannelSO restartLevelEvent;
+    [SerializeField] private VoidEventChannelSO pauseLevelEvent;
+    [SerializeField] private VoidEventChannelSO unpauseLevelEvent;
     [SerializeField] private VoidEventChannelSO exitLevelEvent;
 
     private GameObject activePanel;
@@ -23,8 +27,10 @@ public class PanelManager : MonoBehaviour
         gamePanel.SetActive(false);
         buildPanel.SetActive(false);
         winPanel.SetActive(false);
+        sidebarMenu.SetActive(false);
 
         startPanel.SetActive(true);
+        sidebarMenuButton.SetActive(true);
         activePanel = startPanel;
     }
 
@@ -33,6 +39,10 @@ public class PanelManager : MonoBehaviour
         playLevelEvent.OnEventRaised += ShowGamePanel;
         levelCompletedEvent.OnEventRaised += ShowWinPanel;
         restartLevelEvent.OnEventRaised += ShowBuildPanel;
+
+        pauseLevelEvent.OnEventRaised += ShowSidebarMenu;
+        unpauseLevelEvent.OnEventRaised += HideSidebarMenu;
+
         exitLevelEvent.OnEventRaised += BackToMenu;
     }
 
@@ -41,6 +51,10 @@ public class PanelManager : MonoBehaviour
         playLevelEvent.OnEventRaised -= ShowGamePanel;
         levelCompletedEvent.OnEventRaised -= ShowWinPanel;
         restartLevelEvent.OnEventRaised -= ShowBuildPanel;
+
+        pauseLevelEvent.OnEventRaised -= ShowSidebarMenu;
+        unpauseLevelEvent.OnEventRaised -= HideSidebarMenu;
+
         exitLevelEvent.OnEventRaised -= BackToMenu;
     }
 
@@ -61,6 +75,22 @@ public class PanelManager : MonoBehaviour
         
         newPanel.SetActive(true);
         activePanel = newPanel;
+    }
+
+    public void ShowSidebarMenu()
+    {
+        Debug.Log("sidebar menu on");
+        sidebarMenuButton.SetActive(false);
+        sidebarMenu.SetActive(true);
+        //TODO: pause the game
+    }
+
+    public void HideSidebarMenu()
+    {
+        Debug.Log("sidebar menu off");
+        sidebarMenuButton.SetActive(true);
+        sidebarMenu.SetActive(false);
+        //TODO: unpause the game
     }
 
     public void BackToMenu() => SceneManager.LoadScene(menuSceneName);

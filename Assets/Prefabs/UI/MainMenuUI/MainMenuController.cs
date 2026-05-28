@@ -61,7 +61,6 @@ public class MainMenuController : MonoBehaviour
         Application.Quit();
 
         //in editor
-        UnityEditor.EditorApplication.isPlaying = false;
 
         Debug.Log("The game should have shut down");
     }

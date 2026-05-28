@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 using Unity.Cinemachine;
 using System.Collections.Generic;
 using UnityEngine.UI;
-
+using System.Linq;
 public class GridManager : MonoBehaviour
 {
     [Header("Listening To")]
@@ -22,10 +22,11 @@ public class GridManager : MonoBehaviour
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private GameObject gameToggleParent;
     [SerializeField] private GameObject gameTogglePrefab;
+    public int brokenPartLayerID = 8;
 
     private Dictionary<ActionType, GameObject> actionToggles = new Dictionary<ActionType, GameObject>();
     private Dictionary<ActionType, int> activeActions = new Dictionary<ActionType, int>();
-
+    private Dictionary<int, GameObject>[,] activeSpawnedParts;
 
     private Transform vehicleParent;
     private Transform buildCameraTarget;
@@ -54,13 +55,26 @@ public class GridManager : MonoBehaviour
         playLevelEvent.OnEventRaised -= Build;
         restartLevelEvent.OnEventRaised -= Restart;
     }
+    public void ClearPartGrid()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                while (partDataGrid[x, y].parts.Count > 0)
+                {
+                    RemovePart(x, y);
+                }
+            }
+        }
+        partsTilemap.ClearAllTiles();
+    }
 
     public void InitializeLevel(GridAnchor anchor)
     {
         vehicleParent = new GameObject("Vehicle").transform;
         LoadLevelSettings(anchor);
     }
-
     public void LoadLevelSettings(GridAnchor anchor)
     {
         gridSizeX = anchor.gridSizeX;
@@ -421,12 +435,15 @@ public class GridManager : MonoBehaviour
                 // A) Łączenie Wewnętrzne (Części na tej samej kratce łączą się ze sobą)
                 if (currentCellParts.Count > 1)
                 {
-                    List<GameObject> partsInCell = new List<GameObject>(currentCellParts.Values);
+                    List<GameObject> partsInCell = currentCellParts.OrderBy(kvp => -kvp.Key).Select(kvp => kvp.Value).ToList();
                     for (int i = 1; i < partsInCell.Count; i++)
                     {
                         PartLogic logicA = partsInCell[0].GetComponentInChildren<PartLogic>();
                         PartLogic logicB = partsInCell[i].GetComponentInChildren<PartLogic>();
-                        CreateJoint(logicA, logicB, Direction.Forward, 50000f);
+                        float aStrength = logicA != null ? logicA.actualJointStrength : 0f;
+                        float bStrength = logicB != null ? logicB.actualJointStrength : 0f;
+                        float strength = (aStrength + bStrength) / 2f;
+                        CreateJoint(logicA, logicB, Direction.Forward, strength);
                     }
                 }
 
@@ -445,7 +462,7 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-
+        activeSpawnedParts = spawnedParts;
         partsTilemap.ClearAllTiles();
         RecalculatePartsState();
     }
@@ -504,13 +521,11 @@ public class GridManager : MonoBehaviour
         logicA.AddConnection(dirFromAToB, logicB, joint);
         logicB.AddConnection(dirFromAToB.Opposite(), logicA, null);
     }
-    private void HandleJointBreak(Vector3Int partPos, Direction breakDir)
-    {
-        // Debug.Log($"Joint broken at {partPos} towards {breakDir}");
-        RecalculatePartsState();
-    }
+
     public void RecalculatePartsState()
     {
+        targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
+
         PartLogic[] activeParts = vehicleParent.GetComponentsInChildren<PartLogic>();
 
         foreach (var part in activeParts)
@@ -524,6 +539,13 @@ public class GridManager : MonoBehaviour
         foreach (var part in activeParts)
         {
             part.ApplyModifiers();
+        }
+        foreach (var part in activeParts)
+        {
+            if (part.gameObject.tag == "Sloth")
+            {
+                targetGroup.AddMember(part.GetComponentInChildren<Rigidbody2D>().transform, 1f, 0f);
+            }
         }
     }
     public void Restart()
@@ -542,5 +564,259 @@ public class GridManager : MonoBehaviour
         targetGroup.Targets = new List<CinemachineTargetGroup.Target>();
         targetGroup.AddMember(buildCameraTarget, 1f, 0f);
         BuildGrid();
+    }
+    private void RefreshEntireTilemap()
+    {
+        partsTilemap.ClearAllTiles();
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                UpdateTilemapForCell(x, y);
+            }
+        }
+    }
+    [ContextMenu("Rotate Clockwise")]
+    public void RotateAllPartsClockwise() => RotateCar(true);
+
+    [ContextMenu("Rotate Counter-Clockwise")]
+    public void RotateAllPartsCounterClockwise() => RotateCar(false);
+
+    private struct PendingMove
+    {
+        public int x;
+        public int y;
+        public Dictionary<int, PartInstance> parts;
+    }
+
+    private void RotateCar(bool clockwise)
+    {
+        // 1. Znajdź Bounding Box (obszar, który zajmuje pojazd)
+        int minX = int.MaxValue, maxX = int.MinValue;
+        int minY = int.MaxValue, maxY = int.MinValue;
+        bool hasParts = false;
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (partDataGrid[x, y].parts.Count > 0)
+                {
+                    hasParts = true;
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (y < minY) minY = y;
+                    if (y > maxY) maxY = y;
+                }
+            }
+        }
+
+        if (!hasParts) return;
+
+        // 2. Wylicz wymiary obecnego prostokąta konstrukcji
+        int w = maxX - minX + 1;
+        int h = maxY - minY + 1;
+
+        // 3. Oblicz nowy lewy dolny róg tak, aby po zmianie wymiarów (w na h, h na w) środek auta pozostał w tym samym miejscu.
+        // Używamy wyłącznie bezpiecznej matematyki całkowitoliczbowej.
+        int newMinX = minX + (w / 2) - (h / 2);
+        int newMinY = minY + (h / 2) - (w / 2);
+
+        // 4. Przygotuj listę ruchów, żeby nie nadpisywać siatki w trakcie czytania
+        List<PendingMove> pendingMoves = new List<PendingMove>();
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (partDataGrid[x, y].parts.Count > 0)
+                {
+                    // Relatywne pozycje wewnątrz naszego "prostokąta" od (0,0)
+                    int localX = x - minX;
+                    int localY = y - minY;
+
+                    int newLocalX, newLocalY;
+
+                    // Czysta transformacja macierzy - ZAWSZE trafia perfekcyjnie w kratkę
+                    if (clockwise)
+                    {
+                        newLocalX = localY;
+                        newLocalY = w - 1 - localX;
+                    }
+                    else
+                    {
+                        newLocalX = h - 1 - localY;
+                        newLocalY = localX;
+                    }
+
+                    int newX = newMinX + newLocalX;
+                    int newY = newMinY + newLocalY;
+
+                    // Sprawdzenie kolizji z krawędzią mapy.
+                    // Jeśli obrót wywaliłby choćby czubek zderzaka poza planszę - anulujemy cały proces obrotu.
+                    if (newX < 0 || newX >= gridSizeX || newY < 0 || newY >= gridSizeY)
+                    {
+                        Debug.LogWarning("Obrót zablokowany: Konstrukcja wyszłaby poza grid.");
+                        return;
+                    }
+
+                    // Klonujemy części do nowej kratki i dodajemy rotację
+                    Dictionary<int, PartInstance> rotatedParts = new Dictionary<int, PartInstance>();
+                    foreach (var kvp in partDataGrid[x, y].parts)
+                    {
+                        int rotOffset = clockwise ? 1 : 3;
+                        rotatedParts[kvp.Key] = new PartInstance
+                        {
+                            partData = kvp.Value.partData,
+                            Rotation = (kvp.Value.Rotation + rotOffset) % 4
+                        };
+                    }
+
+                    pendingMoves.Add(new PendingMove { x = newX, y = newY, parts = rotatedParts });
+                }
+            }
+        }
+
+        // 5. Jeśli kod dotarł tutaj, obrót jest bezpieczny na 100%. Generujemy czystą siatkę.
+        GridCell[,] newGrid = new GridCell[gridSizeX, gridSizeY];
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                newGrid[x, y].parts = new Dictionary<int, PartInstance>();
+            }
+        }
+
+        // 6. Wklejamy przekalkulowane, obrócone klocki na nową siatkę.
+        foreach (var move in pendingMoves)
+        {
+            newGrid[move.x, move.y].parts = move.parts;
+        }
+
+        // 7. Zastępujemy stare dane i odświeżamy grafikę.
+        partDataGrid = newGrid;
+        RefreshEntireTilemap();
+    }
+    [ContextMenu("Shift Right")] public void ShiftRight() => ShiftGrid(1, 0);
+    [ContextMenu("Shift Left")] public void ShiftLeft() => ShiftGrid(-1, 0);
+    [ContextMenu("Shift Up")] public void ShiftUp() => ShiftGrid(0, 1);
+    [ContextMenu("Shift Down")] public void ShiftDown() => ShiftGrid(0, -1);
+
+    public void ShiftGrid(int dx, int dy)
+    {
+        // 1. Sprawdź, czy przesunięcie nie wyrzuci klocków poza siatkę
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (partDataGrid[x, y].parts.Count > 0)
+                {
+                    int newX = x + dx;
+                    int newY = y + dy;
+
+                    // Jeśli choć jeden klocek wyjdzie poza zakres, przerywamy operację
+                    if (newX < 0 || newX >= gridSizeX || newY < 0 || newY >= gridSizeY)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+
+        // 2. Przygotuj czystą, nową siatkę
+        GridCell[,] newGrid = new GridCell[gridSizeX, gridSizeY];
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                newGrid[x, y].parts = new Dictionary<int, PartInstance>();
+            }
+        }
+
+        // 3. Skopiuj dane ze starych pozycji na nowe
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (partDataGrid[x, y].parts.Count > 0)
+                {
+                    newGrid[x + dx, y + dy].parts = partDataGrid[x, y].parts;
+                }
+            }
+        }
+
+        // 4. Zastąp starą siatkę nową i odśwież grafikę
+        partDataGrid = newGrid;
+        RefreshEntireTilemap();
+    }
+    private void HandleJointBreak(Vector3Int partPos, Direction breakDir)
+    {
+        int x = partPos.x;
+        int y = partPos.y;
+        int currentLayer = partPos.z;
+
+        if (activeSpawnedParts == null || x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY) return;
+
+        var partsInCell = activeSpawnedParts[x, y];
+        GameObject brokenOffPart = null;
+
+        // 1. USTALAMY, KTO ODPADA
+        if (Direction.Backward == breakDir)
+        {
+            // Pęknięcie w stronę wyższej warstwy (np. Z=1 puszcza Z=2). 
+            // Odpada wyższa warstwa.
+            int higherLayer = currentLayer + 1;
+            if (partsInCell.TryGetValue(higherLayer, out brokenOffPart))
+            {
+                // Usuwamy ze słownika, bo ten klocek fizycznie opuszcza pojazd!
+                partsInCell.Remove(higherLayer);
+            }
+        }
+        else if (Direction.Forward == breakDir)
+        {
+            // Pęknięcie w stronę niższej warstwy (np. Z=1 odrywa się od ramy Z=0). 
+            // Odpadamy MY.
+            if (partsInCell.TryGetValue(currentLayer, out brokenOffPart))
+            {
+                partsInCell.Remove(currentLayer);
+            }
+        }
+
+        // 2. LOGIKA WYPADANIA KLOCKA Z KRATKI
+        if (brokenOffPart != null)
+        {
+            // Odepnij od pojazdu, żeby jego masa i fizyka działała już osobno
+
+            // KLUCZOWE: Zmiana warstwy fizycznej na złom. 
+            // Dzięki temu nie zderzy się z warstwą 0, z którą dzieli pozycję (X, Y)!
+            SetLayerRecursively(brokenOffPart, brokenPartLayerID);
+
+            // Dopiero teraz bezpiecznie włączamy twardą kolizję
+            Collider2D[] colliders = brokenOffPart.GetComponentsInChildren<Collider2D>();
+            foreach (var col in colliders)
+            {
+                col.isTrigger = false;
+            }
+
+            // Wizualny bajer - nadajemy mu lekką, losową siłę odrzutu, żeby "wyskoczył" ze środka auta
+            Rigidbody2D rb = brokenOffPart.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.AddForce(new Vector2(Random.Range(-1.5f, 1.5f), Random.Range(0f, 2f)), ForceMode2D.Impulse);
+            }
+        }
+
+        RecalculatePartsState();
+    }
+
+    // Funkcja pomocnicza, ponieważ zmiana gameObject.layer nie zmienia automatycznie dzieci, 
+    // a Twoje Collidery mogą być głębiej w hierarchii prefabu.
+    private void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
     }
 }

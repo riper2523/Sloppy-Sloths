@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8732212497392152158}
   - component: {fileID: 7726627971461787393}
   - component: {fileID: 3624861112218210688}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WoodSquare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,9 +182,6 @@ MonoBehaviour:
   jointBreakEvent:
     m_PersistentCalls:
       m_Calls: []
-  gridPosition: {x: 0, y: 0, z: 0}
   actionReceivers: []
   jointStrength: 3500
   enginePower: 0
-  actualJointStrength: 200
-  actualEnginePower: 0

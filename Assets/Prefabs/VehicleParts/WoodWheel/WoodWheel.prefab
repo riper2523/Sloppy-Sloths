@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 634085337601775054}
   - component: {fileID: 2691272659136138746}
   - component: {fileID: 4742973360715907365}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WoodWheelFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 5292873327794204896}
   - component: {fileID: 2871179765715236392}
   - component: {fileID: 8610039384462123308}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WoodWheelBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -511,7 +511,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2562856846963897997}
   - component: {fileID: 6752293016083485949}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WoodWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

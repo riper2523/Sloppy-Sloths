@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 190983473130455996}
   - component: {fileID: 5705464860512869561}
   - component: {fileID: 1511639547055365359}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sloth
   m_TagString: Sloth
   m_Icon: {fileID: 0}

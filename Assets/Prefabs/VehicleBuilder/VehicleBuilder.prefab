@@ -126,6 +126,10 @@ PrefabInstance:
       propertyPath: inventoryManager
       value: 
       objectReference: {fileID: 1517542740764448496}
+    - target: {fileID: 5469125150765599570, guid: 016910ff58731ea4fa99998b903d0fac, type: 3}
+      propertyPath: brokenPartLayerID
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6697092817488480993, guid: 016910ff58731ea4fa99998b903d0fac, type: 3}
       propertyPath: m_Name
       value: Grid

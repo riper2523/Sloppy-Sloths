@@ -29,6 +29,9 @@ public class InventoryManager : MonoBehaviour
         {
             CreateButtonForPart(entry.Key, entry.Value);
         }
+
+        // Request restore only after inventory is fully initialized.
+        gridManager.RequestRestoreForLevel(levelData);
     }
     public bool TryUsePart(PartData part)
     {

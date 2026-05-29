@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
   m_Name: SlothPD
   m_EditorClassIdentifier: Assembly-CSharp::PartData
+  uniqueID: b49f6cc9-2cdc-4734-87fc-53f6172047bf
   partPrefab: {fileID: 7586396994626127713, guid: 3eac2be2a126e4547be7836f193304c6, type: 3}
   partSpriteUI: {fileID: 6025285105372068174, guid: d9a02e7b0af469840b8b483b85895c1e, type: 3}
   partName: Sloth

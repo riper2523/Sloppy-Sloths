@@ -13,13 +13,19 @@ public class LevelButtonUI : MonoBehaviour
     public void Setup(LevelData data, int levelNumber, UnityAction<LevelData> onClick)
     {
         levelData = data;
-        if (titleText != null) titleText.text = levelNumber.ToString();
-
         if (button == null)
         {
             button = GetComponent<Button>();
         }
+
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => onClick?.Invoke(levelData));
+
+        int starsCount = SaveManager.Instance.GetEarnedStarCount(data);
+
+        if (titleText != null) 
+        {
+            titleText.text = $"{levelNumber}\n<size=50%>{starsCount} / {data.starGoals.Count}</size>";
+        }
     }
 }

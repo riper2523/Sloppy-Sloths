@@ -49,6 +49,7 @@ public class StarManager : MonoBehaviour
 
     private void HandleRestart()
     {
+        sessionCollectedStarIDs.Clear();
         levelTimer = 0f;
         isDriving = false;
     }
@@ -57,7 +58,7 @@ public class StarManager : MonoBehaviour
 
     private void HandleStarSpawned(CollectibleStar star)
     {
-        if (sessionCollectedStarIDs.Contains(star.starID))
+        if (SaveManager.Instance.HasCollectedStar(currentLevel.uniqueID, star.starID))
         {
             star.SetCollected();
         }
@@ -82,7 +83,8 @@ public class StarManager : MonoBehaviour
         LevelResult result = new LevelResult
         {
             completionTime = levelTimer,
-            starResults = new List<StarResult>()
+            starResults = new List<StarResult>(),
+            collectedStarIDs = new List<int>(sessionCollectedStarIDs)
         };
 
         int collectibleStarIndex = 0;

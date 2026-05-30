@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlothModifier : MonoBehaviour, IPartModifier
+public class EngineModifier : MonoBehaviour, IPartModifier
 {
     public void ActivateEffects(PartLogic coreLogic)
     {
@@ -14,11 +14,14 @@ public class SlothModifier : MonoBehaviour, IPartModifier
         while (queue.Count > 0)
         {
             PartLogic current = queue.Dequeue();
-            if (current == null)
-                continue;
-
-            current.gameObject.tag = "Sloth";
-
+            if (current.actualEnginePower < 0)
+            {
+                current.actualEnginePower -= 10f;
+            }
+            else
+            {
+                current.actualEnginePower += 10f;
+            }
             foreach (var neighbor in current.connectedParts.Values)
             {
                 if (neighbor != null && !visited.Contains(neighbor))

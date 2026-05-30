@@ -1,2 +1,11 @@
-# Auto detect text files and perform LF normalization
+# Auto-detect text files and perform LF normalization
 * text=auto
+
+# Force LF for source code files
+*.cs text eol=lf
+*.json text eol=lf
+
+# Force CRLF for Visual Studio/MSBuild files (this is standard for .sln, .slnx, and .csproj)
+*.sln text eol=crlf
+*.slnx text eol=crlf
+*.csproj text eol=crlf

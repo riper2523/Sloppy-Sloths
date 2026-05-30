@@ -58,10 +58,7 @@ public class StarManager : MonoBehaviour
 
     private void HandleStarSpawned(CollectibleStar star)
     {
-        if (SaveManager.Instance.HasCollectedStar(currentLevel.uniqueID, star.starID))
-        {
-            star.SetCollected();
-        }
+        // can switch star color here based on being collected
     }
     
     private void HandleStarCollected(CollectibleStar star) 

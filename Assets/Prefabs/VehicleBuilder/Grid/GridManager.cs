@@ -819,4 +819,30 @@ public class GridManager : MonoBehaviour
             SetLayerRecursively(child.gameObject, newLayer);
         }
     }
+    public void DropPartAtWorldPosition(Vector3 worldPos)
+    {
+        Vector3Int cellPos = partsTilemap.WorldToCell(worldPos);
+        OnSingleClick(cellPos);
+        actPartData = null;
+    }
+    public PartData GrabPartFromGrid(Vector3Int tilePos)
+    {
+        int x = tilePos.x - offsetX;
+        int y = tilePos.y - offsetY;
+
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY) return null;
+
+        var cellParts = partDataGrid[x, y].parts;
+        if (cellParts.Count == 0) return null;
+
+        int topLayer = -1;
+        foreach (int layerId in cellParts.Keys)
+        {
+            if (layerId > topLayer) topLayer = layerId;
+        }
+
+        PartData grabbedPart = cellParts[topLayer].partData;
+        RemovePart(x, y);
+        return grabbedPart;
+    }
 }

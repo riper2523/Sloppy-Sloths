@@ -118,6 +118,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8658418913961371011}
     m_Modifications:
+    - target: {fileID: 4880401364143377125, guid: 016910ff58731ea4fa99998b903d0fac, type: 3}
+      propertyPath: gridManager
+      value: 
+      objectReference: {fileID: 2485891098192372977}
     - target: {fileID: 5469125150765599570, guid: 016910ff58731ea4fa99998b903d0fac, type: 3}
       propertyPath: gameTogglePrefab
       value: 

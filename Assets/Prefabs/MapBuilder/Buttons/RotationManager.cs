@@ -1,48 +1,54 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using Assets.Prefabs.MapBuilder.Utils;
 using Assets.Prefabs.MapBuilder.MapBuilderManager;
-using Assets.Prefabs.MapBuilder.Buttons;
-
-class RotationValueValidator : IValidator
-{
-    public bool IsValid(string text)
-    {
-        // Allow starting a negative number or a decimal
-        if (text == "-" || text == "." || text == "-.") return true;
-
-        return float.TryParse(text, out _);
-    }
-}
 
 namespace Assets.Prefabs.MapBuilder.Buttons
 {
-    class RotationManager : ButtonTextFieldGroup, IEventProvider<Rotation>
+    public class RotationManager : MonoBehaviour, IEventProvider<Rotation>
     {
         public event Action<Rotation> ProvidedEvent;
+        private Slider _slider;
+        private float _lastValue;
 
-        new void Awake()
+        void Awake()
         {
-            base.Awake();
-            Validator = new RotationValueValidator();
-        }
-
-        override public void DispatchTheEvent()
-        {
-            if (string.IsNullOrEmpty(InputField.text))
+            _slider = GetComponentInChildren<Slider>();
+            if (_slider != null)
             {
-                Debug.Log("No value provided");
-                return;
-            }
-
-            if (float.TryParse(InputField.text, out float rotationValue))
-            {
-                var rotationTransform = new Rotation(rotationValue);
-                ProvidedEvent?.Invoke(rotationTransform);
+                _lastValue = _slider.value;
+                _slider.onValueChanged.AddListener(HandleValueChanged);
             }
             else
             {
-                Debug.LogError("The provided value is invalid, this shouldn't happen");
+                Debug.LogWarning("RotationManager: No Slider component found in children.");
+            }
+        }
+
+        private void HandleValueChanged(float value)
+        {
+            float delta = value - _lastValue;
+            _lastValue = value;
+            if (Mathf.Abs(delta) > 0.001f)
+            {
+                ProvidedEvent?.Invoke(new Rotation(delta));
+            }
+        }
+
+        private IInputInformation _inputInformation;
+
+        void Update()
+        {
+            if (_inputInformation == null)
+            {
+                _inputInformation = FindAnyObjectByType<InputInformation>();
+            }
+
+            if (_slider != null && _inputInformation != null && _inputInformation.WeReleasedThisFrame())
+            {
+                _slider.SetValueWithoutNotify(0f);
+                _lastValue = 0f;
             }
         }
     }

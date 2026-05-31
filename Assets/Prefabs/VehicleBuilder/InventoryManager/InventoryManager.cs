@@ -17,7 +17,7 @@ public class InventoryManager : MonoBehaviour
 
     public void InitializeLevel(LevelData levelData)
     {
-        foreach (Transform child in buttonParent.transform) 
+        foreach (Transform child in buttonParent.transform)
         {
             Destroy(child.gameObject);
         }
@@ -25,7 +25,7 @@ public class InventoryManager : MonoBehaviour
         inventory = ScriptableObject.CreateInstance<Inventory>();
         inventory.itemsMap = new Dictionary<PartData, int>(levelData.startingItems.itemsMap);
         CreateRemovePartButton();
-        foreach (var entry in inventory.itemsMap) 
+        foreach (var entry in inventory.itemsMap)
         {
             CreateButtonForPart(entry.Key, entry.Value);
         }

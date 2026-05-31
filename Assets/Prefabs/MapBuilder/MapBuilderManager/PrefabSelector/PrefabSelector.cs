@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Assets.Prefabs.MapBuilder.MapBuilderManager.PrefabSelector
 {
-    public delegate void PrefabSelectedHandler(GameObject prefab);
+    public delegate void PrefabSelectedHandler(MapBuilderItemType type);
 
     public class PrefabSelector : MonoBehaviour
     {
         public PrefabSelectedHandler? PrefabSelected;
 
-        public void TriggerSelectPrefab(GameObject prefab)
+        public void TriggerSelectPrefab(MapBuilderItemType type)
         {
-            PrefabSelected?.Invoke(prefab);
+            PrefabSelected?.Invoke(type);
         }
     }
 }

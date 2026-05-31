@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Assets.Prefabs.MapBuilder.MapBuilderManager
 {
-    readonly struct Transposition : IContainerStateTransformation
+    public readonly struct Transposition : IContainerStateTransformation
     {
         readonly Vector3 Vector;
 
@@ -21,7 +21,7 @@ namespace Assets.Prefabs.MapBuilder.MapBuilderManager
         }
     }
 
-    readonly struct Rotation : IContainerStateTransformation
+    public readonly struct Rotation : IContainerStateTransformation
     {
         readonly float RotationValue;
 
@@ -44,7 +44,7 @@ namespace Assets.Prefabs.MapBuilder.MapBuilderManager
         }
     }
 
-    readonly struct Scaling : IContainerStateTransformation
+    public readonly struct Scaling : IContainerStateTransformation
     {
         readonly float ScalingValue;
 

@@ -20,7 +20,7 @@ const MAP_FILES_DIR = process.env.MAP_STORAGE_PATH
 const getMapParamsSchema = {
     type: 'object',
     properties: {
-        mapName: { type: 'string', pattern: '^[a-zA-Z0-9_-]+$' } // Path sanitization via regex
+        mapName: { type: 'string', pattern: '^[a-zA-Z0-9_ -]+$' } // Path sanitization via regex
     },
     required: ['mapName']
 } as const;
@@ -51,6 +51,15 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             await mkdir(MAP_FILES_DIR, { recursive: true });
         } catch (err: any) {
             fastifyInstance.log.error({ err }, `Failed to create ${MAP_FILES_DIR} directory`);
+        }
+    });
+
+    // Global Error Handler
+    fastifyInstance.setErrorHandler((error, request, reply) => {
+        if (error.validation) {
+            reply.status(400).send({ errMsg: error.message });
+        } else {
+            reply.status(error.statusCode || 500).send({ errMsg: error.message || "Internal Server Error" });
         }
     });
 
@@ -213,6 +222,25 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             const tempPath = join(tmpdir_path, `upload_${randomUUID()}.map`);
             const uniqueFileName = `${mapName}_${randomUUID()}.map`;
             const finalPath = join(MAP_FILES_DIR, uniqueFileName);
+
+            // 3. Extract 'nick' from the form fields
+            const nick = (data.fields.nick as any)?.value;
+            console.log(`Upload Request: mapName=${mapName}, nick='${nick}'`);
+            if (!nick) {
+                data.file.resume(); // Drain stream to avoid hanging
+                return reply.status(400).send({ errMsg: "Missing 'nick' field in multipart form" });
+            }
+
+            // 4. Validate Owner
+            const ownerResult = await databaseConnection.getOwner(nick);
+            if (!ownerResult.ok) {
+                data.file.resume();
+                return reply.status(404).send({ errMsg: `User ${nick} not found` });
+            }
+
+            const tempPath = join(tmpdir_path, `upload_${randomUUID()}.map`);
+            const finalPath = join(MAP_FILES_DIR, `${basename(mapName)}.map`);
+            let finalPathCreated = false;
 
             try {
                 // 4. Stream directly to temp file

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Assets.Prefabs.LevelSystem.StarManager;
 
 public struct LevelResult
 {

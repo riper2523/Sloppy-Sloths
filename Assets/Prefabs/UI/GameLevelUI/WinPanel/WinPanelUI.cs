@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UIElements;
+using Assets.Prefabs.LevelSystem.StarManager;
 
 public class WinPanelUI : MonoBehaviour
 {

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Threading.Tasks;
 using System;
 
 namespace Assets.Prefabs.MapBuilder.MapBuilderManager
@@ -15,7 +16,8 @@ namespace Assets.Prefabs.MapBuilder.MapBuilderManager
     {
         BUILDER_MODE,
         GEAR_SELECT_MODE,
-        TESTING_MODE
+        TESTING_MODE,
+        STAR_CONFIG_MODE
     }
 
     public interface IMapBuilderManagerState
@@ -26,11 +28,6 @@ namespace Assets.Prefabs.MapBuilder.MapBuilderManager
         void OnActivateState();
 
         #endregion
-
-        void ChoosePrefab(GameObject prefab)
-        {
-            Utils.PrintUnsupportedCall(GetType().Name, nameof(ChoosePrefab), prefab.ToString());
-        }
 
         #region Basic Input Handling
 

@@ -1,10 +1,33 @@
 using UnityEngine;
+using Newtonsoft.Json;
 using UnityEngine.EventSystems;
-using Assets.Prefabs.MapBuilder;
 using System;
+using Assets.Prefabs.MapBuilder.Serialization;
 
 namespace Assets.Prefabs.MapBuilder.Node
 {
+    [System.Serializable]
+    public struct NodeControllerDTO : INodeHandleDTO
+    {
+        public float x { get; set; }
+        public float y { get; set; }
+        public float z { get; set; }
+
+        public readonly Vector3 AsVector3()
+        {
+            return new(x, y, z);
+        }
+        public NodeControllerDTO(Vector3 vec)
+        {
+            x = vec.x;
+            y = vec.y;
+            z = vec.z;
+        }
+
+        public readonly NodeHandleType Type => NodeHandleType.CIRCULAR;
+    }
+
+
     [RequireComponent(typeof(Draggable))]
     class NodeController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, INodeHandle
     {
@@ -81,6 +104,23 @@ namespace Assets.Prefabs.MapBuilder.Node
             var actPos = Coordinates;
             Debug.Log($"Act pos: {actPos}, offset: {offset}");
             transform.position = actPos + offset;
+        }
+
+        public INodeHandleDTO SerializeToDTO()
+        {
+            return new NodeControllerDTO(Coordinates);
+        }
+
+        public void SetUpUsingDTO(INodeHandleDTO nodeHandleDTO)
+        {
+            if (nodeHandleDTO is NodeControllerDTO nodeControllerDTO)
+            {
+                Coordinates = nodeControllerDTO.AsVector3();
+            }
+            else
+            {
+                Debug.LogError($"Invalid type of DTO which declared {nodeHandleDTO.Type} type");
+            }
         }
     }
 }

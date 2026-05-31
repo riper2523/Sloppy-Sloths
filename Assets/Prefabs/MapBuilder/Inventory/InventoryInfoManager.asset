@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5b20f665148048daa89421468be7924, type: 3}
+  m_Name: InventoryInfoManager
+  m_EditorClassIdentifier: MapBuilder::Assets.Prefabs.MapBuilder.Inventory.InventoryInfoManager
+  supportedPartsRegistry: {fileID: 11400000, guid: a4234e8ab69cf1ad09037fcf6ddf9f23, type: 2}

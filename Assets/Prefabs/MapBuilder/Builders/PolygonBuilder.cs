@@ -5,6 +5,29 @@ using UnityEngine;
 using UnityEngine.U2D;
 using Assets.Prefabs.MapBuilder;
 using UnityEngine.EventSystems;
+using Assets.Prefabs.MapBuilder.Node;
+using Assets.Prefabs.MapBuilder.Serialization;
+
+[System.Serializable]
+public class PolygonBuilderDTO : INodeContainerDTO
+{
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public NodeContainerType Type => NodeContainerType.POLYGON;
+    public List<INodeHandleDTO> NodeHandleDTOs { get; set; } = new();
+
+    public PolygonBuilderDTO() { }
+    public PolygonBuilderDTO(Vector3 pos, List<INodeHandleDTO> nodes)
+    {
+        x = pos.x;
+        y = pos.y;
+        z = pos.z;
+        NodeHandleDTOs = nodes;
+    }
+
+    public Vector3 AsVector3() => new Vector3(x, y, z);
+}
 
 [RequireComponent(typeof(SpriteShapeController))]
 [RequireComponent(typeof(SpriteShapeRenderer))]
@@ -350,5 +373,56 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
         }
 
         RebuildTheSplineAndCollider();
+    }
+
+    public INodeContainerDTO SerializeToDTO()
+    {
+        var nodeDTOs = nodes.Select(n => n.SerializeToDTO()).ToList();
+        return new PolygonBuilderDTO(transform.position, nodeDTOs);
+    }
+
+    public void SetUpUsingDTO(INodeContainerDTO nodeContainerDTO)
+    {
+        if (nodeContainerDTO is PolygonBuilderDTO polygonDTO)
+        {
+            transform.position = polygonDTO.AsVector3();
+
+            // Clear existing nodes (like those created in Start from the initial spline)
+            foreach (var node in nodes.ToList())
+            {
+                DeleteANode(node);
+            }
+            nodes.Clear();
+            spline.Clear();
+
+            foreach (var nodeDTO in polygonDTO.NodeHandleDTOs)
+            {
+                // We use world coordinates from the DTO
+                var nodeData = CreateNode(nodeDTO is NodeControllerDTO nDTO ? nDTO.AsVector3() : Vector3.zero);
+                if (nodeData != null)
+                {
+                    var (controller, _) = nodeData.Value;
+
+                    // Hook up events similar to TryAddingNodeAtPoint
+                    controller.NodeTriggered += () => OnNodeTrigger(controller);
+                    controller.NodeDragged += (_, offset) => NodeMoved(controller, offset);
+                    controller.NodeChangedSelectionState += () => NodeChangedState?.Invoke(controller);
+                    controller.NodeDragEnded += () => ColliderNeedsRebuilding = true;
+
+                    nodes.Add(controller);
+                }
+            }
+
+            RebuildTheSplineAndCollider();
+        }
+    }
+
+    public void MoveToGameplay()
+    {
+        foreach (var node in nodes)
+        {
+            node.Delete();
+        }
+        nodes.Clear();
     }
 }

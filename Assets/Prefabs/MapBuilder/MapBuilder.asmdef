@@ -1,0 +1,22 @@
+{
+    "name": "MapBuilder",
+    "rootNamespace": "",
+    "references": [
+        "Unity.InputSystem",
+        "Unity.2D.SpriteShape.Runtime",
+        "Unity.2D.SpriteShape.Editor",
+        "Newtonsoft.Json",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
+        "Data"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

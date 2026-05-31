@@ -6,13 +6,13 @@ using Assets.Prefabs.MapBuilder.MapBuilderManager.PrefabSelector;
 public class PrefabSelectButton : MonoBehaviour
 {
     [SerializeField]
-    public GameObject Prefab;
+    public MapBuilderItemType ItemType;
 
     private PrefabSelector prefabSelector;
 
-    void InitPrefabAndEnableIt(GameObject prefab)
+    void InitPrefabAndEnableIt(MapBuilderItemType type)
     {
-        Prefab = prefab;
+        ItemType = type;
         gameObject.SetActive(true);
     }
 
@@ -20,12 +20,11 @@ public class PrefabSelectButton : MonoBehaviour
     {
         prefabSelector = GetComponentInParent<PrefabSelector>();
         Debug.Assert(prefabSelector is not null);
-        Debug.Assert(Prefab is not null, "PrefabSelectButton instance was not correctly set up, Prefab field is null");
     }
 
     public void SelectPrefab()
     {
-        Debug.Log($"Prefab {Prefab} was selected {prefabSelector}");
-        prefabSelector.TriggerSelectPrefab(Prefab);
+        Debug.Log($"Prefab type {ItemType} was selected {prefabSelector}");
+        prefabSelector.TriggerSelectPrefab(ItemType);
     }
 }

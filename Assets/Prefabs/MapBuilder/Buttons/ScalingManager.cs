@@ -1,53 +1,58 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using Assets.Prefabs.MapBuilder.Utils;
 using Assets.Prefabs.MapBuilder.MapBuilderManager;
 
-using Assets.Prefabs.MapBuilder.Buttons;
-
-class ScaleValueValidator : IValidator
-{
-    public bool IsValid(string text)
-    {
-        // Allow starting a decimal number
-        if (text == ".") return true;
-
-        if (float.TryParse(text, out float value))
-        {
-            return value > 0;
-        }
-        return false;
-    }
-}
-
 namespace Assets.Prefabs.MapBuilder.Buttons
 {
-    class ScalingManager : ButtonTextFieldGroup, IEventProvider<Scaling>
+    public class ScalingManager : MonoBehaviour, IEventProvider<Scaling>
     {
         public event Action<Scaling> ProvidedEvent;
+        private Slider _slider;
+        private float _lastValue;
 
-        new void Awake()
+        void Awake()
         {
-            base.Awake();
-            Validator = new ScaleValueValidator();
-        }
-
-        override public void DispatchTheEvent()
-        {
-            if (string.IsNullOrEmpty(InputField.text))
+            _slider = GetComponentInChildren<Slider>();
+            if (_slider != null)
             {
-                Debug.Log("No value provided");
-                return;
-            }
-
-            if (float.TryParse(InputField.text, out float scalingValue))
-            {
-                var rotationTransform = new Scaling(scalingValue);
-                ProvidedEvent?.Invoke(rotationTransform);
+                _lastValue = _slider.value;
+                _slider.onValueChanged.AddListener(HandleValueChanged);
             }
             else
             {
-                Debug.LogError("The provided value is invalid, this shouldn't happen");
+                Debug.LogWarning("ScalingManager: No Slider component found in children.");
+            }
+        }
+
+        private void HandleValueChanged(float value)
+        {
+            if (value <= 0.01f) value = 0.01f;
+            if (_lastValue <= 0.01f) _lastValue = 0.01f;
+
+            float delta = value / _lastValue;
+            _lastValue = value;
+
+            if (Mathf.Abs(delta - 1f) > 0.001f)
+            {
+                ProvidedEvent?.Invoke(new Scaling(delta));
+            }
+        }
+
+        private IInputInformation _inputInformation;
+
+        void Update()
+        {
+            if (_inputInformation == null)
+            {
+                _inputInformation = FindAnyObjectByType<InputInformation>();
+            }
+
+            if (_slider != null && _inputInformation != null && _inputInformation.WeReleasedThisFrame())
+            {
+                _slider.SetValueWithoutNotify(1f);
+                _lastValue = 1f;
             }
         }
     }

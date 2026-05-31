@@ -35,6 +35,7 @@ public class GridManager : MonoBehaviour
     {
         public PartData partData;
         public int Rotation;
+        public int AimRotation;
     }
 
     struct GridCell
@@ -157,7 +158,13 @@ public class GridManager : MonoBehaviour
     {
         int x = tilePos.x - offsetX;
         int y = tilePos.y - offsetY;
-        RotatePart(x, y);
+        RotateAim(x, y);
+    }
+    public void OnRightClick(Vector3Int tilePos)
+    {
+        int x = tilePos.x - offsetX;
+        int y = tilePos.y - offsetY;
+        RotateStructure(x, y);
     }
     private void BuildGrid()
     {
@@ -230,12 +237,9 @@ public class GridManager : MonoBehaviour
 
         UpdateTilemapForCell(x, y);
     }
-    public void RotatePart(int x, int y)
+    public void RotateStructure(int x, int y)
     {
-        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY)
-        {
-            return;
-        }
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY) return;
 
         var cellParts = partDataGrid[x, y].parts;
         if (cellParts.Count == 0) return;
@@ -250,6 +254,32 @@ public class GridManager : MonoBehaviour
         cellParts[topLayer].Rotation = newRotation;
 
         UpdateTilemapForCell(x, y);
+    }
+
+    public void RotateAim(int x, int y)
+    {
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY) return;
+
+        var cellParts = partDataGrid[x, y].parts;
+        if (cellParts.Count == 0) return;
+
+        int topLayer = -1;
+        foreach (int layerId in cellParts.Keys)
+        {
+            if (layerId > topLayer) topLayer = layerId;
+        }
+
+        PartInstance pInst = cellParts[topLayer];
+
+        if (pInst.partData.isAimable && pInst.partData.aimStates != null && pInst.partData.aimStates.Length > 0)
+        {
+            pInst.AimRotation = (pInst.AimRotation + 1) % pInst.partData.aimStates.Length;
+            UpdateTilemapForCell(x, y);
+        }
+        else
+        {
+            RotateStructure(x, y);
+        }
     }
     private void UpdateTilemapForCell(int x, int y)
     {
@@ -274,7 +304,15 @@ public class GridManager : MonoBehaviour
 
             Vector3Int tilePosition = new Vector3Int(x + offsetX, y + offsetY, layerId);
 
-            partsTilemap.SetTile(tilePosition, pInst.partData.partTile);
+            TileBase tileToDraw = pInst.partData.partTile;
+
+            if (pInst.partData.isAimable && pInst.partData.aimStates != null && pInst.partData.aimStates.Length > 0)
+            {
+                tileToDraw = pInst.partData.aimStates[pInst.AimRotation].visualTile;
+            }
+
+            partsTilemap.SetTile(tilePosition, tileToDraw);
+
             ApplyRotation(tilePosition, pInst.Rotation);
         }
     }
@@ -370,7 +408,15 @@ public class GridManager : MonoBehaviour
                                              * Quaternion.Euler(0, 0, pInst.Rotation * -90f);
 
                     GameObject newPart = Instantiate(pInst.partData.partPrefab, worldPos, finalRotation);
-
+                    if (pInst.partData.isAimable && pInst.partData.aimStates != null && pInst.partData.aimStates.Length > 0)
+                    {
+                        AimablePartComponent aimScript = newPart.GetComponentInChildren<AimablePartComponent>();
+                        if (aimScript != null)
+                        {
+                            float exactAngle = pInst.partData.aimStates[pInst.AimRotation].angle;
+                            aimScript.SetAimRotation(exactAngle);
+                        }
+                    }
                     // WYŁĄCZANIE KOLIZJI DLA WYŻSZYCH WARSTW
                     if (layer > minLayerInCell)
                     {

@@ -16,7 +16,7 @@ public class CollectibleStar : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Sloth") || other.transform.parent.CompareTag("Sloth"))
+        if (other.CompareTag("Sloth") || (other.transform.parent != null && other.transform.parent.CompareTag("Sloth")))
         {
             Collect();
         }

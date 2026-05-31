@@ -925,6 +925,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LevelLoader, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 6405412634677610311, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_StartAxis
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405412634677610311, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_Constraint
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405412634677610311, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_ConstraintCount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5562549750797607966, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0

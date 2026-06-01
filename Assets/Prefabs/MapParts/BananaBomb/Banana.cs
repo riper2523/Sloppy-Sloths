@@ -49,7 +49,7 @@ public class Banana : MonoBehaviour
 
         if (explosionEffect != null)
         {
-            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            Instantiate(explosionEffect, transform.position, Quaternion.identity, transform.parent);
         }
 
         Collider2D[] objects = Physics2D.OverlapCircleAll(transform.position, radius);
@@ -79,7 +79,7 @@ public class Banana : MonoBehaviour
         {
             for (int i = 0; i < childrenCount; i++)
             {
-                GameObject miniBanana = Instantiate(spawnChildren, transform.position, Quaternion.identity);
+                GameObject miniBanana = Instantiate(spawnChildren, transform.position, Quaternion.identity, transform.parent);
                 Rigidbody2D rb = miniBanana.GetComponent<Rigidbody2D>();
 
                 if (rb != null)

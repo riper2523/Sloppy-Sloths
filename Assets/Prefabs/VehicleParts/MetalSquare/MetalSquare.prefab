@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8732212497392152158}
   - component: {fileID: 7726627971461787393}
   - component: {fileID: 644236973283140138}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MetalSquare
   m_TagString: Untagged
   m_Icon: {fileID: 0}

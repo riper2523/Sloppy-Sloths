@@ -749,6 +749,100 @@ public class GridManager : MonoBehaviour
         partDataGrid = newGrid;
         RefreshEntireTilemap();
     }
+    [ContextMenu("Mirror Horizontally")]
+    public void MirrorAllPartsHorizontally() => MirrorCar(true);
+
+    [ContextMenu("Mirror Vertically")]
+    public void MirrorAllPartsVertically() => MirrorCar(false);
+
+    private void MirrorCar(bool horizontal)
+    {
+        // 1. Znajdź Bounding Box (obszar zajmowany przez auto)
+        int minX = int.MaxValue, maxX = int.MinValue;
+        int minY = int.MaxValue, maxY = int.MinValue;
+        bool hasParts = false;
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (partDataGrid[x, y].parts.Count > 0)
+                {
+                    hasParts = true;
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (y < minY) minY = y;
+                    if (y > maxY) maxY = y;
+                }
+            }
+        }
+
+        if (!hasParts) return;
+
+        List<PendingMove> pendingMoves = new List<PendingMove>();
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (partDataGrid[x, y].parts.Count > 0)
+                {
+                    int newX = horizontal ? (minX + maxX - x) : x;
+                    int newY = horizontal ? y : (minY + maxY - y);
+
+                    // 3. Klonowanie i odwracanie kierunku klocków (Obrót strukturalny)
+                    Dictionary<int, PartInstance> mirroredParts = new Dictionary<int, PartInstance>();
+                    foreach (var kvp in partDataGrid[x, y].parts)
+                    {
+                        int oldRot = kvp.Value.Rotation;
+                        int newRot = oldRot;
+
+                        // NAPRAWIONA MATEMATYKA ROTACJI
+                        if (horizontal)
+                        {
+                            // Lustro Poziome (X): Zamieniamy Prawo(1) z Lewo(3).
+                            if (oldRot == 1) newRot = 3;
+                            else if (oldRot == 3) newRot = 1;
+                        }
+                        else
+                        {
+                            // Lustro Pionowe (Y): Zamieniamy Górę(0) z Dołem(2).
+                            if (oldRot == 0) newRot = 2;
+                            else if (oldRot == 2) newRot = 0;
+                        }
+
+                        mirroredParts[kvp.Key] = new PartInstance
+                        {
+                            partData = kvp.Value.partData,
+                            Rotation = newRot
+                        };
+                    }
+
+                    pendingMoves.Add(new PendingMove { x = newX, y = newY, parts = mirroredParts });
+                }
+            }
+        }
+
+        // 4. Generujemy czystą siatkę.
+        GridCell[,] newGrid = new GridCell[gridSizeX, gridSizeY];
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                newGrid[x, y].parts = new Dictionary<int, PartInstance>();
+            }
+        }
+
+        // 5. Wklejamy odbite klocki na nową siatkę.
+        foreach (var move in pendingMoves)
+        {
+            newGrid[move.x, move.y].parts = move.parts;
+        }
+
+        // 6. Zastępujemy stare dane i odświeżamy grafikę.
+        partDataGrid = newGrid;
+        RefreshEntireTilemap();
+    }
     private void HandleJointBreak(Vector3Int partPos, Direction breakDir)
     {
         int x = partPos.x;

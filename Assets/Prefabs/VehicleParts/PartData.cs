@@ -5,10 +5,19 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "PartData", menuName = "Scriptable Objects/PartData")]
 public class PartData : ScriptableObject
 {
+    [System.Serializable]
+    public struct AimState
+    {
+        public int angle;
+        public TileBase visualTile;
+    }
     public GameObject partPrefab;
     public Sprite partSpriteUI;
     public string partName;
     public Tile partTile;
+    [Header("Ustawienia celowania")]
+    public bool isAimable = false;
+    public AimState[] aimStates;
     public int layer = 0;
     [Tooltip("List of layers that can be with this part on same square")]
     public List<int> acceptedLayers = new List<int>();

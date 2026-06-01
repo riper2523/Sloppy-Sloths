@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
+  m_Name: SwitchPD
+  m_EditorClassIdentifier: Assembly-CSharp::PartData
+  partPrefab: {fileID: 7586396994626127713, guid: 1a38653876056024fb82f57c38d3b50e, type: 3}
+  partSpriteUI: {fileID: -1494352897237206093, guid: a8cf6b6bc1d9b75429a43702fd188bf6, type: 3}
+  partName: Switch
+  partTile: {fileID: 11400000, guid: 39b6ddf925074e645b4a875c68d83067, type: 2}
+  layer: 1
+  acceptedLayers: 00000000
+  attachable: 00000000

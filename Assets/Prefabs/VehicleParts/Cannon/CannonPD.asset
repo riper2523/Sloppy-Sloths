@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
+  m_Name: CannonPD
+  m_EditorClassIdentifier: Assembly-CSharp::PartData
+  partPrefab: {fileID: 8574444926399471992, guid: c9e2aa484a5e47a43b49c2383bb32e21, type: 3}
+  partSpriteUI: {fileID: 21300000, guid: 03bae1ccc28b2434ea422f4c4cd0fbac, type: 3}
+  partName: Cannon
+  partTile: {fileID: 11400000, guid: 2658e396143626e4f8460b96f2126446, type: 2}
+  isAimable: 1
+  aimStates:
+  - angle: 0
+    visualTile: {fileID: 11400000, guid: 2658e396143626e4f8460b96f2126446, type: 2}
+  - angle: 45
+    visualTile: {fileID: 11400000, guid: b6179d3e12c4a1f4fa71af3d878b4f76, type: 2}
+  - angle: 90
+    visualTile: {fileID: 11400000, guid: 1a331a04a0c23d04d905aa4b4b6b6f5a, type: 2}
+  - angle: 135
+    visualTile: {fileID: 11400000, guid: 14bfb5ba54a33fd4d8f33a17f309bb6e, type: 2}
+  - angle: 180
+    visualTile: {fileID: 11400000, guid: f1f398d9b573b6f4ba1558bc0104b078, type: 2}
+  layer: 0
+  acceptedLayers: 
+  attachable: 00000100

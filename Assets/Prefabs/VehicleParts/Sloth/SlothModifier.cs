@@ -5,11 +5,6 @@ public class SlothModifier : MonoBehaviour, IPartModifier
 {
     public void ActivateEffects(PartLogic coreLogic)
     {
-    }
-
-    public void ApplyModifiers(PartLogic coreLogic)
-    {
-
         var visited = new HashSet<PartLogic>();
         var queue = new Queue<PartLogic>();
 
@@ -33,6 +28,12 @@ public class SlothModifier : MonoBehaviour, IPartModifier
                 }
             }
         }
+    }
+
+    public void ApplyModifiers(PartLogic coreLogic)
+    {
+
+
     }
 
     public void ResetModifier(PartLogic coreLogic)

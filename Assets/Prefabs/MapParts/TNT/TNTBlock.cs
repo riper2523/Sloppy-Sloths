@@ -23,7 +23,7 @@ public class TNTBlock : MonoBehaviour
 
         if (explosionEffect != null)
         {
-            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            Instantiate(explosionEffect, transform.position, Quaternion.identity, transform.parent);
         }
 
         Collider2D[] objects = Physics2D.OverlapCircleAll(transform.position, radius);

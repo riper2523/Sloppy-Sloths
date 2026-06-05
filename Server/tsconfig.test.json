@@ -1,13 +1,17 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "rootDir": ".",
-    "noEmit": true,
-    "types": ["node", "jest"]
-  },
-  "include": [
-    "*.ts",
-    "database/**/*.ts",
-    "__tests__/**/*.ts"
-  ]
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "noEmit": true,
+        "types": [
+            "node",
+            "jest"
+        ]
+    },
+    "include": [
+        "*.ts",
+        "database/**/*.ts",
+        "__tests__/**/*.ts",
+        "__integration_tests__/**/*.ts"
+    ]
 }

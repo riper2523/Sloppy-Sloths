@@ -21,7 +21,7 @@ jest.unstable_mockModule('../src/postgres_connection.js', () => ({
 }));
 
 // Use dynamic import because we are using unstable_mockModule for ESM
-const { setUpTheRoutes: setUpTheRoutes } = await import('../src/set_up_the_routes.js');
+const { setUpTheRoutes } = await import('../src/set_up_the_routes.js');
 
 describe('API Routes', () => {
     let fastify;
@@ -59,8 +59,8 @@ describe('API Routes', () => {
             expect(response.statusCode).toBe(200);
             expect(JSON.parse(response.payload)).toEqual({
                 maps: [
-                    { mapName: 'Map-1', owner: mockOwner, filePath: mockPath },
-                    { mapName: 'Map-2', owner: mockOwner, filePath: mockPath }
+                    { mapName: 'Map-1', owner: mockOwner },
+                    { mapName: 'Map-2', owner: mockOwner }
                 ],
             });
         });
@@ -92,9 +92,8 @@ describe('API Routes', () => {
 
             expect(response.statusCode).toBe(200);
             expect(JSON.parse(response.payload)).toEqual({
-                map: { mapName: 'Map-1', owner: mockOwner, filePath: mockPath },
-            });
-            expect(mockGetMap).toHaveBeenCalledWith('Map-1');
+                map: { mapName: 'Map-1', owner: mockOwner },
+            }); expect(mockGetMap).toHaveBeenCalledWith('Map-1');
         });
 
         it('should return an error message on failure', async () => {
@@ -131,9 +130,8 @@ describe('API Routes', () => {
             expect(response.statusCode).toBe(200);
             expect(JSON.parse(response.payload)).toEqual({
                 msg: 'Owner changed successfully',
-                map: { mapName: 'Map-1', owner: { nick: 'NewOwner' }, filePath: mockPath }
-            });
-            expect(mockChangeOwner).toHaveBeenCalledWith(mockMap, mockNewOwner);
+                map: { mapName: 'Map-1', owner: { nick: 'NewOwner' } }
+            }); expect(mockChangeOwner).toHaveBeenCalledWith(mockMap, mockNewOwner);
         });
 
         it('should return 404 if map not found', async () => {

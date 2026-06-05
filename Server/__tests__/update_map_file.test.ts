@@ -42,7 +42,7 @@ jest.unstable_mockModule('node:fs', () => ({
     }),
 }));
 
-const { setUpTheRoutes: set_up_the_routes } = await import('../src/set_up_the_routes.js');
+const { setUpTheRoutes } = await import('../src/set_up_the_routes.js');
 
 describe('PATCH /maps/:mapName/file', () => {
     let fastify;
@@ -52,7 +52,7 @@ describe('PATCH /maps/:mapName/file', () => {
 
     beforeAll(async () => {
         fastify = Fastify();
-        set_up_the_routes(fastify);
+        setUpTheRoutes(fastify);
         await fastify.ready();
     });
 

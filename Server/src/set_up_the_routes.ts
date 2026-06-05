@@ -37,10 +37,9 @@ const mapDataSchema = {
     type: 'object',
     properties: {
         mapName: { type: 'string' },
-        owner: ownerDataSchema,
-        filePath: { type: 'string' }
+        owner: ownerDataSchema
     },
-    required: ['mapName', 'owner', 'filePath']
+    required: ['mapName', 'owner']
 } as const;
 
 const tmpdir_path = tmpdir();
@@ -51,7 +50,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
         try {
             await mkdir(MAP_FILES_DIR, { recursive: true });
         } catch (err: any) {
-            fastifyInstance.log.error(`Failed to create ${MAP_FILES_DIR} directory: ${err.message}`);
+            fastifyInstance.log.error({ err }, `Failed to create ${MAP_FILES_DIR} directory`);
         }
     });
 
@@ -102,7 +101,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             let result = await databaseConnection.getMapList()
             if (result.ok) {
                 let mapList = result.value
-                reply.send({ maps: mapList.map(x => x.data) })
+                reply.send({ maps: mapList.map(x => ({ mapName: x.data.mapName, owner: x.data.owner })) })
             }
             else {
                 // List can be empty or error
@@ -131,7 +130,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             let result = await databaseConnection.getMap(mapName)
             if (result.ok) {
                 let mapEntity = result.value
-                reply.send({ map: mapEntity.data })
+                reply.send({ map: { mapName: mapEntity.data.mapName, owner: mapEntity.data.owner } })
             }
             else {
                 // EXPLICIT 404 for missing resources
@@ -167,7 +166,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
         }
     })
 
-    // Single Step Upload: Metadata + File in one multipart request
+    // Single-step upload: map file in one multipart request
     fastify.route({
         method: "POST",
         url: "/maps/:mapName",
@@ -177,10 +176,9 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                 200: {
                     type: 'object',
                     properties: {
-                        msg: { type: 'string' },
-                        path: { type: 'string' }
+                        msg: { type: 'string' }
                     },
-                    required: ['msg', 'path']
+                    required: ['msg']
                 }
             }
         },
@@ -206,7 +204,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                 return reply.status(400).send({ errMsg: "No file provided" });
             }
 
-            console.log(`Upload Request: mapName=${mapName}, user='${currentUser.data.nick}'`);
+            request.log.info({ mapName, user: currentUser.data.nick }, 'Upload request');
 
             const tempPath = join(tmpdir_path, `upload_${randomUUID()}.map`);
             const finalPath = join(MAP_FILES_DIR, `${mapName}.map`);
@@ -217,17 +215,17 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
 
                 // 5. Move to permanent storage (Safe for cross-device links)
                 await copyFile(tempPath, finalPath);
-                await unlink(tempPath);
+                await unlink(tempPath).catch(() => { });
 
                 // 6. FINAL STEP: Register in database using current user
                 const dbResult = await databaseConnection.addMap(mapName, currentUser, finalPath);
 
                 if (!dbResult.ok) {
-                    await unlink(finalPath);
+                    await unlink(finalPath).catch(() => { });
                     return reply.status(500).send({ errMsg: dbResult.error });
                 }
 
-                return { msg: "Map successfully uploaded and registered", path: finalPath };
+                return { msg: "Map successfully uploaded and registered" };
 
             } catch (err: any) {
                 await unlink(tempPath).catch(() => { });
@@ -288,9 +286,9 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                 // 5. Stream to temp file first
                 await pipeline(data.file, createWriteStream(tempPath));
 
-                // 6. Overwrite the existing file
+                // 5. Overwrite the existing file
                 await copyFile(tempPath, finalPath);
-                await unlink(tempPath);
+                await unlink(tempPath).catch(() => { });
 
                 return { msg: "Map file successfully updated" };
 

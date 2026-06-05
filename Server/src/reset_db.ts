@@ -5,10 +5,15 @@ import { join } from 'node:path';
 
 async function reset() {
     const client = new Client();
-    const MAP_FILES_DIR = process.env.MAP_STORAGE_PATH 
+    const dbName = process.env.PGDATABASE ?? '';
+    if (!process.env.FORCE_DB_RESET && !dbName.endsWith('_test')) {
+        throw new Error(`Refusing to reset database '${dbName}'. Use a '*_test' database or set FORCE_DB_RESET=1 to override.`);
+    }
+
+    const MAP_FILES_DIR = process.env.MAP_STORAGE_PATH
         ? join(process.cwd(), process.env.MAP_STORAGE_PATH)
         : join(process.cwd(), '..', 'App-Data', 'map-files');
-    
+
     console.log("🔄 Resetting Database and Files...");
 
     try {

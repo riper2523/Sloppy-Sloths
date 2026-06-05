@@ -48,8 +48,11 @@ class PostgresDatabase implements DatabaseConnection {
     }
 
     async getCurrentUser(): Promise<Result<OwnerEntity, string>> {
-        // Placeholder implementation: returns the first user in the DB
-        // In a real app, this would be tied to a session/JWT
+        /**
+         * WARNING: Placeholder implementation. 
+         * This currently returns the first user in the database without any authentication.
+         * In a real application, this must be replaced with proper session/JWT verification.
+         */
         try {
             const result = await this.pool.query('SELECT ID as id, Nick as nick FROM Owners LIMIT 1');
             if (result.rows.length > 0) {
@@ -118,7 +121,7 @@ class PostgresDatabase implements DatabaseConnection {
                 'INSERT INTO MapData (MapName, FileName, OwnerID) VALUES ($1, $2, $3)',
                 [mapName, filePath, owner.id]
             );
-            
+
             return this.getMap(mapName);
         } catch (err: any) {
             return { ok: false, error: getErrorMessage(err) };

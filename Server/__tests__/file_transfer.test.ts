@@ -47,7 +47,7 @@ jest.unstable_mockModule('node:stream/promises', () => ({
     pipeline: jest.fn().mockResolvedValue(undefined),
 }));
 
-const { setUpTheRoutes: set_up_the_routes } = await import('../src/set_up_the_routes.js');
+const { setUpTheRoutes } = await import('../src/set_up_the_routes.js');
 
 describe('File Transfer Routes', () => {
     let fastify: any;
@@ -63,7 +63,7 @@ describe('File Transfer Routes', () => {
 
     beforeAll(async () => {
         fastify = Fastify();
-        set_up_the_routes(fastify);
+        setUpTheRoutes(fastify);
         await fastify.ready();
     });
 
@@ -75,6 +75,8 @@ describe('File Transfer Routes', () => {
         jest.clearAllMocks();
         mockGetCurrentUser.mockResolvedValue({ ok: true, value: mockUser });
         mockMkdir.mockResolvedValue(undefined);
+        mockCopyFile.mockResolvedValue(undefined);
+        mockUnlink.mockResolvedValue(undefined);
     });
 
     describe('GET /maps/:mapName/file', () => {
@@ -137,6 +139,7 @@ describe('File Transfer Routes', () => {
 
             expect(response.statusCode).toBe(200);
             expect(JSON.parse(response.payload).msg).toContain('successfully uploaded');
+            expect(JSON.parse(response.payload).path).toBeUndefined();
             expect(mockAddMap).toHaveBeenCalledWith('NewForest', mockUser, expect.stringContaining('NewForest.map'));
             expect(mockCopyFile).toHaveBeenCalled();
         });

@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import { getPostgresDatabaseConnection as get_postgres_database_connection } from './postgres_connection.js';
+import { getPostgresDatabaseConnection } from './postgres_connection.js';
 import type { DatabaseConnection } from './database_connection.js';
 import type { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
 import { tmpdir } from 'node:os';
@@ -11,7 +11,7 @@ import { unlink, mkdir, readFile, copyFile } from 'node:fs/promises';
 import fastifyMultipart from '@fastify/multipart';
 import fastifyRateLimit from '@fastify/rate-limit';
 
-const databaseConnection: DatabaseConnection = get_postgres_database_connection()
+const databaseConnection: DatabaseConnection = getPostgresDatabaseConnection()
 
 const MAP_FILES_DIR = process.env.MAP_STORAGE_PATH
     ? join(process.cwd(), process.env.MAP_STORAGE_PATH)
@@ -45,10 +45,14 @@ const mapDataSchema = {
 
 const tmpdir_path = tmpdir();
 
-export function set_up_the_routes(fastifyInstance: FastifyInstance) {
+export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
     // Ensure map-files directory exists in application data folder
-    mkdir(MAP_FILES_DIR, { recursive: true }).catch(err => {
-        console.error(`Failed to create ${MAP_FILES_DIR} directory:`, err);
+    fastifyInstance.addHook('onReady', async () => {
+        try {
+            await mkdir(MAP_FILES_DIR, { recursive: true });
+        } catch (err: any) {
+            fastifyInstance.log.error(`Failed to create ${MAP_FILES_DIR} directory: ${err.message}`);
+        }
     });
 
     // Global Error Handler
@@ -183,46 +187,40 @@ export function set_up_the_routes(fastifyInstance: FastifyInstance) {
         handler: async function (request, reply) {
             const { mapName } = request.params;
 
-            // 1. Pre-validation: Check if map already exists
+            // 1. Validate Caller Identity (Source of Truth)
+            const userResult = await databaseConnection.getCurrentUser();
+            if (!userResult.ok) {
+                return reply.status(401).send({ errMsg: "Authentication required" });
+            }
+            const currentUser = userResult.value;
+
+            // 2. Pre-validation: Check if map already exists
             const exists = await databaseConnection.getMap(mapName);
             if (exists.ok) {
                 return reply.status(400).send({ errMsg: "Map name already taken" });
             }
 
-            // 2. Start receiving the multipart stream
+            // 3. Start receiving the multipart stream
             const data = await request.file();
             if (!data) {
                 return reply.status(400).send({ errMsg: "No file provided" });
             }
 
-            // 3. Extract 'nick' from the form fields
-            const nick = (data.fields.nick as any)?.value;
-            console.log(`Upload Request: mapName=${mapName}, nick='${nick}'`);
-            if (!nick) {
-                data.file.resume(); // Drain stream to avoid hanging
-                return reply.status(400).send({ errMsg: "Missing 'nick' field in multipart form" });
-            }
-
-            // 4. Validate Owner
-            const ownerResult = await databaseConnection.getOwner(nick);
-            if (!ownerResult.ok) {
-                data.file.resume();
-                return reply.status(404).send({ errMsg: `User ${nick} not found` });
-            }
+            console.log(`Upload Request: mapName=${mapName}, user='${currentUser.data.nick}'`);
 
             const tempPath = join(tmpdir_path, `upload_${randomUUID()}.map`);
             const finalPath = join(MAP_FILES_DIR, `${mapName}.map`);
 
             try {
-                // 5. Stream directly to temp file
+                // 4. Stream directly to temp file
                 await pipeline(data.file, createWriteStream(tempPath));
 
-                // 6. Move to permanent storage (Safe for cross-device links)
+                // 5. Move to permanent storage (Safe for cross-device links)
                 await copyFile(tempPath, finalPath);
                 await unlink(tempPath);
 
-                // 7. FINAL STEP: Register in database
-                const dbResult = await databaseConnection.addMap(mapName, ownerResult.value, finalPath);
+                // 6. FINAL STEP: Register in database using current user
+                const dbResult = await databaseConnection.addMap(mapName, currentUser, finalPath);
 
                 if (!dbResult.ok) {
                     await unlink(finalPath);
@@ -257,27 +255,28 @@ export function set_up_the_routes(fastifyInstance: FastifyInstance) {
         handler: async function (request, reply) {
             const { mapName } = request.params;
 
-            // 1. Verify map exists
+            // 1. Validate Caller Identity
+            const userResult = await databaseConnection.getCurrentUser();
+            if (!userResult.ok) {
+                return reply.status(401).send({ errMsg: "Authentication required" });
+            }
+            const currentUser = userResult.value;
+
+            // 2. Verify map exists
             const mapResult = await databaseConnection.getMap(mapName);
             if (!mapResult.ok) {
                 return reply.status(404).send({ errMsg: mapResult.error });
             }
             const mapEntity = mapResult.value;
 
-            // 2. Start receiving the multipart stream
+            // 3. Start receiving the multipart stream
             const data = await request.file();
             if (!data) {
                 return reply.status(400).send({ errMsg: "No file provided" });
             }
 
-            // 3. Extract 'nick' and verify ownership
-            const nick = (data.fields.nick as any)?.value;
-            if (!nick) {
-                data.file.resume();
-                return reply.status(400).send({ errMsg: "Missing 'nick' field" });
-            }
-
-            if (mapEntity.data.owner.nick !== nick) {
+            // 4. Verify Ownership against Current User
+            if (mapEntity.data.owner.nick !== currentUser.data.nick) {
                 data.file.resume();
                 return reply.status(403).send({ errMsg: "You are not the owner of this map" });
             }
@@ -286,10 +285,10 @@ export function set_up_the_routes(fastifyInstance: FastifyInstance) {
             const finalPath = mapEntity.data.filePath;
 
             try {
-                // 4. Stream to temp file first
+                // 5. Stream to temp file first
                 await pipeline(data.file, createWriteStream(tempPath));
 
-                // 5. Overwrite the existing file
+                // 6. Overwrite the existing file
                 await copyFile(tempPath, finalPath);
                 await unlink(tempPath);
 
@@ -330,17 +329,33 @@ export function set_up_the_routes(fastifyInstance: FastifyInstance) {
             const { mapName } = request.params;
             const { newOwnerNick } = request.body;
 
+            // 1. Validate Caller Identity
+            const userResult = await databaseConnection.getCurrentUser();
+            if (!userResult.ok) {
+                return reply.status(401).send({ errMsg: "Authentication required" });
+            }
+            const currentUser = userResult.value;
+
+            // 2. Verify map exists
             const mapResult = await databaseConnection.getMap(mapName);
             if (!mapResult.ok) {
                 return reply.status(404).send({ errMsg: mapResult.error });
             }
+            const mapEntity = mapResult.value;
 
+            // 3. Verify Ownership
+            if (mapEntity.data.owner.nick !== currentUser.data.nick) {
+                return reply.status(403).send({ errMsg: "You are not the owner of this map" });
+            }
+
+            // 4. Validate New Owner
             const ownerResult = await databaseConnection.getOwner(newOwnerNick);
             if (!ownerResult.ok) {
                 return reply.status(404).send({ errMsg: `New owner ${newOwnerNick} not found` });
             }
 
-            const result = await databaseConnection.changeOwner(mapResult.value, ownerResult.value);
+            // 5. Perform Transfer
+            const result = await databaseConnection.changeOwner(mapEntity, ownerResult.value);
             if (result.ok) {
                 return { msg: "Owner changed successfully", map: result.value.data };
             } else {

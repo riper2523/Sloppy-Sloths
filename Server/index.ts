@@ -1,5 +1,5 @@
 import Fastify from 'fastify';
-import { set_up_the_routes } from './src/set_up_the_routes.js';
+import { setUpTheRoutes } from './src/set_up_the_routes.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const fastify = Fastify({
@@ -7,7 +7,7 @@ const fastify = Fastify({
 })
 
 try {
-    set_up_the_routes(fastify)
+    setUpTheRoutes(fastify)
     const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
     await fastify.listen({ port })
 }

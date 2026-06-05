@@ -1,0 +1,47 @@
+data/
+playground/
+node_modules/
+*traineddata
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# TypeScript compilation output
+# (Change 'dist' or 'build' to whatever "outDir" is set to in your tsconfig.json)
+**/dist/
+build/
+out/
+
+# Environment variables (CRITICAL: Never commit these)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+
+# IDEs and Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

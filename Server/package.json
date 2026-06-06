@@ -6,6 +6,10 @@
     "author": "",
     "type": "module",
     "main": "index.ts",
+    "engines": {
+        "node": ">=20.6.0",
+        "npm": ">=9.0.0"
+    },
     "scripts": {
         "postinstall": "cp -n .env.template .env || true",
         "start": "tsx --env-file=.env index.ts",

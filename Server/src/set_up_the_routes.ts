@@ -203,11 +203,16 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             if (!data) {
                 return reply.status(400).send({ errMsg: "No file provided" });
             }
+            if (data.mimetype !== 'application/json') {
+                data.file.resume();
+                return reply.status(400).send({ errMsg: "Only JSON maps are supported" });
+            }
 
             request.log.info({ mapName, user: currentUser.data.nick }, 'Upload request');
 
             const tempPath = join(tmpdir_path, `upload_${randomUUID()}.map`);
-            const finalPath = join(MAP_FILES_DIR, `${mapName}.map`);
+            const uniqueFileName = `${mapName}_${randomUUID()}.map`;
+            const finalPath = join(MAP_FILES_DIR, uniqueFileName);
 
             try {
                 // 4. Stream directly to temp file
@@ -272,6 +277,10 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             if (!data) {
                 return reply.status(400).send({ errMsg: "No file provided" });
             }
+            if (data.mimetype !== 'application/json') {
+                data.file.resume();
+                return reply.status(400).send({ errMsg: "Only JSON maps are supported" });
+            }
 
             // 4. Verify Ownership against Current User
             if (mapEntity.data.owner.nick !== currentUser.data.nick) {
@@ -308,7 +317,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             body: {
                 type: 'object',
                 properties: {
-                    newOwnerNick: { type: 'string', minLength: 1 }
+                    newOwnerNick: { type: 'string', minLength: 1, maxLength: 255 }
                 },
                 required: ['newOwnerNick']
             },

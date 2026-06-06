@@ -140,7 +140,7 @@ describe('File Transfer Routes', () => {
             expect(response.statusCode).toBe(200);
             expect(JSON.parse(response.payload).msg).toContain('successfully uploaded');
             expect(JSON.parse(response.payload).path).toBeUndefined();
-            expect(mockAddMap).toHaveBeenCalledWith('NewForest', mockUser, expect.stringContaining('NewForest.map'));
+            expect(mockAddMap).toHaveBeenCalledWith('NewForest', mockUser, expect.stringMatching(/NewForest_[a-f0-9-]+\.map/));
             expect(mockCopyFile).toHaveBeenCalled();
         });
 

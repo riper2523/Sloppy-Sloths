@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ChapterData_Sandbox
   m_EditorClassIdentifier: Assembly-CSharp::ChapterData
   chapterName: Sandbox
-  icon: {fileID: 0}
+  icon: {fileID: 4381761850852107665, guid: df7b6b04db44d6d4c9190cd619a8e149, type: 3}
   levels:
   - {fileID: 11400000, guid: 916a09835b4ae2141b54317b016f088e, type: 2}
   - {fileID: 11400000, guid: e69ff43a78e2d9a4a8f54f5f7c0eb686, type: 2}

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1457357157213129443}
   - component: {fileID: 6736716425559731205}
   - component: {fileID: 7891395618979438420}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TinyWheelFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 5292873327794204896}
   - component: {fileID: 2871179765715236392}
   - component: {fileID: 3746346064423470823}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TinyWheelBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -514,7 +514,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2562856846963897997}
   - component: {fileID: -8530545542306716296}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TinyWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

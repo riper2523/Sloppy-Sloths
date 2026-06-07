@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
   m_Name: MotorWheelPD
   m_EditorClassIdentifier: Assembly-CSharp::PartData
+  uniqueID: 4e3ba916-6ef8-486a-9ce5-6f11d33cf7f2
   partPrefab: {fileID: 8574444926399471992, guid: c32c107539e4ae54ea8ed05e7f5447cf, type: 3}
   partSpriteUI: {fileID: -643209912010868259, guid: 93c37cc924f6b8e41824252bc6f7d955, type: 3}
   partName: MotorWheel
   partTile: {fileID: 11400000, guid: 9c505c6d4ca5880409a11f8faf884ee1, type: 2}
-  jointStrength: 5000
   layer: 0
   acceptedLayers: 
   attachable: 01000000

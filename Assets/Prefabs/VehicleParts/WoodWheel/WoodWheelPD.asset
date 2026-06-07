@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
   m_Name: WoodWheelPD
   m_EditorClassIdentifier: Assembly-CSharp::PartData
+  uniqueID: 22a023f4-2c60-4935-b531-1933d7d71b2b
   partPrefab: {fileID: 8574444926399471992, guid: 1d3f9615a87b1f04a91047edd84359f0, type: 3}
   partSpriteUI: {fileID: 2002302499793441681, guid: bf9087fd1bdf6f84e87acb12a931a1f3, type: 3}
   partName: WoodWheel
   partTile: {fileID: 11400000, guid: 05b2665d4d0f01042918039643fb4251, type: 2}
-  jointStrength: 3000
   layer: 0
   acceptedLayers: 
   attachable: 01000000

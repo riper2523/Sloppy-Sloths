@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
   m_Name: SampleLevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  uniqueID: c987840c-51e2-4872-bb4a-4151a8417a5c
   mapPrefab: {fileID: 6255040595238325873, guid: de690671225b1a34d824d0113b4378b9, type: 3}
   startingItems: {fileID: 11400000, guid: 24808778af07e934e9353fad66a22b4e, type: 2}
   starGoals:

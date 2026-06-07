@@ -7,20 +7,41 @@ public class WinPanelUI : MonoBehaviour
 
     public void DisplayResults(LevelResult result)
     {
-        int count = 0;
+        string levelID = SaveManager.Instance.currentSessionSO.activeLevel.uniqueID;
+        LevelSaveData levelSave = SaveManager.Instance.GetLevelData(levelID);
+        bool supportsUnicodeStars = resultText != null && resultText.font != null && resultText.font.HasCharacter('★');
+        string filledStar = supportsUnicodeStars ? "★" : "[X]";
+        string emptyStar = supportsUnicodeStars ? "☆" : "[ ]";
 
-        foreach (StarResult starResult in result.starResults)
+        int totalAchievedCount = 0;
+        string starsVisual = "";
+        string details = "";
+
+        for (int i = 0; i < result.starResults.Count; i++)
         {
-            if (starResult.achieved) count++;
+            StarResult starResult = result.starResults[i];
+            
+            // It's achieved if they got it in this run OR they already had it from a previous run
+            bool isAchieved = starResult.achieved || (levelSave != null && levelSave.achievedGoalIndices.Contains(i));
+
+            if (isAchieved)
+            {
+                totalAchievedCount++;
+                starsVisual += filledStar + " ";
+            }
+            else
+            {
+                starsVisual += emptyStar + " ";
+            }
+
+            details += (isAchieved ? filledStar : emptyStar) + " " + starResult.goal.goalType + "\n";
         }
 
-        resultText.text = "You won with " + count + " Stars Collected!\nTime: " + result.completionTime.ToString("F2") + " seconds";
-        resultText.text += "\nStar Details:\n";
-
-        foreach (StarResult starResult in result.starResults)
-        {
-            resultText.text += starResult.achieved ? "Star Achieved: " : "Star Missed: ";
-            resultText.text += starResult.goal.goalType.ToString() + "\n";
-        }
+        resultText.text =
+            $"Level Completed!\n" +
+            $"Time: {result.completionTime:F2} seconds\n" +
+            $"Stars: {starsVisual.TrimEnd()}\n" +
+            $"Achieved: {totalAchievedCount}/{result.starResults.Count}\n\n" +
+            $"Star Details:\n{details}";
     }
 }

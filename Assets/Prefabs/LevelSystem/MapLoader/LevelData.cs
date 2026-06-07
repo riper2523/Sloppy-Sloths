@@ -4,6 +4,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LevelData", menuName = "Scriptable Objects/LevelData")]
 public class LevelData : ScriptableObject
 {
+    [Header("Save Data")]
+    public string uniqueID;
+
     [Header("Map")]
     public GameObject mapPrefab;
     
@@ -12,4 +15,15 @@ public class LevelData : ScriptableObject
 
     [Header("Star Goals")]
     public List<StarGoal> starGoals;
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (string.IsNullOrEmpty(uniqueID))
+        {
+            uniqueID = System.Guid.NewGuid().ToString();
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+    }
+#endif
 }

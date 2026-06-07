@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 023f782165514f34ab643c14c5dbfd1d, type: 3}
   m_Name: WoodSquarePD
   m_EditorClassIdentifier: Assembly-CSharp::PartData
+  uniqueID: 71ee9066-5f6d-4866-be92-abf67e3b038e
   partPrefab: {fileID: 7586396994626127713, guid: 8f760bdff96aa8341913d39916cd50e2, type: 3}
   partSpriteUI: {fileID: -2067898546876541913, guid: 431e02b2768d3eb4f8e87ea03c367329, type: 3}
   partName: WoodSquare
   partTile: {fileID: 11400000, guid: af5276cb032cecb408e3212ed52d021d, type: 2}
-  jointStrength: 3500
   layer: 0
   acceptedLayers: 01000000
   attachable: 01010101

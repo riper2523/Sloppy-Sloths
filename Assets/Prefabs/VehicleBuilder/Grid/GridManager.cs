@@ -44,6 +44,7 @@ public class GridManager : MonoBehaviour
     }
     private GridCell[,] partDataGrid;
     private PartData actPartData;
+    private LevelData pendingRestoreLevelData;
 
     private void OnEnable()
     {
@@ -75,6 +76,29 @@ public class GridManager : MonoBehaviour
     {
         vehicleParent = new GameObject("Vehicle").transform;
         LoadLevelSettings(anchor);
+
+        if (pendingRestoreLevelData != null)
+        {
+            LevelData levelToRestore = pendingRestoreLevelData;
+            pendingRestoreLevelData = null;
+            RequestRestoreForLevel(levelToRestore);
+        }
+    }
+
+    public void RequestRestoreForLevel(LevelData levelData)
+    {
+        if (partDataGrid == null)
+        {
+            pendingRestoreLevelData = levelData;
+            return;
+        }
+
+        if (SaveManager.Instance.TryGetLevelData(levelData.uniqueID, out LevelSaveData levelSave)
+            && levelSave.lastAttemptedGrid != null
+            && levelSave.lastAttemptedGrid.cells.Count > 0)
+        {
+            RestoreGridState(levelSave.lastAttemptedGrid, levelData.startingItems);
+        }
     }
     public void LoadLevelSettings(GridAnchor anchor)
     {
@@ -237,6 +261,77 @@ public class GridManager : MonoBehaviour
 
         UpdateTilemapForCell(x, y);
     }
+    
+    public GridSaveData ExportGridState()
+    {
+        GridSaveData gridData = new GridSaveData();
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                var cellParts = partDataGrid[x, y].parts;
+                if (cellParts.Count > 0)
+                {
+                    CellSaveData cellData = new CellSaveData { x = x, y = y };
+                    foreach (var kvp in cellParts)
+                    {
+                        PartSaveData partData = new PartSaveData
+                        {
+                            layer = kvp.Key,
+                            rotation = kvp.Value.Rotation,
+                            partID = kvp.Value.partData.uniqueID
+                        };
+                        cellData.parts.Add(partData);
+                    }
+                    gridData.cells.Add(cellData);
+                }
+            }
+        }
+        return gridData;
+    }
+
+    public void RestoreGridState(GridSaveData savedData, Inventory startingInventory)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                partDataGrid[x, y].parts.Clear();
+            }
+        }
+        partsTilemap.ClearAllTiles();
+
+        foreach (var cellSave in savedData.cells)
+        {
+            if (cellSave.x < 0 || cellSave.x >= gridSizeX || cellSave.y < 0 || cellSave.y >= gridSizeY)
+                continue;
+
+            foreach (var partSave in cellSave.parts)
+            {
+                PartData partDataRef = null;
+                
+                foreach(var part in startingInventory.itemsMap.Keys)
+                {
+                    if (part.uniqueID == partSave.partID)
+                    {
+                        partDataRef = part;
+                        break;
+                    }
+                }
+                
+                if (partDataRef != null && inventoryManager.TryUsePart(partDataRef))
+                {
+                    partDataGrid[cellSave.x, cellSave.y].parts[partSave.layer] = new PartInstance 
+                    { 
+                        partData = partDataRef, 
+                        Rotation = partSave.rotation 
+                    };
+                }
+            }
+            UpdateTilemapForCell(cellSave.x, cellSave.y);
+        }
+    }
+
     public void RotateStructure(int x, int y)
     {
         if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY) return;

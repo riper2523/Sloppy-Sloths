@@ -11,6 +11,9 @@ public class PartData : ScriptableObject
         public int angle;
         public TileBase visualTile;
     }
+    [Header("Save Data")]
+    public string uniqueID;
+
     public GameObject partPrefab;
     public Sprite partSpriteUI;
     public string partName;
@@ -23,14 +26,24 @@ public class PartData : ScriptableObject
     public List<int> acceptedLayers = new List<int>();
     [Tooltip("0: Up, 1: Right, 2: Down, 3: Left")]
     public bool[] attachable = new bool[4];
+
+#if UNITY_EDITOR
     private void OnValidate()
     {
+        if (string.IsNullOrEmpty(uniqueID))
+        {
+            uniqueID = System.Guid.NewGuid().ToString();
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+
         if (attachable.Length != 4)
         {
             Debug.LogWarning("The 'attachable' array must have exactly 4 elements.");
             System.Array.Resize(ref attachable, 4);
         }
     }
+#endif
+
     public bool HasAttachment(int worldDirection, int rotation)
     {
         rotation = rotation % 4;

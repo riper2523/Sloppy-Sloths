@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CampaignData
   chapters:
   - {fileID: 11400000, guid: b5ab6ee7bc114e7418dbd091c731bc6b, type: 2}
+  - {fileID: 11400000, guid: 5e168ffddad935a44898ff9a2a288fa2, type: 2}

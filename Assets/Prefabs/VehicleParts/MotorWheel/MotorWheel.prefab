@@ -274,8 +274,8 @@ MonoBehaviour:
   maxSpeed: 1000
   minPitch: 0.8
   maxPitch: 2.5
-  minVolume: 0.05
-  maxVolume: 0.3
+  minVolume: 0.01
+  maxVolume: 0.05
 --- !u!114 &7091092380435819754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,6 +553,7 @@ MonoBehaviour:
   hinge: {fileID: 2871179765715236392}
   partLogic: {fileID: 9175531997070321749}
   motorSound: {fileID: 1845965182531414558}
+  motorSpeed: 0
 --- !u!114 &9175531997070321749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -627,8 +628,8 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 9978bfbbc5a3f75468a1b46f222af2a4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
+  m_Volume: 0.05
+  m_Pitch: 0.4
   Loop: 1
   Mute: 0
   Spatialize: 0

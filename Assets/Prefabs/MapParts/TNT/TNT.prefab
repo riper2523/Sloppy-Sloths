@@ -180,6 +180,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TNTBlock
   radius: 5
-  power: 100
-  impactThreshold: 0.01
+  power: 500
+  impactThreshold: 0.1
   explosionEffect: {fileID: 8811523859676374939, guid: 892d033a843d1d54caf66fb8ec0f010b, type: 3}

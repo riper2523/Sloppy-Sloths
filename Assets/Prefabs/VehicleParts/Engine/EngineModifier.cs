@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class EngineModifier : MonoBehaviour, IPartModifier
 {
+    private float enignePower = 50f;
+    
     public void ActivateEffects(PartLogic coreLogic)
     {
         var visited = new HashSet<PartLogic>();
@@ -16,11 +18,11 @@ public class EngineModifier : MonoBehaviour, IPartModifier
             PartLogic current = queue.Dequeue();
             if (current.actualEnginePower < 0)
             {
-                current.actualEnginePower -= 10f;
+                current.actualEnginePower -= enignePower;
             }
             else
             {
-                current.actualEnginePower += 10f;
+                current.actualEnginePower += enignePower;
             }
             foreach (var neighbor in current.connectedParts.Values)
             {

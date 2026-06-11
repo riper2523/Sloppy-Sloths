@@ -121,6 +121,9 @@ public class PolygonBuilder : MonoBehaviour, INodeContainer, IPointerUpHandler, 
 
     void Start()
     {
+        // If nodes were already populated (e.g. loaded from DTO), do not add default spline points
+        if (nodes.Count > 0) return;
+
         for (int i = 0; i < spline.GetPointCount(); i++)
         {
             var splinePoint = spline.GetPosition(i) + shape.transform.position;

@@ -67,7 +67,6 @@ namespace Assets.Prefabs.MapBuilder.MapBuilderManager
     public class MapUploader : ScriptableObject
     {
         [SerializeField] private UnityServerDriver? serverDriver;
-        [SerializeField] private string defaultNick = "Walrus";
 
         void Awake()
         {

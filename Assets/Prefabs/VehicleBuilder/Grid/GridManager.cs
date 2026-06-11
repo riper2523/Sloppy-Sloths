@@ -93,7 +93,8 @@ public class GridManager : MonoBehaviour
             return;
         }
 
-        if (SaveManager.Instance.TryGetLevelData(levelData.uniqueID, out LevelSaveData levelSave)
+        if (SaveManager.Instance != null &&
+            SaveManager.Instance.TryGetLevelData(levelData.uniqueID, out LevelSaveData levelSave)
             && levelSave.lastAttemptedGrid != null
             && levelSave.lastAttemptedGrid.cells.Count > 0)
         {

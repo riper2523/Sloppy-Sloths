@@ -2,6 +2,7 @@ using UnityEngine;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Assets.Prefabs.LevelSystem.StarManager;
 
 public class SaveManager : MonoBehaviour
 {

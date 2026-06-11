@@ -9,7 +9,6 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
     {
         [SerializeField] private UnityServerDriver? serverDriver;
         [SerializeField] private string testMapName = "Test-Map";
-        [SerializeField] private string testNick = "Walrus";
 
         [ContextMenu("Run Full Integration Test")]
         public async void RunTest()

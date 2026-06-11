@@ -202,6 +202,9 @@ namespace Assets.Prefabs.UI.MapSelection
                 return;
             }
 
+            // Assign unique ID based on map name so the Save System has a key
+            level.uniqueID = mapName;
+
             // Cleanup previous dynamic map source to avoid memory leaks
             if (lastDynamicMapSource != null)
             {

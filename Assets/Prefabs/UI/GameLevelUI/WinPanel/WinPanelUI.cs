@@ -9,8 +9,13 @@ public class WinPanelUI : MonoBehaviour
 
     public void DisplayResults(LevelResult result)
     {
-        string levelID = SaveManager.Instance.currentSessionSO.activeLevel.uniqueID;
-        LevelSaveData levelSave = SaveManager.Instance.GetLevelData(levelID);
+        LevelSaveData levelSave = null;
+        if (SaveManager.Instance != null && SaveManager.Instance.currentSessionSO != null && SaveManager.Instance.currentSessionSO.activeLevel != null)
+        {
+            string levelID = SaveManager.Instance.currentSessionSO.activeLevel.uniqueID;
+            levelSave = SaveManager.Instance.GetLevelData(levelID);
+        }
+
         bool supportsUnicodeStars = resultText != null && resultText.font != null && resultText.font.HasCharacter('★');
         string filledStar = supportsUnicodeStars ? "★" : "[X]";
         string emptyStar = supportsUnicodeStars ? "☆" : "[ ]";

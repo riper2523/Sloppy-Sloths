@@ -46,8 +46,8 @@ describe('API Routes', () => {
     describe('GET /maps/', () => {
         it('should return a list of maps on success', async () => {
             const mockMaps = [
-                { id: 1, data: { mapName: 'Map-1', owner: mockOwner, filePath: mockPath } },
-                { id: 2, data: { mapName: 'Map-2', owner: mockOwner, filePath: mockPath } },
+                { id: 1, owner: { id: 1, data: mockOwner }, data: { mapName: 'Map-1', owner: mockOwner, filePath: mockPath } },
+                { id: 2, owner: { id: 1, data: mockOwner }, data: { mapName: 'Map-2', owner: mockOwner, filePath: mockPath } },
             ];
             mockGetMapList.mockResolvedValue({ ok: true, value: mockMaps });
 
@@ -82,7 +82,7 @@ describe('API Routes', () => {
 
     describe('GET /maps/:mapName', () => {
         it('should return a specific map on success', async () => {
-            const mockMap = { id: 1, data: { mapName: 'Map-1', owner: mockOwner, filePath: mockPath } };
+            const mockMap = { id: 1, owner: { id: 1, data: mockOwner }, data: { mapName: 'Map-1', owner: mockOwner, filePath: mockPath } };
             mockGetMap.mockResolvedValue({ ok: true, value: mockMap });
 
             const response = await fastify.inject({
@@ -113,7 +113,7 @@ describe('API Routes', () => {
 
     describe('PATCH /maps/:mapName/owner', () => {
         it('should change owner successfully', async () => {
-            const mockMap = { id: 1, data: { mapName: 'Map-1', owner: { nick: 'TestUser' }, filePath: mockPath } };
+            const mockMap = { id: 1, owner: { id: 1, data: { nick: 'TestUser' } }, data: { mapName: 'Map-1', owner: { nick: 'TestUser' }, filePath: mockPath } };
             const mockNewOwner = { id: 2, data: { nick: 'NewOwner' } };
             const mockUpdatedMap = { id: 1, data: { mapName: 'Map-1', owner: { nick: 'NewOwner' }, filePath: mockPath } };
 
@@ -148,7 +148,7 @@ describe('API Routes', () => {
         });
 
         it('should return 404 if new owner not found', async () => {
-            const mockMap = { id: 1, data: { mapName: 'Map-1', owner: mockOwner, filePath: mockPath } };
+            const mockMap = { id: 1, owner: { id: 1, data: mockOwner }, data: { mapName: 'Map-1', owner: mockOwner, filePath: mockPath } };
             mockGetMap.mockResolvedValue({ ok: true, value: mockMap });
             mockGetOwner.mockResolvedValue({ ok: false, error: 'User not found' });
 

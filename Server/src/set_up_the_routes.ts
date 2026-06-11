@@ -339,7 +339,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             body: {
                 type: 'object',
                 properties: {
-                    newOwnerNick: { type: 'string', minLength: 1 }
+                    newOwnerNick: { type: 'string', minLength: 1, maxLength: 255 }
                 },
                 required: ['newOwnerNick'],
                 additionalProperties: false
@@ -362,17 +362,33 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             const { mapName } = request.params;
             const { newOwnerNick } = request.body;
 
+            // 1. Validate Caller Identity
+            const userResult = await databaseConnection.getCurrentUser();
+            if (!userResult.ok) {
+                return reply.status(401).send({ errMsg: "Authentication required" });
+            }
+            const currentUser = userResult.value;
+
+            // 2. Verify map exists
             const mapResult = await databaseConnection.getMap(mapName);
             if (!mapResult.ok) {
                 return reply.status(404).send({ errMsg: mapResult.error });
             }
+            const mapEntity = mapResult.value;
 
+            // 3. Verify Ownership using ID
+            if (mapEntity.owner.id !== currentUser.id) {
+                return reply.status(403).send({ errMsg: "You are not the owner of this map" });
+            }
+
+            // 4. Validate New Owner
             const ownerResult = await databaseConnection.getOwner(newOwnerNick);
             if (!ownerResult.ok) {
                 return reply.status(404).send({ errMsg: `New owner ${newOwnerNick} not found` });
             }
 
-            const result = await databaseConnection.changeOwner(mapResult.value, ownerResult.value);
+            // 5. Change Ownership
+            const result = await databaseConnection.changeOwner(mapEntity, ownerResult.value);
             if (result.ok) {
                 return { msg: "Owner changed successfully", map: result.value.data };
             } else {

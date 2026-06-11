@@ -31,7 +31,7 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction.Tests
             string testMap = "Test-Map-" + System.Guid.NewGuid().ToString().Substring(0, 5);
             string dummyJson = "{\"Type\": 0, \"NodeContainerDTOs\": []}";
 
-            ServerActionResult uploadResult = await _driver.UploadMapAsync(testMap, "Walrus", dummyJson);
+            ServerActionResult uploadResult = await _driver.UploadMapAsync(testMap, dummyJson);
             Assert.AreEqual(ServerActionResult.SUCCESS, uploadResult, "Upload should succeed");
 
             var (fetchResult, fetched) = await _driver.GetMapAsync(testMap);
@@ -55,10 +55,10 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction.Tests
             string testMap = "Duplicate-Test-" + System.Guid.NewGuid().ToString().Substring(0, 5);
             string dummyJson = "{\"Type\": 0, \"NodeContainerDTOs\": []}";
 
-            await _driver.UploadMapAsync(testMap, "Walrus", dummyJson);
+            await _driver.UploadMapAsync(testMap, dummyJson);
 
 
-            ServerActionResult second = await _driver.UploadMapAsync(testMap, "Walrus", dummyJson);
+            ServerActionResult second = await _driver.UploadMapAsync(testMap, dummyJson);
             Assert.AreEqual(ServerActionResult.ALREADY_EXISTS, second, "Second upload with same name should fail with ALREADY_EXISTS");
         });
 
@@ -68,9 +68,9 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction.Tests
             string testMap = "Owner-Test-" + System.Guid.NewGuid().ToString().Substring(0, 5);
             string dummyJson = "{\"Type\": 0, \"NodeContainerDTOs\": []}";
 
-            await _driver.UploadMapAsync(testMap, "Walrus", dummyJson);
+            await _driver.UploadMapAsync(testMap, dummyJson);
             var (_, map) = await _driver.GetMapAsync(testMap);
-            Assert.AreEqual("Walrus", map.Owner.Nick);
+            Assert.IsNotEmpty(map.Owner.Nick);
 
             ServerActionResult changed = await _driver.ChangeOwnerAsync(map!, new OwnerData("AnonymousSloth"));
             Assert.AreEqual(ServerActionResult.SUCCESS, changed, "Ownership change should succeed");
@@ -87,7 +87,7 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction.Tests
             string dummyJson = "{\"Type\": 0, \"NodeContainerDTOs\": []}";
 
 
-            ServerActionResult result = await _driver.UploadMapAsync(invalidName, "Walrus", dummyJson);
+            ServerActionResult result = await _driver.UploadMapAsync(invalidName, dummyJson);
             Assert.AreEqual(ServerActionResult.FAILED, result, "Server should reject names containing dots with FAILED");
         });
 

@@ -164,13 +164,12 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
             return result;
         }
 
-        public async Task<ServerActionResult> UploadMapAsync(string mapName, string nick, string mapJson)
+        public async Task<ServerActionResult> UploadMapAsync(string mapName, string mapJson)
         {
             string url = $"{serverBaseUrl}/maps/{mapName}";
 
             List<IMultipartFormSection> formData = new()
             {
-                new MultipartFormDataSection("nick", nick),
                 new MultipartFormFileSection("mapFile", System.Text.Encoding.UTF8.GetBytes(mapJson), $"{mapName}.map", "application/json")
             };
 
@@ -179,13 +178,12 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
             return result;
         }
 
-        public async Task<ServerActionResult> UpdateMapFileAsync(string mapName, string nick, string mapJson)
+        public async Task<ServerActionResult> UpdateMapFileAsync(string mapName, string mapJson)
         {
             string url = $"{serverBaseUrl}/maps/{mapName}/file";
 
             List<IMultipartFormSection> formData = new()
             {
-                new MultipartFormDataSection("nick", nick),
                 new MultipartFormFileSection("mapFile", System.Text.Encoding.UTF8.GetBytes(mapJson), $"{mapName}.map", "application/json")
             };
 

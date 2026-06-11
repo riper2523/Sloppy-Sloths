@@ -73,7 +73,7 @@ describe('API Routes', () => {
                 url: '/maps/',
             });
 
-            expect(response.statusCode).toBe(200);
+            expect(response.statusCode).toBe(500);
             expect(JSON.parse(response.payload)).toEqual({
                 errMsg: 'Database error',
             });
@@ -172,7 +172,7 @@ describe('API Routes', () => {
                 url: '/maps/Taken-Map'
             });
 
-            expect(response.statusCode).toBe(400);
+            expect(response.statusCode).toBe(409);
             expect(JSON.parse(response.payload).errMsg).toBe('Map name already taken');
         });
     });

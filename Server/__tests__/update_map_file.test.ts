@@ -65,13 +65,8 @@ describe('PATCH /maps/:mapName/file', () => {
         mockGetCurrentUser.mockResolvedValue({ ok: true, value: { id: 1, data: mockOwner } });
     });
 
-    const createMultipartPayload = (boundary: string, nick: string | null, content: string | null) => {
+    const createMultipartPayload = (boundary: string, content: string | null) => {
         let payload = '';
-        if (nick !== null) {
-            payload += `--${boundary}\r\n` +
-                `Content-Disposition: form-data; name="nick"\r\n\r\n` +
-                `${nick}\r\n`;
-        }
         if (content !== null) {
             payload += `--${boundary}\r\n` +
                 `Content-Disposition: form-data; name="mapFile"; filename="map.json"\r\n` +
@@ -89,7 +84,7 @@ describe('PATCH /maps/:mapName/file', () => {
         mockUnlink.mockResolvedValue(undefined);
 
         const boundary = 'boundary123';
-        const payload = createMultipartPayload(boundary, 'TestUser', '{"new":"data"}');
+        const payload = createMultipartPayload(boundary, '{"new":"data"}');
 
         const response = await fastify.inject({
             method: 'PATCH',
@@ -124,7 +119,7 @@ describe('PATCH /maps/:mapName/file', () => {
         mockGetCurrentUser.mockResolvedValue({ ok: true, value: { id: 2, data: { nick: 'WrongUser' } } });
 
         const boundary = 'boundary456';
-        const payload = createMultipartPayload(boundary, 'WrongUser', '{"new":"data"}');
+        const payload = createMultipartPayload(boundary, '{"new":"data"}');
 
         const response = await fastify.inject({
             method: 'PATCH',

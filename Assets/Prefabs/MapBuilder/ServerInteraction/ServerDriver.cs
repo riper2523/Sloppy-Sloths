@@ -11,7 +11,7 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
         Task<(ServerActionResult result, MapData? map)> GetMapAsync(string mapName);
 
         Task<ServerActionResult> ChangeOwnerAsync(MapData map, OwnerData newOwner);
-        Task<ServerActionResult> UploadMapAsync(string mapName, string nick, string mapJson);
-        Task<ServerActionResult> UpdateMapFileAsync(string mapName, string nick, string mapJson);
+        Task<ServerActionResult> UploadMapAsync(string mapName, string mapJson);
+        Task<ServerActionResult> UpdateMapFileAsync(string mapName, string mapJson);
     }
 }

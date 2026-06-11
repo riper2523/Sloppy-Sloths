@@ -94,7 +94,7 @@ namespace Assets.Prefabs.MapBuilder.MapBuilderManager
 
             try
             {
-                ServerActionResult result = await serverDriver.UploadMapAsync(mapName, defaultNick, json);
+                ServerActionResult result = await serverDriver.UploadMapAsync(mapName, json);
 
                 return result switch
                 {
@@ -129,7 +129,7 @@ namespace Assets.Prefabs.MapBuilder.MapBuilderManager
 
             try
             {
-                ServerActionResult result = await serverDriver.UpdateMapFileAsync(mapName, defaultNick, json);
+                ServerActionResult result = await serverDriver.UpdateMapFileAsync(mapName, json);
 
                 return result switch
                 {

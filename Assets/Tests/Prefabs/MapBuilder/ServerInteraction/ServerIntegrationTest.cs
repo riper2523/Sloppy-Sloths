@@ -35,7 +35,7 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
 
                 // 2. Upload a Dummy Map
                 string dummyJson = "{\"Type\": 0, \"NodeContainerDTOs\": []}";
-                ServerActionResult uploadRes = await serverDriver.UploadMapAsync(testMapName, testNick, dummyJson);
+                ServerActionResult uploadRes = await serverDriver.UploadMapAsync(testMapName, dummyJson);
                 Debug.Log($"Test: Upload '{testMapName}' Result: {uploadRes}");
 
                 // 3. Get the uploaded map

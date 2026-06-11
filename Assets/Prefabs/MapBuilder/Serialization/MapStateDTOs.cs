@@ -25,7 +25,6 @@ namespace Assets.Prefabs.MapBuilder.Serialization
         public float z { get; set; }
         public uint Width { get; set; }
         public uint Height { get; set; }
-        public List<(VehiclePartID part, uint amount)> Parts { get; set; } = new();
     }
 
     [System.Serializable]

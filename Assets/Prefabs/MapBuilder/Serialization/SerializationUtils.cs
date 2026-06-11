@@ -53,7 +53,6 @@ namespace Assets.Prefabs.MapBuilder.Serialization
 
     public interface IVehicleBuilderDTO : IGridDTO
     {
-        List<(VehiclePartID part, uint amount)> Parts { get; }
     }
 
     // Position is only used if 

@@ -24,7 +24,7 @@ public class MapLoader : MonoBehaviour
 
     private void OnEnable()
     {
-        loadLevelEvent.OnEventRaised += HandleLoadEvent;
+        loadLevelEvent.OnEventRaised += LoadMap;
         restartLevelEvent.OnEventRaised += ReloadMap;
     }
 

@@ -13,4 +13,3 @@ MonoBehaviour:
   m_Name: MapUploader
   m_EditorClassIdentifier: MapBuilder::Assets.Prefabs.MapBuilder.MapBuilderManager.MapUploader
   serverDriver: {fileID: 11400000, guid: 58e3e4a3b7d1e4e4a9e8e4a3b7d1e4e4, type: 2}
-  defaultNick: Walrus

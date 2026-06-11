@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Prefabs.LevelSystem.StarManager;
 
 public class StarManager : MonoBehaviour
 {   

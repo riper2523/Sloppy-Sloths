@@ -54,7 +54,7 @@ namespace Assets.Prefabs.LevelSystem.MapLoader
                 {
                     if (starDto.StarGoal.goalType == StarGoalType.CollectStar)
                     {
-                        GameObject starObj = instantiator.InstantiateStar(starDto, mapContainer.transform);
+                        GameObject? starObj = instantiator.InstantiateStar(starDto, mapContainer.transform);
                         if (starObj != null)
                         {
                             CollectibleStar collectible = starObj.GetComponent<CollectibleStar>();

@@ -49,11 +49,21 @@ namespace Assets.Prefabs.LevelSystem.MapLoader
             levelData.starGoals = new List<StarGoal>();
             if (dto.Stars != null)
             {
+                int collectibleStarIndex = 0;
                 foreach (var starDto in dto.Stars)
                 {
                     if (starDto.StarGoal.goalType == StarGoalType.CollectStar)
                     {
-                        instantiator.InstantiateStar(starDto, mapContainer.transform);
+                        GameObject starObj = instantiator.InstantiateStar(starDto, mapContainer.transform);
+                        if (starObj != null)
+                        {
+                            CollectibleStar collectible = starObj.GetComponent<CollectibleStar>();
+                            if (collectible != null)
+                            {
+                                collectible.starID = collectibleStarIndex;
+                                collectibleStarIndex++;
+                            }
+                        }
                         levelData.starGoals.Add(starDto.StarGoal);
                     }
                     else

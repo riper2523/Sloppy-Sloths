@@ -68,6 +68,7 @@ jobs:
           path: build
 
   build:
+    needs: test
     if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
     name: Build my project ✨ (${{ matrix.targetPlatform }})
     runs-on: ubuntu-latest

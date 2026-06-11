@@ -59,9 +59,7 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:
-          - WebGL
           - StandaloneWindows64
-          - StandaloneOSX
           - StandaloneLinux64
 
     permissions:

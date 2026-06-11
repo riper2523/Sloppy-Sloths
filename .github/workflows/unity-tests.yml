@@ -2,7 +2,17 @@ name: Actions 😎
 
 on:
   push:
+    paths:
+      - 'Assets/**'
+      - 'Packages/**'
+      - 'ProjectSettings/**'
+      - '.github/workflows/**'
   pull_request:
+    paths:
+      - 'Assets/**'
+      - 'Packages/**'
+      - 'ProjectSettings/**'
+      - '.github/workflows/**'
   workflow_dispatch:
   release:
     types: [published]

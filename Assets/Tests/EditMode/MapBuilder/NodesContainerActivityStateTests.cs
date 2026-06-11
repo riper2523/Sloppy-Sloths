@@ -1,7 +1,9 @@
+#nullable enable
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Prefabs.MapBuilder;
+using System;
 
 namespace Assets.Tests.EditMode
 {
@@ -9,14 +11,16 @@ namespace Assets.Tests.EditMode
     {
         private readonly List<MockNode> createdNodes = new();
 
+#pragma warning disable CS0067, CS0414
         private class MockNode : INodeHandle
         {
-            public event NodeTriggeredHandler? NodeChangedSelectionState;
-            public event NodeTriggeredHandler? NodeTriggered;
+            public event Action? NodeChangedSelectionState;
+            public event Action? NodeTriggered;
             public event Assets.Prefabs.MapBuilder.NodeDraggedHandler? NodeDragged;
+            public event Action? NodeDragEnded;
 
             public bool Active { get; set; }
-            public Vector3 GetCoordinates() => Vector3.zero;
+            public Vector3 Coordinates { get; set; }
             public void MoveByOffset(Vector3 offset) { }
             public void Delete() { }
 
@@ -26,6 +30,7 @@ namespace Assets.Tests.EditMode
                 NodeChangedSelectionState = null;
                 NodeTriggered = null;
                 NodeDragged = null;
+                NodeDragEnded = null;
             }
         }
 

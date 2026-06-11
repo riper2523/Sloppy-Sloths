@@ -23,14 +23,6 @@ jobs:
         with:
           lfs: true
 
-      # Cache
-      - uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
-
       # Free Disk Space
       - name: Free disk space
         uses: jlumbroso/free-disk-space@v1.3.1
@@ -39,6 +31,14 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
+
+      # Cache
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
 
       # Test
       - name: Run tests
@@ -72,13 +72,6 @@ jobs:
         with:
           lfs: true
 
-      - uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
-
       - name: Free disk space
         uses: jlumbroso/free-disk-space@v1.3.1
         with:
@@ -86,6 +79,13 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
+
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
 
       - name: Build project
         uses: game-ci/unity-builder@v4
@@ -126,13 +126,6 @@ jobs:
         with:
           lfs: true
 
-      - uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
-
       - name: Free disk space
         uses: jlumbroso/free-disk-space@v1.3.1
         with:
@@ -140,6 +133,13 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
+
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
 
       - name: Build project
         uses: game-ci/unity-builder@v4

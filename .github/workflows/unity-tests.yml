@@ -28,6 +28,21 @@ jobs:
       contents: read
       pull-requests: write
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: sloppy_sloths_user
+          POSTGRES_PASSWORD: secretpassword
+          POSTGRES_DB: sloppy_sloths_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sloppy_sloths_user -d sloppy_sloths_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       # Checkout
       - name: Checkout repository
@@ -51,6 +66,37 @@ jobs:
           key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
             Library-
+
+      # Start TS Server for Integration Tests
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Start TS Server
+        working-directory: ./Server
+        env:
+          PGUSER: sloppy_sloths_user
+          PGPASSWORD: secretpassword
+          PGDATABASE: sloppy_sloths_test
+          PGHOST: localhost
+          PGPORT: 5432
+          MAPS_DIRECTORY: ./map-files
+          JWT_SECRET: supersecretkey
+          PORT: 3000
+          HOST: 0.0.0.0
+        run: |
+          npm ci
+          npm run db:reset || true
+          npm run seed || true
+          npm run start &
+          sleep 5
+
+      # Patch Unity server URL to hit the host runner from inside GameCI docker container
+      - name: Patch Server URL
+        run: |
+          sed -i 's/127.0.0.1/172.17.0.1/g' Assets/Prefabs/MapBuilder/ServerInteraction/UnityServerDriver.cs
+          sed -i 's/127.0.0.1/172.17.0.1/g' Assets/Prefabs/MapBuilder/ServerInteraction/ServerDriver.asset || true
 
       # Test
       - name: Run tests

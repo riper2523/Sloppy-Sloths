@@ -1,0 +1,66 @@
+name: TypeScript Server Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Server/**'
+      - '.github/workflows/ts-tests.yml'
+  pull_request:
+    paths:
+      - 'Server/**'
+      - '.github/workflows/ts-tests.yml'
+
+jobs:
+  test:
+    name: Run Unit and Integration Tests
+    runs-on: ubuntu-latest
+
+    # Integration tests require a running PostgreSQL server
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: sloppy_sloths_user
+          POSTGRES_PASSWORD: secretpassword
+          POSTGRES_DB: sloppy_sloths_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './Server/package-lock.json'
+
+      - name: Install Dependencies
+        working-directory: ./Server
+        run: npm ci
+
+      - name: Create Mock .env File
+        working-directory: ./Server
+        run: |
+          echo "MAPS_DIRECTORY=./map-files" > .env
+          echo "JWT_SECRET=supersecretkey" >> .env
+          echo "PORT=3000" >> .env
+
+      - name: Run Tests (Unit & Integration)
+        working-directory: ./Server
+        env:
+          PGUSER: sloppy_sloths_user
+          PGPASSWORD: secretpassword
+          PGDATABASE: sloppy_sloths_test
+          PGHOST: localhost
+          PGPORT: 5432
+        run: npm run test

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Prefabs.MapBuilder;
 using System;
+using Assets.Prefabs.MapBuilder.Serialization;
 
 namespace Assets.Tests.EditMode
 {
@@ -23,6 +24,9 @@ namespace Assets.Tests.EditMode
             public Vector3 Coordinates { get; set; }
             public void MoveByOffset(Vector3 offset) { }
             public void Delete() { }
+
+            public INodeHandleDTO SerializeToDTO() => null!;
+            public void SetUpUsingDTO(INodeHandleDTO dto) { }
 
             public void ResetState()
             {

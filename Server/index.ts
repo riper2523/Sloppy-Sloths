@@ -9,7 +9,8 @@ const fastify = Fastify({
 try {
     setUpTheRoutes(fastify)
     const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
-    await fastify.listen({ port })
+    const host = process.env.HOST || '0.0.0.0';
+    await fastify.listen({ port, host })
 }
 catch (err) {
     fastify.log.error(err)

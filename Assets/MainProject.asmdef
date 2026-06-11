@@ -4,7 +4,9 @@
         "Unity.InputSystem",
         "Unity.TextMeshPro",
         "Unity.2D.SpriteShape.Runtime",
-        "Unity.Cinemachine"
+        "Unity.Cinemachine",
+        "Data",
+        "MapBuilder"
     ],
     "autoReferenced": true
 }

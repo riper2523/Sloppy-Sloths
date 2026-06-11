@@ -67,53 +67,8 @@ jobs:
           name: Build
           path: build
 
-  build-linux:
-    if: github.event_name != 'release'
-    name: Build my project ✨ (StandaloneLinux64)
-    runs-on: ubuntu-latest
-    permissions:
-        checks: write
-        contents: read
-        pull-requests: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          lfs: true
-
-      - name: Free disk space
-        uses: jlumbroso/free-disk-space@v1.3.1
-        with:
-          tool-cache: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
-
-      - uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
-
-      - name: Build project
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          targetPlatform: StandaloneLinux64
-          unityVersion: auto
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Build-StandaloneLinux64
-          path: build/StandaloneLinux64
-
-  build-release:
-    if: github.event_name == 'release'
+  build:
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
     name: Build my project ✨ (${{ matrix.targetPlatform }})
     runs-on: ubuntu-latest
     strategy:

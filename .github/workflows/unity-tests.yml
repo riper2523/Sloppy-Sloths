@@ -1,6 +1,10 @@
 name: Actions 😎
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
 
 jobs:
   test:
@@ -53,14 +57,17 @@ jobs:
           path: build
 
   build:
+    if: github.event_name == 'release' || matrix.targetPlatform == 'StandaloneLinux64'
     name: Build my project ✨ (${{ matrix.targetPlatform }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         targetPlatform:
+          - WebGL
           - StandaloneWindows64
           - StandaloneLinux64
+          - Android
 
     permissions:
         checks: write

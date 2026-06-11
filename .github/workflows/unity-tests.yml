@@ -2,6 +2,8 @@ name: Actions 😎
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'Assets/**'
       - 'Packages/**'
@@ -70,7 +72,7 @@ jobs:
   build:
     needs: test
     if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
-    name: Build my project ✨ (${{ matrix.targetPlatform }})
+    name: Build my project ✨
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

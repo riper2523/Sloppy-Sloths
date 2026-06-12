@@ -61,6 +61,7 @@ namespace Assets.Prefabs.UI.MapSelection
         public async Task RefreshMapList()
         {
             statusPanel?.SetActive(true);
+            statusPanel?.transform.SetAsLastSibling();
             refreshButton?.gameObject.SetActive(false);
             statusText?.SetText("Checking server connection...");
 

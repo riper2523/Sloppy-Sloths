@@ -477,6 +477,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Assets.Prefabs.MapBuilder.Utils.SaveTheMapButton, MapBuilder
       objectReference: {fileID: 0}
+    - target: {fileID: 7223448127136239753, guid: 7ec0a8a8da458ec09919fba4a5b12b2c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7610702584043174044, guid: 2f224c6317311c6a0831929ff8e15206, type: 3}
     - target: {fileID: 8734978679238632587, guid: 7ec0a8a8da458ec09919fba4a5b12b2c, type: 3}
       propertyPath: m_Name
       value: SaveTheMapButton
@@ -12524,6 +12528,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7223448127136239753, guid: 7ec0a8a8da458ec09919fba4a5b12b2c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: bc371e77ddcb519dca3031867c9ba802, type: 3}
     - target: {fileID: 8734978679238632587, guid: 7ec0a8a8da458ec09919fba4a5b12b2c, type: 3}
       propertyPath: m_Name
       value: EnableMovementButton
@@ -12605,6 +12613,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -68.333336
       objectReference: {fileID: 0}
+    - target: {fileID: 5794563708919742254, guid: 60175d198ac6569beb85cf7029df2a9c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -3278859021780183304, guid: a4e71623a2de71f5f97fc879efc8857e, type: 3}
     - target: {fileID: 6149498738489259851, guid: 60175d198ac6569beb85cf7029df2a9c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -12709,6 +12721,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -250
       objectReference: {fileID: 0}
+    - target: {fileID: 6959577037083036259, guid: 60175d198ac6569beb85cf7029df2a9c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 385173514463150410, guid: 8c1b1091b6e5ca54799324454c5f6f73, type: 3}
     - target: {fileID: 7434536550872961301, guid: 60175d198ac6569beb85cf7029df2a9c, type: 3}
       propertyPath: m_Name
       value: MapBuilderMode
@@ -12741,6 +12757,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -48.333336
       objectReference: {fileID: 0}
+    - target: {fileID: 7783232526599384878, guid: 60175d198ac6569beb85cf7029df2a9c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 6961262827992784269, guid: 3c056d8f6da4f5667ba189ec4b1471ba, type: 3}
     - target: {fileID: 8699496474173141692, guid: 60175d198ac6569beb85cf7029df2a9c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -12765,6 +12785,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -113.333336
       objectReference: {fileID: 0}
+    - target: {fileID: 9107749098116360298, guid: 60175d198ac6569beb85cf7029df2a9c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7027312155925990547, guid: b711adc4b2c23484dacece762c97d6a4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

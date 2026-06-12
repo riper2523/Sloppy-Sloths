@@ -20,9 +20,10 @@ const MAP_FILES_DIR = process.env.MAP_STORAGE_PATH
 const getMapParamsSchema = {
     type: 'object',
     properties: {
-        mapName: { type: 'string', pattern: '^[a-zA-Z0-9_-]+$' } // Path sanitization via regex
+        mapName: { type: 'string', pattern: '^[a-zA-Z0-9_ -]+$' } // Path sanitization via regex
     },
-    required: ['mapName']
+    required: ['mapName'],
+    additionalProperties: false
 } as const;
 
 const ownerDataSchema = {
@@ -30,7 +31,8 @@ const ownerDataSchema = {
     properties: {
         nick: { type: 'string' }
     },
-    required: ['nick']
+    required: ['nick'],
+    additionalProperties: false
 } as const;
 
 const mapDataSchema = {
@@ -39,7 +41,17 @@ const mapDataSchema = {
         mapName: { type: 'string' },
         owner: ownerDataSchema
     },
-    required: ['mapName', 'owner']
+    required: ['mapName', 'owner'],
+    additionalProperties: false
+} as const;
+
+const errorResponseSchema = {
+    type: 'object',
+    properties: {
+        errMsg: { type: 'string' }
+    },
+    required: ['errMsg'],
+    additionalProperties: false
 } as const;
 
 const tmpdir_path = tmpdir();
@@ -55,7 +67,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
     });
 
     // Global Error Handler
-    fastifyInstance.setErrorHandler((error, request, reply) => {
+    fastifyInstance.setErrorHandler((error: any, request, reply) => {
         if (error.validation) {
             reply.status(400).send({ errMsg: error.message });
         } else {
@@ -91,10 +103,13 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                 200: {
                     type: 'object',
                     properties: {
-                        maps: { type: 'array', items: mapDataSchema },
-                        errMsg: { type: 'string' }
-                    }
-                }
+                        maps: { type: 'array', items: mapDataSchema }
+                    },
+                    required: ['maps'],
+                    additionalProperties: false
+                },
+                '4xx': errorResponseSchema,
+                '5xx': errorResponseSchema
             }
         },
         handler: async function (_, reply) {
@@ -105,7 +120,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             }
             else {
                 // List can be empty or error
-                reply.send({ errMsg: result.error })
+                reply.status(500).send({ errMsg: result.error })
             }
         }
     })
@@ -119,10 +134,13 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                 200: {
                     type: 'object',
                     properties: {
-                        map: mapDataSchema,
-                        errMsg: { type: 'string' }
-                    }
-                }
+                        map: mapDataSchema
+                    },
+                    required: ['map'],
+                    additionalProperties: false
+                },
+                '4xx': errorResponseSchema,
+                '5xx': errorResponseSchema
             }
         },
         handler: async function (request, reply) {
@@ -146,7 +164,9 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
         schema: {
             params: getMapParamsSchema,
             response: {
-                200: { type: 'string' }
+                200: { type: 'string' },
+                '4xx': errorResponseSchema,
+                '5xx': errorResponseSchema
             }
         },
         handler: async function (request, reply) {
@@ -178,8 +198,11 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                     properties: {
                         msg: { type: 'string' }
                     },
-                    required: ['msg']
-                }
+                    required: ['msg'],
+                    additionalProperties: false
+                },
+                '4xx': errorResponseSchema,
+                '5xx': errorResponseSchema
             }
         },
         handler: async function (request, reply) {
@@ -195,7 +218,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             // 2. Pre-validation: Check if map already exists
             const exists = await databaseConnection.getMap(mapName);
             if (exists.ok) {
-                return reply.status(400).send({ errMsg: "Map name already taken" });
+                return reply.status(409).send({ errMsg: "Map name already taken" });
             }
 
             // 3. Start receiving the multipart stream
@@ -214,23 +237,24 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             const uniqueFileName = `${mapName}_${randomUUID()}.map`;
             const finalPath = join(MAP_FILES_DIR, uniqueFileName);
 
+
             try {
-                // 4. Stream directly to temp file
+                // 5. Stream directly to temp file
                 await pipeline(data.file, createWriteStream(tempPath));
 
-                // 5. Move to permanent storage (Safe for cross-device links)
+                // 6. Move to permanent storage (Safe for cross-device links)
                 await copyFile(tempPath, finalPath);
-                await unlink(tempPath).catch(() => { });
+                await unlink(tempPath);
 
-                // 6. FINAL STEP: Register in database using current user
+                // 7. FINAL STEP: Register in database
                 const dbResult = await databaseConnection.addMap(mapName, currentUser, finalPath);
 
                 if (!dbResult.ok) {
-                    await unlink(finalPath).catch(() => { });
+                    await unlink(finalPath);
                     return reply.status(500).send({ errMsg: dbResult.error });
                 }
 
-                return { msg: "Map successfully uploaded and registered" };
+                return { msg: "Map successfully uploaded and registered", path: finalPath };
 
             } catch (err: any) {
                 await unlink(tempPath).catch(() => { });
@@ -251,39 +275,37 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                     properties: {
                         msg: { type: 'string' }
                     },
-                    required: ['msg']
-                }
+                    required: ['msg'],
+                    additionalProperties: false
+                },
+                '4xx': errorResponseSchema,
+                '5xx': errorResponseSchema
             }
         },
         handler: async function (request, reply) {
             const { mapName } = request.params;
 
-            // 1. Validate Caller Identity
+            // Validate Caller Identity
             const userResult = await databaseConnection.getCurrentUser();
             if (!userResult.ok) {
                 return reply.status(401).send({ errMsg: "Authentication required" });
             }
-            const currentUser = userResult.value;
 
-            // 2. Verify map exists
+            // 1. Verify map exists
             const mapResult = await databaseConnection.getMap(mapName);
             if (!mapResult.ok) {
                 return reply.status(404).send({ errMsg: mapResult.error });
             }
             const mapEntity = mapResult.value;
 
-            // 3. Start receiving the multipart stream
+            // 2. Start receiving the multipart stream
             const data = await request.file();
             if (!data) {
                 return reply.status(400).send({ errMsg: "No file provided" });
             }
-            if (data.mimetype !== 'application/json') {
-                data.file.resume();
-                return reply.status(400).send({ errMsg: "Only JSON maps are supported" });
-            }
 
-            // 4. Verify Ownership against Current User
-            if (mapEntity.data.owner.nick !== currentUser.data.nick) {
+            // 3. Verify ownership using currentUser
+            if (mapEntity.data.owner.nick !== userResult.value.data.nick) {
                 data.file.resume();
                 return reply.status(403).send({ errMsg: "You are not the owner of this map" });
             }
@@ -292,12 +314,12 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             const finalPath = mapEntity.data.filePath;
 
             try {
-                // 5. Stream to temp file first
+                // 4. Stream to temp file first
                 await pipeline(data.file, createWriteStream(tempPath));
 
                 // 5. Overwrite the existing file
                 await copyFile(tempPath, finalPath);
-                await unlink(tempPath).catch(() => { });
+                await unlink(tempPath);
 
                 return { msg: "Map file successfully updated" };
 
@@ -319,7 +341,8 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                 properties: {
                     newOwnerNick: { type: 'string', minLength: 1, maxLength: 255 }
                 },
-                required: ['newOwnerNick']
+                required: ['newOwnerNick'],
+                additionalProperties: false
             },
             response: {
                 200: {
@@ -328,8 +351,11 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                         msg: { type: 'string' },
                         map: mapDataSchema
                     },
-                    required: ['msg', 'map']
-                }
+                    required: ['msg', 'map'],
+                    additionalProperties: false
+                },
+                '4xx': errorResponseSchema,
+                '5xx': errorResponseSchema
             }
         },
         handler: async function (request, reply) {
@@ -350,8 +376,8 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             }
             const mapEntity = mapResult.value;
 
-            // 3. Verify Ownership
-            if (mapEntity.data.owner.nick !== currentUser.data.nick) {
+            // 3. Verify Ownership using ID
+            if (mapEntity.owner.id !== currentUser.id) {
                 return reply.status(403).send({ errMsg: "You are not the owner of this map" });
             }
 
@@ -361,7 +387,7 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
                 return reply.status(404).send({ errMsg: `New owner ${newOwnerNick} not found` });
             }
 
-            // 5. Perform Transfer
+            // 5. Change Ownership
             const result = await databaseConnection.changeOwner(mapEntity, ownerResult.value);
             if (result.ok) {
                 return { msg: "Owner changed successfully", map: result.value.data };

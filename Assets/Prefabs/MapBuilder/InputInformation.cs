@@ -49,23 +49,24 @@ class InputInformation : MonoBehaviour, IInputInformation
         return Keyboard.current is not null && Keyboard.current.escapeKey.wasPressedThisFrame;
     }
 
-    public bool VoidWasClicked()
+    public bool AreWeOverAGameObject()
     {
-        if (WeClickedThisFrame() == false)
-        {
-            return false;
-        }
-
         if (EventSystem.current is null)
         {
             Debug.LogError(
                     "Event system is null");
             return false;
         }
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return false;
-        }
-        return true;
+        return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public bool IsPressed()
+    {
+        return Mouse.current is not null && Mouse.current.leftButton.isPressed;
+    }
+
+    public float ScrollValue()
+    {
+        return Mouse.current is not null ? Mouse.current.scroll.ReadValue().y : 0f;
     }
 }

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b4ca27b80c2bb2ad98fee9b9942b41f, type: 3}
+  m_Name: MapBuilderItemRegistry
+  m_EditorClassIdentifier: 
+  Mappings:
+  - ItemType: 1
+    Prefab: {fileID: 5591852602787770805, guid: 2b4ade143a599542ab9f2de3806ffc52, type: 3}
+    ConfigPanel: {fileID: 0}
+  - ItemType: 2
+    Prefab: {fileID: 7962669896937621224, guid: 7bb65755c946c06a48980fa54afca272, type: 3}
+    ConfigPanel: {fileID: 0}
+  - ItemType: 3
+    Prefab: {fileID: 3344059065839901088, guid: 3095acfd047ce79f8bfa6202c8af2f41, type: 3}
+    ConfigPanel: {fileID: 0}
+  - ItemType: 0
+    Prefab: {fileID: 5281844673424121986, guid: a72eae1b244f610b499287cf3327a507, type: 3}
+    ConfigPanel: {fileID: 0}

@@ -2,12 +2,19 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Assets.Prefabs.MapBuilder.Serialization;
 
 namespace Assets.Prefabs.MapBuilder
 {
     public delegate void NodeDraggedHandler(Vector3 actPos, Vector3 offset);
 
-    public interface INodeHandle
+    public interface ISerializableToDTO<T>
+    {
+        T SerializeToDTO();
+        void SetUpUsingDTO(T dto);
+    }
+
+    public interface INodeHandle : ISerializableToDTO<INodeHandleDTO>
     {
         public event Action? NodeChangedSelectionState;
         // This is triggered for example when clicking the node
@@ -52,7 +59,7 @@ namespace Assets.Prefabs.MapBuilder
         void TransformInPlace(NodeContainerState state);
     }
 
-    public interface INodeContainer
+    public interface INodeContainer : ISerializableToDTO<INodeContainerDTO>
     {
         public event NodeInContainerChangedSelectionState? NodeChangedState;
         public event NodesInContainerDeletedHandler? NodesDeleted;
@@ -73,17 +80,22 @@ namespace Assets.Prefabs.MapBuilder
         Vector2 GetClosestPointOnCollider(Vector2 point);
 
         NodesContainerActivityState ActivityState { get; }
+
+        void MoveToGameplay();
     }
 
     public delegate void SelectedContainerChangedHandler(INodeContainer? newSelected);
 
-    public interface INodeManager
+    public interface INodeManager : ISerializableToDTO<INodeManagerDTO>
     {
         event SelectedContainerChangedHandler? SelectedContainerChanged;
         INodeContainer? AddNodeContainerAtPos(GameObject nodeContainerPrefab, Vector3 position);
         void HandleVoidWasClicked(Vector3 where);
         void ResetActivityState();
         void ApplyTransformation(IContainerStateTransformation transformation);
+        void Clear();
+        void MoveToGameplay();
+        void DeleteActiveContainer();
     }
 
     public interface IInputInformation
@@ -94,6 +106,8 @@ namespace Assets.Prefabs.MapBuilder
         bool DelKeyWasClicked();
         bool EscapeKeyWasClicked();
         bool IsCtrlPressed();
-        bool VoidWasClicked();
+        bool AreWeOverAGameObject();
+        bool IsPressed();
+        float ScrollValue();
     }
 }

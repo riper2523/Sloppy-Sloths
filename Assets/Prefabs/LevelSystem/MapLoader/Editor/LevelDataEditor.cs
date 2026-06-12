@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using Assets.Prefabs.LevelSystem.StarManager;
 
 [CustomEditor(typeof(LevelData))]
 public class LevelDataEditor : Editor

@@ -74,6 +74,7 @@ describe('File Transfer Routes', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         mockGetCurrentUser.mockResolvedValue({ ok: true, value: mockUser });
+        mockGetOwner.mockResolvedValue({ ok: true, value: mockUser });
         mockMkdir.mockResolvedValue(undefined);
         mockCopyFile.mockResolvedValue(undefined);
         mockUnlink.mockResolvedValue(undefined);
@@ -116,10 +117,6 @@ describe('File Transfer Routes', () => {
             const boundary = '----Boundary';
             const payload = [
                 `--${boundary}`,
-                'Content-Disposition: form-data; name="nick"',
-                '',
-                'Alice',
-                `--${boundary}`,
                 'Content-Disposition: form-data; name="mapFile"; filename="forest.map"',
                 'Content-Type: application/json',
                 '',
@@ -152,7 +149,7 @@ describe('File Transfer Routes', () => {
                 url: '/maps/Existing',
             });
 
-            expect(response.statusCode).toBe(400);
+            expect(response.statusCode).toBe(409);
             expect(JSON.parse(response.payload).errMsg).toBe('Map name already taken');
         });
     });

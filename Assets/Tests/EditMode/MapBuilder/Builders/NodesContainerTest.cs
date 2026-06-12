@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.U2D;
 using System;
+using Assets.Prefabs.MapBuilder.Serialization;
 
 namespace Assets.Tests.EditMode
 {
@@ -26,6 +27,9 @@ namespace Assets.Tests.EditMode
             public Vector3 Coordinates { get; set; }
             public void MoveByOffset(Vector3 offset) { }
             public void Delete() { }
+            
+            public INodeHandleDTO SerializeToDTO() => null!;
+            public void SetUpUsingDTO(Assets.Prefabs.MapBuilder.Serialization.INodeHandleDTO dto) { }
         }
 
         private class MockInputInformation : MonoBehaviour, IInputInformation
@@ -37,6 +41,9 @@ namespace Assets.Tests.EditMode
             public bool EscapeKeyWasClicked() => false;
             public bool IsCtrlPressed() => false;
             public bool VoidWasClicked() => false;
+            public bool AreWeOverAGameObject() => false;
+            public bool IsPressed() => false;
+            public float ScrollValue() => 0f;
         }
 
         INodeContainer GetFreshInstance()

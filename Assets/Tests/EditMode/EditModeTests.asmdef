@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "MainProject",
-        "Unity.2D.SpriteShape.Runtime"
+        "Unity.2D.SpriteShape.Runtime",
+        "MapBuilder"
     ],
     "includePlatforms": [
         "Editor"

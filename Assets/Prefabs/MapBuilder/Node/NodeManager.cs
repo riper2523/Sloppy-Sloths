@@ -1,10 +1,33 @@
 #nullable enable
 using UnityEngine;
 using Assets.Prefabs.MapBuilder;
+using Assets.Prefabs.MapBuilder.Serialization;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+
+[System.Serializable]
+public class OrdinaryNodeManagerDTO : INodeManagerDTO
+{
+    public NodeManagerType Type => NodeManagerType.ORDINARY;
+    public List<INodeContainerDTO> NodeContainerDTOs { get; set; } = new();
+
+    public OrdinaryNodeManagerDTO() { }
+    public OrdinaryNodeManagerDTO(List<INodeContainerDTO> containers)
+    {
+        NodeContainerDTOs = containers;
+    }
+
+    public string GetPayload() => JsonConvert.SerializeObject(this);
+}
 
 [RequireComponent(typeof(IInputInformation))]
 class NodeManager : MonoBehaviour, INodeManager
 {
+    private readonly List<INodeContainer> NodeContainers = new();
+
+    [SerializeField] private DTOInstantiator? instantiator;
+
     private INodeContainer? _activeNodeContainer;
     private INodeContainer? ActiveNodeContainer
     {
@@ -32,10 +55,22 @@ class NodeManager : MonoBehaviour, INodeManager
         ActiveNodeContainer = null;
     }
 
+    public void DeleteActiveContainer()
+    {
+        if (ActiveNodeContainer != null)
+        {
+            var container = ActiveNodeContainer;
+            ActiveNodeContainer = null;
+            container.Delete();
+            NodeContainers.Remove(container);
+        }
+    }
+
     public void HandleVoidWasClicked(Vector3 position)
     {
         if (ActiveNodeContainer is null)
         {
+            Debug.Log("Active is null");
             return;
         }
 
@@ -59,15 +94,22 @@ class NodeManager : MonoBehaviour, INodeManager
 
     public INodeContainer? AddNodeContainerAtPos(GameObject nodeContainerPrefab, Vector3 position)
     {
-        var container = Instantiate(nodeContainerPrefab, position, Quaternion.identity, transform);
-        var containerController = container.GetComponent<INodeContainer>();
+        var containerInstance = Instantiate(nodeContainerPrefab, position, Quaternion.identity, transform);
+        var containerController = containerInstance.GetComponent<INodeContainer>();
         if (containerController is null)
         {
-            Debug.LogError($"Prefab '{nodeContainerPrefab.name}' is missing a component implementing INodeContainer (for example, PolygonBuilder).", container);
-            Destroy(container);
+            Debug.LogError($"Prefab '{nodeContainerPrefab.name}' is missing a component implementing INodeContainer (for example, PolygonBuilder).", containerInstance);
+            Destroy(containerInstance);
             return null;
         }
 
+        InitializeContainer(containerController);
+        containerInstance.SetActive(true);
+        return containerController;
+    }
+
+    private void InitializeContainer(INodeContainer containerController)
+    {
         containerController.NodeChangedState += (node) =>
         {
             ActiveNodeContainer = containerController;
@@ -99,16 +141,76 @@ class NodeManager : MonoBehaviour, INodeManager
                 ActiveNodeContainer = null;
             }
             containerController.Delete();
+            NodeContainers.Remove(containerController);
         };
 
         ActiveNodeContainer = containerController;
-        container.SetActive(true);
-
-        return containerController;
+        NodeContainers.Add(containerController);
     }
 
     public void ApplyTransformation(IContainerStateTransformation transformation)
     {
         ActiveNodeContainer?.ApplyTransformation(transformation);
+    }
+
+    public void Clear()
+    {
+        foreach (var container in NodeContainers.ToList())
+        {
+            container.Delete();
+        }
+        NodeContainers.Clear();
+        ActiveNodeContainer = null;
+    }
+
+    public void MoveToGameplay()
+    {
+        foreach (var container in NodeContainers)
+        {
+            container.MoveToGameplay();
+        }
+    }
+
+    public INodeManagerDTO SerializeToDTO()
+    {
+        var containerDTOs = NodeContainers.Select(c => c.SerializeToDTO()).ToList();
+        return new OrdinaryNodeManagerDTO(containerDTOs);
+    }
+
+    public void SetUpUsingDTO(INodeManagerDTO dto)
+    {
+        // Clear existing containers
+        foreach (var container in NodeContainers.ToList())
+        {
+            container.Delete();
+        }
+        NodeContainers.Clear();
+        ActiveNodeContainer = null;
+
+        if (instantiator == null)
+        {
+            Debug.LogError("NodeManager: DTOInstantiator is not assigned. Cannot deserialize containers.");
+            return;
+        }
+
+        foreach (var containerDTO in dto.NodeContainerDTOs)
+        {
+            var container = instantiator.InstantiateContainer(containerDTO, transform);
+            if (container != null)
+            {
+                InitializeContainer(container);
+            }
+        }
+    }
+
+    public string SerializeToJson()
+    {
+        var dto = SerializeToDTO();
+
+        return JsonConvert.SerializeObject(dto, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto,
+            Formatting = Formatting.Indented
+        });
     }
 }

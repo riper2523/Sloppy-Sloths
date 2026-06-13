@@ -24,6 +24,7 @@ namespace Assets.Prefabs.UI.MapSelection
         [SerializeField] private GameObject statusPanel = null!;
         [SerializeField] private TextMeshProUGUI statusText = null!;
         [SerializeField] private Button refreshButton = null!;
+        [SerializeField] private Button loadMapFromDiskButton = null!;
 
         private static GameObject? lastDynamicMapSource;
 
@@ -50,6 +51,50 @@ namespace Assets.Prefabs.UI.MapSelection
             {
                 refreshButton.onClick.AddListener(async () => await RefreshMapList());
                 refreshButton.gameObject.SetActive(false);
+            }
+
+            if (loadMapFromDiskButton != null)
+            {
+#if UNITY_ANDROID || UNITY_IOS
+                loadMapFromDiskButton.gameObject.SetActive(false);
+#else
+                if (Application.isMobilePlatform)
+                {
+                    loadMapFromDiskButton.gameObject.SetActive(false);
+                }
+                else
+                {
+                    loadMapFromDiskButton.onClick.AddListener(OnLoadMapFromDisk);
+                }
+#endif
+            }
+        }
+
+        private void OnLoadMapFromDisk()
+        {
+            var paths = SFB.StandaloneFileBrowser.OpenFilePanel("Open Map", "", "map", false);
+            if (paths != null && paths.Length > 0 && !string.IsNullOrEmpty(paths[0]))
+            {
+                string path = paths[0];
+                string json = System.IO.File.ReadAllText(path);
+                var settings = SerializationManager.GetSettings();
+                var dto = Newtonsoft.Json.JsonConvert.DeserializeObject<Assets.Prefabs.MapBuilder.Serialization.IMapStateDTO>(json, settings);
+                if (dto != null)
+                {
+                    string mapName = System.IO.Path.GetFileNameWithoutExtension(path);
+                    statusPanel?.SetActive(true);
+                    statusText?.SetText($"Loading map from disk: {mapName}...");
+
+                    AsyncOperation sceneLoad = SceneManager.LoadSceneAsync("MapBuilder");
+                    sceneLoad.completed += (op) =>
+                    {
+                        var builderManager = FindAnyObjectByType<MapBuilderManager>();
+                        if (builderManager != null)
+                        {
+                            builderManager.SetUpUsingDTO(dto, mapName);
+                        }
+                    };
+                }
             }
         }
 

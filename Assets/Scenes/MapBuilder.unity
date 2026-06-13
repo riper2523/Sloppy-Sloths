@@ -959,6 +959,7 @@ RectTransform:
   - {fileID: 2523040424631153267}
   - {fileID: 1193589863473138968}
   - {fileID: 6637579805640823243}
+  - {fileID: 1848010205}
   m_Father: {fileID: 1836320958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -8528,6 +8529,119 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1845426445}
   m_CullTransparentMesh: 1
+--- !u!1001 &1848010204
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 471349649}
+    m_Modifications:
+    - target: {fileID: 6452646212925270630, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_Name
+      value: DownloadMapButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_Pivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_Pivot.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+--- !u!224 &1848010205 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8705011873710663555, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+  m_PrefabInstance: {fileID: 1848010204}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1848010206 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4991900877227378816, guid: 5ab455182a61e8db4b99e34634b30152, type: 3}
+  m_PrefabInstance: {fileID: 1848010204}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e0c5134975c1bb08549e27bf70b241, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MapBuilder::Assets.Prefabs.MapBuilder.Utils.DownloadMapButton
 --- !u!1 &1855259520
 GameObject:
   m_ObjectHideFlags: 0
@@ -9736,7 +9850,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1697171326674525253, guid: b2b6cdf303d086c578ab7cd4bfe237ee, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -20
+      value: -155
       objectReference: {fileID: 0}
     - target: {fileID: 1697171326674525253, guid: b2b6cdf303d086c578ab7cd4bfe237ee, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -9859,6 +9973,10 @@ PrefabInstance:
       propertyPath: _movingTheMapRightNow
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4024710538889483341, guid: 6e153abf0347beb9cabbbe749239f867, type: 3}
+      propertyPath: downloadMapButtonBase
+      value: 
+      objectReference: {fileID: 1848010206}
     - target: {fileID: 5592908479922058186, guid: 6e153abf0347beb9cabbbe749239f867, type: 3}
       propertyPath: Mappings.Array.size
       value: 4
@@ -10343,7 +10461,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1209109800833809767, guid: 387cb24193becd3b886e190ecf235ea1, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -155
+      value: -290
       objectReference: {fileID: 0}
     - target: {fileID: 1209109800833809767, guid: 387cb24193becd3b886e190ecf235ea1, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -11148,7 +11266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2945568339705921606, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -290
+      value: -425
       objectReference: {fileID: 0}
     - target: {fileID: 2945568339705921606, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
       propertyPath: m_AnchoredPosition.y

@@ -169,7 +169,7 @@ namespace Assets.Prefabs.UI.MapSelection
                 var builderManager = FindAnyObjectByType<MapBuilderManager>();
                 if (builderManager != null)
                 {
-                    builderManager.SetUpUsingDTO(mapData.MapStateDTO);
+                    builderManager.SetUpUsingDTO(mapData.MapStateDTO, mapName);
                 }
                 else
                 {

@@ -88,6 +88,16 @@ namespace Assets.Prefabs.MapBuilder.MapBuilderManager
             }
         }
 
+        public void ShowMessage(string message, bool isSuccess)
+        {
+            resultPanel?.SetActive(true);
+            if (resultText != null)
+            {
+                resultText.text = message;
+                resultText.color = isSuccess ? Color.green : Color.red;
+            }
+        }
+
         public void AskOverwrite(string mapName, Action onConfirmed)
         {
             onOverwriteConfirmed = onConfirmed;

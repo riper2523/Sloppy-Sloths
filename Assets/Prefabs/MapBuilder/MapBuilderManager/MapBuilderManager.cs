@@ -57,6 +57,11 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
     private SaveTheMapButtonBase saveTheMapButtonBase = null!;
 
     [SerializeField]
+    private DownloadMapButtonBase downloadMapButtonBase = null!;
+
+    private string lastSavedMapName = "MyMap";
+
+    [SerializeField]
     private MapSavePopup mapSavePopup = null!;
 
     [SerializeField]
@@ -132,7 +137,7 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
 
         if (MapBuilderTestPreserver.IsTesting && MapBuilderTestPreserver.SavedState != null)
         {
-            SetUpUsingDTO(MapBuilderTestPreserver.SavedState);
+            SetUpUsingDTO(MapBuilderTestPreserver.SavedState, MapBuilderTestPreserver.SavedMapName);
             MapBuilderTestPreserver.IsTesting = false;
         }
 
@@ -154,16 +159,60 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
                         var dto = SerializeToDTO();
                         var updateResult = await _mapUploader.UpdateExistingMap(mapName, dto);
                         mapSavePopup.ShowResult(updateResult, mapName);
+                        if (updateResult == UploadMapResult.SUCCESS) lastSavedMapName = mapName;
                     });
                 }
                 else
                 {
                     mapSavePopup.ShowResult(result, mapName);
+                    if (result == UploadMapResult.SUCCESS) lastSavedMapName = mapName;
                 }
             });
         };
 
+        if (downloadMapButtonBase != null)
+        {
+            downloadMapButtonBase.ProvidedEvent += _ =>
+            {
+                DownloadMap();
+            };
+        }
+
         Debug.Assert(State is not null);
+    }
+
+    private void DownloadMap()
+    {
+        if (vehicleBuilderInstance == null || finishLineInstance == null)
+        {
+            Debug.LogError("MapBuilderManager: Cannot download map without VehicleBuilder and FinishLine.");
+            if (mapSavePopup != null)
+            {
+                mapSavePopup.ShowMessage("Cannot download map without Vehicle Builder and Finish Line.", false);
+            }
+            return;
+        }
+
+        var dto = SerializeToDTO();
+        string json = Newtonsoft.Json.JsonConvert.SerializeObject(dto, Newtonsoft.Json.Formatting.Indented);
+        string downloadsPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile), "Downloads");
+        string safeName = string.Join("_", lastSavedMapName.Split(System.IO.Path.GetInvalidFileNameChars()));
+        if (string.IsNullOrWhiteSpace(safeName)) safeName = "DefaultMap";
+        string filePath = System.IO.Path.Combine(downloadsPath, safeName + ".map");
+        int counter = 1;
+        while (System.IO.File.Exists(filePath))
+        {
+            filePath = System.IO.Path.Combine(downloadsPath, $"{safeName} ({counter}).map");
+            counter++;
+        }
+
+        System.IO.File.WriteAllText(filePath, json);
+        Debug.Log($"Map '{lastSavedMapName}' successfully downloaded to: {filePath}");
+
+        if (mapSavePopup != null)
+        {
+            mapSavePopup.ShowMessage($"Downloaded to:\n{filePath}", true);
+        }
     }
 
     public async Task<UploadMapResult> SaveMap(string mapName)
@@ -289,7 +338,7 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
                 {
                     nodeManager?.HandleVoidWasClicked(inputInformation.GetMouseWorldPos());
                 }
-                
+
                 if (State.StateType == previousState)
                 {
                     State.VoidWasClicked(inputInformation.GetMouseWorldPos());
@@ -347,9 +396,10 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
             }
 
             Debug.Log("MapBuilderManager: Serializing to DTO for testing...");
-            // Save current map state
+            Debug.Log("Entering testing mode");
             var dto = SerializeToDTO();
             MapBuilderTestPreserver.SavedState = dto;
+            MapBuilderTestPreserver.SavedMapName = lastSavedMapName;
             MapBuilderTestPreserver.IsTesting = true;
 
             // Generate playable level from DTO
@@ -446,8 +496,13 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
         return dto;
     }
 
-    public void SetUpUsingDTO(IMapStateDTO dto)
+    public void SetUpUsingDTO(IMapStateDTO dto, string? loadedMapName)
     {
+        if (!string.IsNullOrEmpty(loadedMapName))
+        {
+            lastSavedMapName = loadedMapName;
+        }
+
         nodeManager.Clear();
         nodeManager.SetUpUsingDTO(dto.NodeManager);
 
@@ -534,5 +589,10 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
     public void GoBackToMapSelection()
     {
         SceneManager.LoadScene("MapSelection");
+    }
+
+    public void SetUpUsingDTO(IMapStateDTO dto)
+    {
+        SetUpUsingDTO(dto, null);
     }
 }

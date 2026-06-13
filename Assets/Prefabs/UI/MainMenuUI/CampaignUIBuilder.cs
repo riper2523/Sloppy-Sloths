@@ -7,7 +7,7 @@ public class CampaignUIBuilder : MonoBehaviour
     [Header("Data References")]
     [SerializeField] private CampaignData campaignData;
     [SerializeField] private CurrentSessionSO currentSession;
-    [SerializeField] private string levelSceneName = "LevelScene";
+    [SerializeField] private string levelSceneName;
     
     [Header("Controllers")]
     [SerializeField] private MainMenuController menuController;

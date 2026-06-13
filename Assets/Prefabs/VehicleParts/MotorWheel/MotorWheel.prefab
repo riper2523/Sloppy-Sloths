@@ -108,9 +108,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Mass: 8
+  m_LinearDamping: 0.1
+  m_AngularDamping: 2
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: d59988605c456324f8c03b840e1dc767, type: 2}
   m_IncludeLayers:
@@ -272,10 +272,10 @@ MonoBehaviour:
   rb: {fileID: 6958040208604798537}
   minSpeed: 10
   maxSpeed: 1000
-  minPitch: 0.8
+  minPitch: 0.2
   maxPitch: 2.5
-  minVolume: 0.05
-  maxVolume: 0.3
+  minVolume: 0.001
+  maxVolume: 0.05
 --- !u!114 &7091092380435819754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,7 +395,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
@@ -483,8 +483,8 @@ HingeJoint2D:
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
-    m_MotorSpeed: 200
-    m_MaximumMotorForce: 10000
+    m_MotorSpeed: 10
+    m_MaximumMotorForce: 10
   m_UseLimits: 0
   m_AngleLimits:
     m_LowerAngle: 0
@@ -553,6 +553,7 @@ MonoBehaviour:
   hinge: {fileID: 2871179765715236392}
   partLogic: {fileID: 9175531997070321749}
   motorSound: {fileID: 1845965182531414558}
+  motorSpeed: 0
 --- !u!114 &9175531997070321749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -627,8 +628,8 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 9978bfbbc5a3f75468a1b46f222af2a4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
+  m_Volume: 0.01
+  m_Pitch: 0.3
   Loop: 1
   Mute: 0
   Spatialize: 0

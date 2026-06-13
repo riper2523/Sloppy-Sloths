@@ -109,9 +109,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Mass: 6
+  m_LinearDamping: 0.1
+  m_AngularDamping: 2
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 71aefa3656928e3499b942607c533809, type: 2}
   m_IncludeLayers:
@@ -216,7 +216,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 6a52af1d20ebb2c4aa1a322671b2bf8a, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0

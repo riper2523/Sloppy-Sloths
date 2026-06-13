@@ -108,9 +108,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Mass: 3
+  m_LinearDamping: 0.1
+  m_AngularDamping: 2
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 31c54cf1125c5bc468c12936bf4e4ab5, type: 2}
   m_IncludeLayers:
@@ -177,8 +177,8 @@ MonoBehaviour:
   maxSpeed: 1000
   minPitch: 0.8
   maxPitch: 2.5
-  minVolume: 0.05
-  maxVolume: 0.3
+  minVolume: 0.01
+  maxVolume: 0.05
 --- !u!82 &2691272659136138746
 AudioSource:
   m_ObjectHideFlags: 0
@@ -395,7 +395,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1

@@ -466,7 +466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cannon
   projectilePrefab: {fileID: 7648714899092357815, guid: 6599e208e2438814c90b87cdfd8d5448, type: 3}
-  shootForce: 20
+  shootForce: 10
   firePoint: {fileID: 7467035106302156985}
 --- !u!50 &4193326017606169279
 Rigidbody2D:
@@ -480,9 +480,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Mass: 3
+  m_LinearDamping: 0.1
+  m_AngularDamping: 1
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 99449a311cec0e84c91987dab98cab6f, type: 2}
   m_IncludeLayers:

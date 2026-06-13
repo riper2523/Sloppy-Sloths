@@ -180,10 +180,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Banana
   radius: 5
-  power: 50
+  power: 200
   impactThreshold: 4
   explosionEffect: {fileID: 8811523859676374939, guid: 0ea37d43ac4d8ff448cf6b5f0d6ae2ff, type: 3}
   spawnChildren: {fileID: 494079654044471943, guid: c0754adaaf31af34bb352af5cc131dc6, type: 3}
   childrenCount: 5
   scatterForce: 0
-  armingDelay: 2
+  armingDelay: 0.5

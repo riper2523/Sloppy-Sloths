@@ -107,8 +107,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 20
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_LinearDamping: 0.1
+  m_AngularDamping: 1
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: aa5cced58a4f29d4a9594ade4020d998, type: 2}
   m_IncludeLayers:
@@ -183,5 +183,5 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   actionReceivers: []
-  jointStrength: 3500
+  jointStrength: 12000
   enginePower: 0

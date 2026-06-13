@@ -6,7 +6,7 @@ public class MotorWheel : MonoBehaviour, IPartModifier
     [SerializeField] private PartLogic partLogic;
     [SerializeField] private AudioSource motorSound;
     public float motorSpeed;
-    private float motorSpeedBase = -1000f;
+    private float motorSpeedBase = -10000f;
     private bool useMotor = false;
     void Start()
     {

@@ -159,7 +159,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.48, y: 3.48}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -180,6 +180,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Banana
   radius: 5
-  power: 50
-  impactThreshold: 4
+  power: 150
+  impactThreshold: 0.1
   explosionEffect: {fileID: 8811523859676374939, guid: 0ea37d43ac4d8ff448cf6b5f0d6ae2ff, type: 3}
+  spawnChildren: {fileID: 0}
+  childrenCount: 5
+  scatterForce: 15
+  armingDelay: 2

@@ -183,5 +183,5 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   actionReceivers: []
-  jointStrength: 5000
+  jointStrength: 6000
   enginePower: 0

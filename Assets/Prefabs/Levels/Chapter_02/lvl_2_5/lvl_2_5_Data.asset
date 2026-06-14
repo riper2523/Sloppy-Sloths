@@ -10,11 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
-  m_Name: BumpySandboxData
+  m_Name: lvl_2_5_Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  uniqueID: 152f2b3c-f8ca-41c0-8cb6-6753bda66433
-  mapPrefab: {fileID: 8040763811617257258, guid: 08387cfa3ede877459ce11656c5476e6, type: 3}
-  startingItems: {fileID: 11400000, guid: 36e111a325aa06f4781e5db95a23bc83, type: 2}
+  uniqueID: 69ff3aa2-bffc-43e7-99f4-be2805e1799f
+  mapPrefab: {fileID: 6255040595238325873, guid: 234f43400eb510340ad0c5f356c98778, type: 3}
+  startingItems: {fileID: 11400000, guid: 16cdcb781082f474fa26d4073a68cd7c, type: 2}
   starGoals:
   - goalType: 0
     timeLimit: 0
+  - goalType: 1
+    timeLimit: 0
+  - goalType: 1
+    timeLimit: 0
+  - goalType: 2
+    timeLimit: 15

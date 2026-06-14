@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
   m_Name: BreakingSandboxData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  uniqueID: f0fe0e90-8132-4916-9f4c-27d47ff8c700
   mapPrefab: {fileID: 8040763811617257258, guid: 60aa5400ea61d8e4cb9feced95fbd91c, type: 3}
   startingItems: {fileID: 11400000, guid: c41db689eb18ed14197ab052d886bba0, type: 2}
-  starGoals: []
+  starGoals:
+  - goalType: 0
+    timeLimit: 0

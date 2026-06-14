@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 368ded4a8b448bb4d92dd8c6c09ec281, type: 3}
+  m_Name: ChapterData_Chapter_02
+  m_EditorClassIdentifier: Assembly-CSharp::ChapterData
+  chapterName: Chapter_02
+  icon: {fileID: 6025285105372068174, guid: 2096c1a6ec879ed4aa243a1c70f73b01, type: 3}
+  levels:
+  - {fileID: 11400000, guid: 4ac1f99f92fa05744be8e5791567ef43, type: 2}

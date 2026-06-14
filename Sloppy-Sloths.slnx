@@ -1,4 +1,8 @@
 ﻿<Solution>
-  <Project Path="Assembly-CSharp.csproj" />
-  <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="EditModeTests.csproj" />
+  <Project Path="MapBuilder.csproj" />
+  <Project Path="MainProject.csproj" />
+  <Project Path="ServerDriverTests.csproj" />
+  <Project Path="Data.csproj" />
+  <Project Path="SerializationTests.csproj" />
 </Solution>

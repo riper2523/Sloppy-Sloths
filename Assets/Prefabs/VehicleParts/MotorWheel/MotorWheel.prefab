@@ -570,7 +570,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   actionReceivers:
-  - actionType: 0
+  - actionType: 3
     startAction:
       m_PersistentCalls:
         m_Calls:

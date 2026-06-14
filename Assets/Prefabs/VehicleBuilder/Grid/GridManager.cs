@@ -15,6 +15,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int gridSizeX = 5;
     [SerializeField] private int gridSizeY = 5;
 
+    [SerializeField] private ActionSprites actionSprites;
     [SerializeField] private Tilemap partsTilemap;
     [SerializeField] private Tilemap backgroundTilemap;
     [SerializeField] private Tile backgroundTile;
@@ -262,7 +263,7 @@ public class GridManager : MonoBehaviour
 
         UpdateTilemapForCell(x, y);
     }
-    
+
     public GridSaveData ExportGridState()
     {
         GridSaveData gridData = new GridSaveData();
@@ -310,8 +311,8 @@ public class GridManager : MonoBehaviour
             foreach (var partSave in cellSave.parts)
             {
                 PartData partDataRef = null;
-                
-                foreach(var part in startingInventory.itemsMap.Keys)
+
+                foreach (var part in startingInventory.itemsMap.Keys)
                 {
                     if (part.uniqueID == partSave.partID)
                     {
@@ -319,13 +320,13 @@ public class GridManager : MonoBehaviour
                         break;
                     }
                 }
-                
+
                 if (partDataRef != null && inventoryManager.TryUsePart(partDataRef))
                 {
-                    partDataGrid[cellSave.x, cellSave.y].parts[partSave.layer] = new PartInstance 
-                    { 
-                        partData = partDataRef, 
-                        Rotation = partSave.rotation 
+                    partDataGrid[cellSave.x, cellSave.y].parts[partSave.layer] = new PartInstance
+                    {
+                        partData = partDataRef,
+                        Rotation = partSave.rotation
                     };
                 }
             }
@@ -556,6 +557,7 @@ public class GridManager : MonoBehaviour
                                 GameToggleScript toggleScript = toggleGO.GetComponent<GameToggleScript>();
                                 toggleScript.startEvent.AddListener(() => action.startAction.Invoke());
                                 toggleScript.endEvent.AddListener(() => action.stopAction.Invoke());
+                                toggleScript.Initialize(actionSprites.iconDictionary[action.actionType]);
                                 actionToggles[action.actionType] = toggleGO;
                             }
                         }

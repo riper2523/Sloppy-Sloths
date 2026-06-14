@@ -184,7 +184,38 @@ MonoBehaviour:
   jointBreakEvent:
     m_PersistentCalls:
       m_Calls: []
-  actionReceivers: []
+  actionReceivers:
+  - actionType: 0
+    startAction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8030102609713163354}
+          m_TargetAssemblyTypeName: EngineModifier, MainProject
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+    stopAction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8030102609713163354}
+          m_TargetAssemblyTypeName: EngineModifier, MainProject
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   jointStrength: 3500
   enginePower: 0
 --- !u!114 &8030102609713163354

@@ -40,8 +40,6 @@ namespace Assets.Prefabs.LevelSystem.MapLoader
             var level = levelLoader.CreateLevelFromDTO(dto);
             global::MapLoader.PendingLevel = level;
             
-            Assets.Prefabs.MapBuilder.MapBuilderManager.TestModeReturnOverlay.CheckAndSpawnOverlay();
-            
             SceneManager.LoadScene(gameplaySceneName);
         }
     }

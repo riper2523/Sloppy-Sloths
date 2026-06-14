@@ -185,7 +185,7 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
     {
         if (vehicleBuilderInstance == null || finishLineInstance == null)
         {
-            Debug.LogError("MapBuilderManager: Cannot download map without VehicleBuilder and FinishLine.");
+            Debug.Log("MapBuilderManager: Cannot download map without VehicleBuilder and FinishLine.");
             if (mapSavePopup != null)
             {
                 mapSavePopup.ShowMessage("Cannot download map without Vehicle Builder and Finish Line.", false);
@@ -387,13 +387,17 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
         Debug.Log("MoveToTestingMode called. Current state: " + State.StateType);
         if (State.StateType != StateID.TESTING_MODE)
         {
-            State = stateProvider.GetTestingModeState();
-
             if (vehicleBuilderInstance == null || finishLineInstance == null)
             {
                 Debug.LogWarning("MapBuilderManager: Map must have a Vehicle Builder and a Finish Line to test!");
+                if (mapSavePopup != null)
+                {
+                    mapSavePopup.ShowMessage("Cannot test map without Vehicle Builder and Finish Line.", false);
+                }
                 return;
             }
+
+            State = stateProvider.GetTestingModeState();
 
             Debug.Log("MapBuilderManager: Serializing to DTO for testing...");
             Debug.Log("Entering testing mode");

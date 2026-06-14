@@ -12,6 +12,8 @@ namespace Assets.Prefabs.UI.MapSelection
 {
     public class MapSelectionMenu : MonoBehaviour
     {
+        private static readonly string ServerUnreachableError = "Server unreachable";
+
         [Header("Dependencies")]
         [SerializeField] private UnityServerDriver serverDriver = null!;
         [SerializeField] private DTOLevelLoader levelLoader = null!;
@@ -134,9 +136,15 @@ namespace Assets.Prefabs.UI.MapSelection
 
             bool isAlive = await serverDriver.IsServerAliveAsync();
 
+            if (scrollRect != null)
+            {
+                var lbl = scrollRect.transform.parent.Find("ServerMapsLabel");
+                if (lbl != null) lbl.gameObject.SetActive(isAlive);
+            }
+
             if (!isAlive)
             {
-                statusText?.SetText("Error: Server unreachable.");
+                statusText?.SetText(ServerUnreachableError);
                 statusPanel?.SetActive(true);
                 refreshButton?.gameObject.SetActive(true);
                 return;
@@ -212,6 +220,29 @@ namespace Assets.Prefabs.UI.MapSelection
             statusPanel?.SetActive(false);
         }
 
+        private async Task HandleDownloadFailureAsync()
+        {
+            if (serverDriver == null) return;
+            bool isAlive = await serverDriver.IsServerAliveAsync();
+            if (!isAlive)
+            {
+                if (scrollRect != null)
+                {
+                    scrollRect.gameObject.SetActive(false);
+                    var lbl = scrollRect.transform.parent.Find("ServerMapsLabel");
+                    if (lbl != null) lbl.gameObject.SetActive(false);
+                }
+                statusText?.SetText(ServerUnreachableError);
+            }
+            else
+            {
+                statusText?.SetText("Failed to download map data.");
+            }
+
+            statusPanel?.SetActive(true);
+            refreshButton?.gameObject.SetActive(true);
+        }
+
         private async void OnMapEditSelected(string mapName)
         {
             statusPanel?.SetActive(true);
@@ -222,9 +253,7 @@ namespace Assets.Prefabs.UI.MapSelection
 
             if (mapData == null || mapData.MapStateDTO == null)
             {
-                statusText?.SetText("Failed to download map data.");
-                statusPanel?.SetActive(true);
-                refreshButton?.gameObject.SetActive(true);
+                await HandleDownloadFailureAsync();
                 return;
             }
 
@@ -255,8 +284,7 @@ namespace Assets.Prefabs.UI.MapSelection
 
             if (mapData == null || mapData.MapStateDTO == null)
             {
-                statusText?.SetText("Failed to download map data.");
-                statusPanel?.SetActive(false);
+                await HandleDownloadFailureAsync();
                 return;
             }
 
@@ -266,7 +294,8 @@ namespace Assets.Prefabs.UI.MapSelection
             if (level == null)
             {
                 statusText?.SetText("Failed to process map data.");
-                statusPanel?.SetActive(false);
+                statusPanel?.SetActive(true);
+                refreshButton?.gameObject.SetActive(true);
                 return;
             }
 

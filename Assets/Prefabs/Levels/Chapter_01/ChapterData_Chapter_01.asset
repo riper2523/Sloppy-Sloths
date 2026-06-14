@@ -15,5 +15,5 @@ MonoBehaviour:
   chapterName: Chapter_01
   icon: {fileID: 6025285105372068174, guid: a10da2c207faf0a4dbadaa5dd54733ae, type: 3}
   levels:
-  - {fileID: 11400000, guid: 357ca809d770b104ead8b2ec5c4d413d, type: 2}
   - {fileID: 11400000, guid: c98c23c2300c8a9428a9142b01274603, type: 2}
+  - {fileID: 11400000, guid: 357ca809d770b104ead8b2ec5c4d413d, type: 2}

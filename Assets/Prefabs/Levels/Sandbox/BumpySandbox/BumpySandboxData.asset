@@ -15,4 +15,6 @@ MonoBehaviour:
   uniqueID: 152f2b3c-f8ca-41c0-8cb6-6753bda66433
   mapPrefab: {fileID: 8040763811617257258, guid: 08387cfa3ede877459ce11656c5476e6, type: 3}
   startingItems: {fileID: 11400000, guid: 36e111a325aa06f4781e5db95a23bc83, type: 2}
-  starGoals: []
+  starGoals:
+  - goalType: 0
+    timeLimit: 0

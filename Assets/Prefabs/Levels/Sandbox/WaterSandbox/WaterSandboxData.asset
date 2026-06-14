@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
   m_Name: WaterSandboxData
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  uniqueID: 30b4abf1-6e71-4b46-b7b8-d34f05c6e0b0
   mapPrefab: {fileID: 8040763811617257258, guid: d3cce84712ceeaa40ad31336502eefcf, type: 3}
   startingItems: {fileID: 11400000, guid: 4b98e1328241c1b4d9ca0845a6a09c2a, type: 2}
-  starGoals: []
+  starGoals:
+  - goalType: 0
+    timeLimit: 0

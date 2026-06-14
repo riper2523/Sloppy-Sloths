@@ -10,12 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 543f0a3ddb5301541a32ae24ae9bd107, type: 3}
-  m_Name: lvl_2_2_Inventory
+  m_Name: lvl_2_3_Inventory
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
   initialItemsList:
   - part: {fileID: 11400000, guid: 2492618dd932f4f4fb2805ddcc47389d, type: 2}
     amount: 1
   - part: {fileID: 11400000, guid: d2afacbd0fad9064fab12fbee55170c5, type: 2}
+    amount: 7
+  - part: {fileID: 11400000, guid: f92733de55663fc458994e1cbf95b82d, type: 2}
+    amount: 4
+  - part: {fileID: 11400000, guid: b6490a910b9f92c40bddd915c1472e63, type: 2}
     amount: 2
-  - part: {fileID: 11400000, guid: d2afacbd0fad9064fab12fbee55170c5, type: 2}
-    amount: 2
+  - part: {fileID: 11400000, guid: 5da7625ce3923134b8849af92ab74fda, type: 2}
+    amount: 1

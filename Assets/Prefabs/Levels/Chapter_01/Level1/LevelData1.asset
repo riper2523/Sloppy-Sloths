@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
-  m_Name: LevelData
+  m_Name: LevelData1
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  uniqueID: 7ee0e64d-f439-4b5a-a23a-f78de641a266
-  mapPrefab: {fileID: 2974721128875585459, guid: 66f41d0af21802841bf7739f83545fa9, type: 3}
-  startingItems: {fileID: 11400000, guid: a26b92360a3eee3418e8dda64943419d, type: 2}
+  uniqueID: 0ceea3c9-578c-4cca-9381-21c32a2ac911
+  mapPrefab: {fileID: 2974721128875585459, guid: e97246e0700d25c4e9cc78ea36e5d30d, type: 3}
+  startingItems: {fileID: 11400000, guid: 1607d2328bcf15948933ae0930ed6303, type: 2}
   starGoals:
   - goalType: 1
     timeLimit: 0
   - goalType: 0
     timeLimit: 0
   - goalType: 2
-    timeLimit: 10
+    timeLimit: 13

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
-  m_Name: SampleLevelData
+  m_Name: LevelData2
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   uniqueID: 588c78c4-d0f0-4fac-8383-46ed57302cb4
   mapPrefab: {fileID: 6255040595238325873, guid: de690671225b1a34d824d0113b4378b9, type: 3}
@@ -22,5 +22,9 @@ MonoBehaviour:
     timeLimit: 0
   - goalType: 1
     timeLimit: 0
+  - goalType: 2
+    timeLimit: 10
+  - goalType: 2
+    timeLimit: 10
   - goalType: 2
     timeLimit: 10

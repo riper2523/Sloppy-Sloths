@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e48d61b54f904e44a36883a3e19e565, type: 3}
+  m_Name: LevelData4
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  uniqueID: 6c1908ef-7853-4a00-b1de-f6040895cdd8
+  mapPrefab: {fileID: 2974721128875585459, guid: d6a1ae14978ab6749b68cba9f37e371a, type: 3}
+  startingItems: {fileID: 11400000, guid: 225f5eaf8985ec547a3286acf5f6e06c, type: 2}
+  starGoals:
+  - goalType: 1
+    timeLimit: 0
+  - goalType: 0
+    timeLimit: 0
+  - goalType: 2
+    timeLimit: 15

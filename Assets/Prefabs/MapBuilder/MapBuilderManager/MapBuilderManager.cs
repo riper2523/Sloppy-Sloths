@@ -586,11 +586,6 @@ public class MapBuilderManager : MonoBehaviour, ISerializableToDTO<IMapStateDTO>
         nodeManager?.MoveToGameplay();
     }
 
-    public void GoBackToMapSelection()
-    {
-        SceneManager.LoadScene("MapSelection");
-    }
-
     public void SetUpUsingDTO(IMapStateDTO dto)
     {
         SetUpUsingDTO(dto, null);

@@ -27,6 +27,7 @@ namespace Assets.Prefabs.UI.MapSelection
         [SerializeField] private Button loadMapFromDiskButton = null!;
 
         private static GameObject? lastDynamicMapSource;
+        private UnityEngine.UI.ScrollRect? scrollRect;
 
         private void Awake()
         {
@@ -47,10 +48,19 @@ namespace Assets.Prefabs.UI.MapSelection
                 eventSystem.AddComponent<StandaloneInputModule>();
             }
 
+            if (mapListContainer != null)
+            {
+                scrollRect = mapListContainer.GetComponentInParent<UnityEngine.UI.ScrollRect>(true);
+            }
+
             if (refreshButton != null)
             {
-                refreshButton.onClick.AddListener(async () => await RefreshMapList());
-                refreshButton.gameObject.SetActive(false);
+                refreshButton.onClick.AddListener(() => _ = RefreshMapList());
+            }
+
+            if (statusPanel != null)
+            {
+                refreshButton!.gameObject.SetActive(false);
             }
 
             if (loadMapFromDiskButton != null)
@@ -64,6 +74,9 @@ namespace Assets.Prefabs.UI.MapSelection
                 }
                 else
                 {
+                    // Clear any lingering Inspector-assigned events (like SceneSwitcher)
+                    // so it doesn't accidentally load an empty scene when clicked!
+                    loadMapFromDiskButton.onClick.RemoveAllListeners();
                     loadMapFromDiskButton.onClick.AddListener(OnLoadMapFromDisk);
                 }
 #endif
@@ -105,6 +118,8 @@ namespace Assets.Prefabs.UI.MapSelection
 
         public async Task RefreshMapList()
         {
+            if (scrollRect != null) scrollRect.gameObject.SetActive(false); // Hide while refreshing
+
             statusPanel?.SetActive(true);
             statusPanel?.transform.SetAsLastSibling();
             refreshButton?.gameObject.SetActive(false);
@@ -118,10 +133,10 @@ namespace Assets.Prefabs.UI.MapSelection
             }
 
             bool isAlive = await serverDriver.IsServerAliveAsync();
+
             if (!isAlive)
             {
                 statusText?.SetText("Error: Server unreachable.");
-                // Keep overlay active so the statusText and refreshButton are visible
                 statusPanel?.SetActive(true);
                 refreshButton?.gameObject.SetActive(true);
                 return;
@@ -187,6 +202,13 @@ namespace Assets.Prefabs.UI.MapSelection
                 editBtn?.onClick.AddListener(() => OnMapEditSelected(map.MapName));
             }
 
+            // Show the ScrollView now that all maps have been successfully populated
+            if (scrollRect != null)
+            {
+                scrollRect.gameObject.SetActive(true);
+            }
+
+            // Hide the status panel now that everything is loaded
             statusPanel?.SetActive(false);
         }
 

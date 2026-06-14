@@ -9868,6 +9868,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1748682592558835949, guid: b2b6cdf303d086c578ab7cd4bfe237ee, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748682592558835949, guid: b2b6cdf303d086c578ab7cd4bfe237ee, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2f224c6317311c6a0831929ff8e15206, type: 3}
     - target: {fileID: 3949549065059111328, guid: b2b6cdf303d086c578ab7cd4bfe237ee, type: 3}
       propertyPath: m_Name
       value: SaveTheMapButton
@@ -11141,6 +11149,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6673443404635128514, guid: d3720607817e25492aec9f97d2bb038d, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6673443404635128514, guid: d3720607817e25492aec9f97d2bb038d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3c056d8f6da4f5667ba189ec4b1471ba, type: 3}
     - target: {fileID: 8221278325486697359, guid: d3720607817e25492aec9f97d2bb038d, type: 3}
       propertyPath: m_Name
       value: SelectPolygonPrefab
@@ -11204,6 +11220,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeftArrowButton
       objectReference: {fileID: 0}
+    - target: {fileID: 1233544312681342791, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1233544312681342791, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6637579805640823245}
+    - target: {fileID: 1233544312681342791, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 1233544312681342791, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Assets.Scripts.Utils.SceneSwitcher, MainProject
+      objectReference: {fileID: 0}
+    - target: {fileID: 1233544312681342791, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2822001138747192558, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2822001138747192558, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ce967acb4a6f1a7d289bf52c61b2b1b5, type: 3}
     - target: {fileID: 2945568339705921606, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -11287,13 +11331,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 694345350524554659, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6637579805640823245}
   m_SourcePrefab: {fileID: 100100000, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
 --- !u!224 &6637579805640823243 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2945568339705921606, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
   m_PrefabInstance: {fileID: 6637579805640823242}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6637579805640823244 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 694345350524554659, guid: bedee89b56610cb1d98c6b65b8bf9df4, type: 3}
+  m_PrefabInstance: {fileID: 6637579805640823242}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6637579805640823245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6637579805640823244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 824bf548ee1b0601a8cfc6a8855dbb3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MainProject::Assets.Scripts.Utils.SceneSwitcher
+  sceneAsset: {fileID: 102900000, guid: 06718943a8bd28313915c07e91da0f1a, type: 3}
+  sceneName: MapSelection
 --- !u!224 &6798441133102365223
 RectTransform:
   m_ObjectHideFlags: 0

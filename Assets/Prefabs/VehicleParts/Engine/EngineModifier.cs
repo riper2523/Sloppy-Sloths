@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EngineModifier : MonoBehaviour, IPartModifier
 {
-    private float enignePower = 30f;
+    private float enignePower = 60f;
     
     public void ActivateEffects(PartLogic coreLogic)
     {

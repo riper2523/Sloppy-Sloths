@@ -64,8 +64,6 @@ public class CampaignDataEditor : Editor
                 if (level != null) foundLevels.Add(level);
             }
 
-            // 5. Sort levels alphabetically by file name and add to chapter
-            foundLevels.Sort((a, b) => a.name.CompareTo(b.name));
             chapterData.levels.AddRange(foundLevels);
 
             // 6. Add the completed chapter to the Campaign

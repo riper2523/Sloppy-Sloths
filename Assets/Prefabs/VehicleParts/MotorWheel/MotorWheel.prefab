@@ -602,7 +602,7 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   jointStrength: 5000
-  enginePower: 30
+  enginePower: 50
 --- !u!114 &5755092849795319607
 MonoBehaviour:
   m_ObjectHideFlags: 0

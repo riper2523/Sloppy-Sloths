@@ -22,7 +22,5 @@ MonoBehaviour:
     timeLimit: 0
   - goalType: 1
     timeLimit: 0
-  - goalType: 1
-    timeLimit: 0
   - goalType: 2
     timeLimit: 10

@@ -6,7 +6,8 @@
         "Unity.2D.SpriteShape.Runtime",
         "Unity.Cinemachine",
         "Data",
-        "MapBuilder"
+        "MapBuilder",
+        "StandaloneFileBrowser"
     ],
     "autoReferenced": true
 }

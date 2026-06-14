@@ -38,9 +38,11 @@ namespace Assets.Prefabs.LevelSystem.MapLoader
             }
 
             var level = levelLoader.CreateLevelFromDTO(dto);
+            if (level != null)
+            {
+                level.uniqueID = "test_map";
+            }
             global::MapLoader.PendingLevel = level;
-            
-            Assets.Prefabs.MapBuilder.MapBuilderManager.TestModeReturnOverlay.CheckAndSpawnOverlay();
             
             SceneManager.LoadScene(gameplaySceneName);
         }

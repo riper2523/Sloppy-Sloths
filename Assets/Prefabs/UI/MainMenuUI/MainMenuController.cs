@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject campaignPanel;
     [SerializeField] private GameObject levelSelectionPanel;
+
+    [Header("Scenes")]
+    [SerializeField] private string workshopSceneName;
 
     [Header("Session Data")]
     [SerializeField] private CurrentSessionSO currentSession;
@@ -53,6 +57,11 @@ public class MainMenuController : MonoBehaviour
     {
         HideAllPanels();
         if (levelSelectionPanel) levelSelectionPanel.SetActive(true);
+    }
+
+    public void SwitchToWorkshop()
+    {
+        SceneManager.LoadScene(workshopSceneName);
     }
 
     public void QuitGame()

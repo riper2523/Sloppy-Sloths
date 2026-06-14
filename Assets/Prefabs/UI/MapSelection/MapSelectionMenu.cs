@@ -12,6 +12,8 @@ namespace Assets.Prefabs.UI.MapSelection
 {
     public class MapSelectionMenu : MonoBehaviour
     {
+        private static readonly string ServerUnreachableError = "Server unreachable";
+
         [Header("Dependencies")]
         [SerializeField] private UnityServerDriver serverDriver = null!;
         [SerializeField] private DTOLevelLoader levelLoader = null!;
@@ -24,8 +26,10 @@ namespace Assets.Prefabs.UI.MapSelection
         [SerializeField] private GameObject statusPanel = null!;
         [SerializeField] private TextMeshProUGUI statusText = null!;
         [SerializeField] private Button refreshButton = null!;
+        [SerializeField] private Button loadMapFromDiskButton = null!;
 
         private static GameObject? lastDynamicMapSource;
+        private UnityEngine.UI.ScrollRect? scrollRect;
 
         private void Awake()
         {
@@ -46,10 +50,66 @@ namespace Assets.Prefabs.UI.MapSelection
                 eventSystem.AddComponent<StandaloneInputModule>();
             }
 
+            if (mapListContainer != null)
+            {
+                scrollRect = mapListContainer.GetComponentInParent<UnityEngine.UI.ScrollRect>(true);
+            }
+
             if (refreshButton != null)
             {
-                refreshButton.onClick.AddListener(async () => await RefreshMapList());
-                refreshButton.gameObject.SetActive(false);
+                refreshButton.onClick.AddListener(() => _ = RefreshMapList());
+            }
+
+            if (statusPanel != null)
+            {
+                refreshButton!.gameObject.SetActive(false);
+            }
+
+            if (loadMapFromDiskButton != null)
+            {
+#if UNITY_ANDROID || UNITY_IOS
+                loadMapFromDiskButton.gameObject.SetActive(false);
+#else
+                if (Application.isMobilePlatform)
+                {
+                    loadMapFromDiskButton.gameObject.SetActive(false);
+                }
+                else
+                {
+                    // Clear any lingering Inspector-assigned events (like SceneSwitcher)
+                    // so it doesn't accidentally load an empty scene when clicked!
+                    loadMapFromDiskButton.onClick.RemoveAllListeners();
+                    loadMapFromDiskButton.onClick.AddListener(OnLoadMapFromDisk);
+                }
+#endif
+            }
+        }
+
+        private void OnLoadMapFromDisk()
+        {
+            var paths = SFB.StandaloneFileBrowser.OpenFilePanel("Open Map", "", "map", false);
+            if (paths != null && paths.Length > 0 && !string.IsNullOrEmpty(paths[0]))
+            {
+                string path = paths[0];
+                string json = System.IO.File.ReadAllText(path);
+                var settings = SerializationManager.GetSettings();
+                var dto = Newtonsoft.Json.JsonConvert.DeserializeObject<Assets.Prefabs.MapBuilder.Serialization.IMapStateDTO>(json, settings);
+                if (dto != null)
+                {
+                    string mapName = System.IO.Path.GetFileNameWithoutExtension(path);
+                    statusPanel?.SetActive(true);
+                    statusText?.SetText($"Loading map from disk: {mapName}...");
+
+                    AsyncOperation sceneLoad = SceneManager.LoadSceneAsync("MapBuilder");
+                    sceneLoad.completed += (op) =>
+                    {
+                        var builderManager = FindAnyObjectByType<MapBuilderManager>();
+                        if (builderManager != null)
+                        {
+                            builderManager.SetUpUsingDTO(dto, mapName);
+                        }
+                    };
+                }
             }
         }
 
@@ -60,6 +120,8 @@ namespace Assets.Prefabs.UI.MapSelection
 
         public async Task RefreshMapList()
         {
+            if (scrollRect != null) scrollRect.gameObject.SetActive(false); // Hide while refreshing
+
             statusPanel?.SetActive(true);
             statusPanel?.transform.SetAsLastSibling();
             refreshButton?.gameObject.SetActive(false);
@@ -73,10 +135,16 @@ namespace Assets.Prefabs.UI.MapSelection
             }
 
             bool isAlive = await serverDriver.IsServerAliveAsync();
+
+            if (scrollRect != null)
+            {
+                var lbl = scrollRect.transform.parent.Find("ServerMapsLabel");
+                if (lbl != null) lbl.gameObject.SetActive(isAlive);
+            }
+
             if (!isAlive)
             {
-                statusText?.SetText("Error: Server unreachable.");
-                // Keep overlay active so the statusText and refreshButton are visible
+                statusText?.SetText(ServerUnreachableError);
                 statusPanel?.SetActive(true);
                 refreshButton?.gameObject.SetActive(true);
                 return;
@@ -142,7 +210,37 @@ namespace Assets.Prefabs.UI.MapSelection
                 editBtn?.onClick.AddListener(() => OnMapEditSelected(map.MapName));
             }
 
+            // Show the ScrollView now that all maps have been successfully populated
+            if (scrollRect != null)
+            {
+                scrollRect.gameObject.SetActive(true);
+            }
+
+            // Hide the status panel now that everything is loaded
             statusPanel?.SetActive(false);
+        }
+
+        private async Task HandleDownloadFailureAsync()
+        {
+            if (serverDriver == null) return;
+            bool isAlive = await serverDriver.IsServerAliveAsync();
+            if (!isAlive)
+            {
+                if (scrollRect != null)
+                {
+                    scrollRect.gameObject.SetActive(false);
+                    var lbl = scrollRect.transform.parent.Find("ServerMapsLabel");
+                    if (lbl != null) lbl.gameObject.SetActive(false);
+                }
+                statusText?.SetText(ServerUnreachableError);
+            }
+            else
+            {
+                statusText?.SetText("Failed to download map data.");
+            }
+
+            statusPanel?.SetActive(true);
+            refreshButton?.gameObject.SetActive(true);
         }
 
         private async void OnMapEditSelected(string mapName)
@@ -155,9 +253,7 @@ namespace Assets.Prefabs.UI.MapSelection
 
             if (mapData == null || mapData.MapStateDTO == null)
             {
-                statusText?.SetText("Failed to download map data.");
-                statusPanel?.SetActive(true);
-                refreshButton?.gameObject.SetActive(true);
+                await HandleDownloadFailureAsync();
                 return;
             }
 
@@ -169,7 +265,7 @@ namespace Assets.Prefabs.UI.MapSelection
                 var builderManager = FindAnyObjectByType<MapBuilderManager>();
                 if (builderManager != null)
                 {
-                    builderManager.SetUpUsingDTO(mapData.MapStateDTO);
+                    builderManager.SetUpUsingDTO(mapData.MapStateDTO, mapName);
                 }
                 else
                 {
@@ -188,8 +284,7 @@ namespace Assets.Prefabs.UI.MapSelection
 
             if (mapData == null || mapData.MapStateDTO == null)
             {
-                statusText?.SetText("Failed to download map data.");
-                statusPanel?.SetActive(false);
+                await HandleDownloadFailureAsync();
                 return;
             }
 
@@ -199,7 +294,8 @@ namespace Assets.Prefabs.UI.MapSelection
             if (level == null)
             {
                 statusText?.SetText("Failed to process map data.");
-                statusPanel?.SetActive(false);
+                statusPanel?.SetActive(true);
+                refreshButton?.gameObject.SetActive(true);
                 return;
             }
 

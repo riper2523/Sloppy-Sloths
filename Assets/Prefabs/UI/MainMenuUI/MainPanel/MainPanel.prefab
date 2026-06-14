@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 2139882582715747845}
   - component: {fileID: 8237849578165495406}
   m_Layer: 5
-  m_Name: SettingsButton
+  m_Name: WorkshopButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -607,7 +607,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Settings
+  m_text: 'Workshop
 
 '
   m_isRightToLeft: 0

@@ -709,6 +709,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LevelLoader, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 2238893550088877518, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.000024319
+      objectReference: {fileID: 0}
+    - target: {fileID: 2238893550088877518, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -100.00001
+      objectReference: {fileID: 0}
     - target: {fileID: 2558282209304486699, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -736,6 +744,10 @@ PrefabInstance:
     - target: {fileID: 2558282209304486699, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2660585702019424024, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2733690729593547265, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -925,18 +937,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LevelLoader, Assembly-CSharp
       objectReference: {fileID: 0}
-    - target: {fileID: 6405412634677610311, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
-      propertyPath: m_StartAxis
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6405412634677610311, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
-      propertyPath: m_Constraint
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6405412634677610311, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
-      propertyPath: m_ConstraintCount
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5562549750797607966, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
@@ -968,6 +968,18 @@ PrefabInstance:
     - target: {fileID: 5727756741905838426, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405412634677610311, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_StartAxis
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405412634677610311, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_Constraint
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405412634677610311, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_ConstraintCount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6440481816439621086, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1088,6 +1100,18 @@ PrefabInstance:
     - target: {fileID: 9057937655859496962, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072139430138677751, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_Color.b
+      value: 0.34963512
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072139430138677751, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_Color.g
+      value: 0.34963512
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072139430138677751, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
+      propertyPath: m_Color.r
+      value: 0.764151
       objectReference: {fileID: 0}
     - target: {fileID: 9152542219884481661, guid: cc362582fbbf3e24ab032cc63d43f768, type: 3}
       propertyPath: m_AnchorMax.y

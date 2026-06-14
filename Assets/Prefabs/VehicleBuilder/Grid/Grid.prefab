@@ -192,6 +192,7 @@ MonoBehaviour:
   offsetY: -3
   gridSizeX: 6
   gridSizeY: 6
+  actionSprites: {fileID: 11400000, guid: e3056f923798e29429621fef5ce40395, type: 2}
   partsTilemap: {fileID: 7264889568269119955}
   backgroundTilemap: {fileID: 1797488054636190606}
   backgroundTile: {fileID: 11400000, guid: ee588fd79641f7849bd080656cfc064d, type: 2}
@@ -199,6 +200,7 @@ MonoBehaviour:
   inventoryManager: {fileID: 0}
   gameToggleParent: {fileID: 0}
   gameTogglePrefab: {fileID: 0}
+  brokenPartLayerID: 8
 --- !u!1 &8529492293485555049
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,3 +426,4 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   doubleClickThreshold: 150
+  gridManager: {fileID: 0}

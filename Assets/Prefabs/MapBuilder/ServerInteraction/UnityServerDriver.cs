@@ -15,6 +15,8 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
         [SerializeField] private string serverBaseUrl = "http://127.0.0.1:3000";
         [SerializeField] private int requestTimeout = 5; // 5 seconds
 
+        public string ConfigFileName { get; set; } = "server_config.json";
+
         private string? _cachedServerUrl = null;
 
         private class ServerConfig
@@ -27,7 +29,7 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
             if (_cachedServerUrl != null) return _cachedServerUrl;
 
             _cachedServerUrl = serverBaseUrl; // Fallback
-            string configPath = System.IO.Path.Combine(Application.streamingAssetsPath, "server_config.json");
+            string configPath = System.IO.Path.Combine(Application.streamingAssetsPath, ConfigFileName);
 
             try
             {

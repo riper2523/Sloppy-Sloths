@@ -97,6 +97,8 @@ jobs:
         run: |
           sed -i 's/127.0.0.1/172.17.0.1/g' Assets/Prefabs/MapBuilder/ServerInteraction/UnityServerDriver.cs
           sed -i 's/127.0.0.1/172.17.0.1/g' Assets/Prefabs/MapBuilder/ServerInteraction/ServerDriver.asset || true
+          sed -i 's/127.0.0.1/172.17.0.1/g' Assets/StreamingAssets/server_config.json || true
+          sed -i 's/127.0.0.1/172.17.0.1/g' Assets/StreamingAssets/test_server_config.json || true
 
       # Test
       - name: Run tests

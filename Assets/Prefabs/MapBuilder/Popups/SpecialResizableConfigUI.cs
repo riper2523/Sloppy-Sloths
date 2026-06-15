@@ -9,7 +9,20 @@ namespace Assets.Prefabs.MapBuilder.Popups
         public TMP_InputField widthInput;
         public TMP_InputField heightInput;
 
+        //Dont change dimensions after chan
+        private void DimUpdater(string _)
+        {
+            UpdateDimensions();
+        }
+
         private IResizableSpecialItemController _currentResizableItem;
+
+        private void SetListeners()
+        {
+            widthInput.onValueChanged.AddListener(DimUpdater);
+            heightInput.onValueChanged.AddListener(DimUpdater);
+        }
+
         public IResizableSpecialItemController CurrentResizableItem
         {
             get => _currentResizableItem;
@@ -19,12 +32,20 @@ namespace Assets.Prefabs.MapBuilder.Popups
                 {
                     return;
                 }
+
                 _currentResizableItem = value;
+
                 if (_currentResizableItem is not null)
                 {
                     Debug.Log($"Setting resizable item to {_currentResizableItem} {CurrentResizableItem.Dimensions}");
+
+                    widthInput.onValueChanged.RemoveListener(DimUpdater);
+                    heightInput.onValueChanged.RemoveListener(DimUpdater);
+
                     widthInput.text = CurrentResizableItem.Dimensions.GridWidth.ToString();
                     heightInput.text = CurrentResizableItem.Dimensions.GridHeight.ToString();
+
+                    SetListeners();
                 }
             }
         }
@@ -49,6 +70,8 @@ namespace Assets.Prefabs.MapBuilder.Popups
 
             widthInput.contentType = TMP_InputField.ContentType.IntegerNumber;
             heightInput.contentType = TMP_InputField.ContentType.IntegerNumber;
+
+            SetListeners();
         }
 
         public override void Trigger(ISpecialItemController specialItemController)

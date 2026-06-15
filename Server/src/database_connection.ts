@@ -26,6 +26,7 @@ export interface DatabaseConnection {
 
     addMap(mapName: string, owner: OwnerEntity, filePath: string): Promise<Result<MapEntity, string>>
     getMapList(): Promise<Result<MapEntity[], string>>
+    deleteMap(mapName: string): Promise<Result<void, string>>
 
     getMap(mapName: string): Promise<Result<MapEntity, string>>
     changeOwner(mapEntity: MapEntity, newOwner: OwnerEntity): Promise<Result<MapEntity, string>>

@@ -125,5 +125,20 @@ describe('PostgresDatabase Integration Tests', () => {
                 expect(result.error).toBe('Map name already taken');
             }
         });
+
+        it('should delete a map', async () => {
+            const owner = (await db.addUser('Dave')).value;
+            await db.addMap('DeleteMe', owner, 'file1');
+            
+            let result = await db.deleteMap('DeleteMe');
+            expect(result.ok).toBe(true);
+            
+            const getResult = await db.getMap('DeleteMe');
+            expect(getResult.ok).toBe(false);
+            
+            // Delete non-existent map
+            result = await db.deleteMap('DeleteMe');
+            expect(result.ok).toBe(false);
+        });
     });
 });

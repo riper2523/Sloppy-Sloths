@@ -8,6 +8,7 @@ const mockGetCurrentUser = jest.fn();
 const mockGetOwner = jest.fn();
 const mockAddMap = jest.fn();
 const mockChangeOwner = jest.fn();
+const mockDeleteMap = jest.fn();
 
 jest.unstable_mockModule('../src/postgres_connection.js', () => ({
     getPostgresDatabaseConnection: () => ({
@@ -17,6 +18,7 @@ jest.unstable_mockModule('../src/postgres_connection.js', () => ({
         getOwner: mockGetOwner,
         addMap: mockAddMap,
         changeOwner: mockChangeOwner,
+        deleteMap: mockDeleteMap,
     }),
 }));
 
@@ -174,6 +176,34 @@ describe('API Routes', () => {
 
             expect(response.statusCode).toBe(409);
             expect(JSON.parse(response.payload).errMsg).toBe('Map name already taken');
+        });
+    });
+    describe('DELETE /maps/:mapName', () => {
+        it('should return 403 if user is not the owner', async () => {
+            const mockMap = { id: 1, owner: { id: 2, data: { nick: 'OtherUser' } }, data: { mapName: 'Map-1', owner: { nick: 'OtherUser' }, filePath: mockPath } };
+            mockGetMap.mockResolvedValue({ ok: true, value: mockMap });
+
+            const response = await fastify.inject({
+                method: 'DELETE',
+                url: '/maps/Map-1'
+            });
+
+            expect(response.statusCode).toBe(403);
+            expect(JSON.parse(response.payload).errMsg).toBe('You are not the owner of this map');
+        });
+
+        it('should successfully delete map if owner', async () => {
+            const mockMap = { id: 1, owner: { id: 1, data: mockOwner }, data: { mapName: 'Map-1', owner: mockOwner, filePath: mockPath } };
+            mockGetMap.mockResolvedValue({ ok: true, value: mockMap });
+            mockDeleteMap.mockResolvedValue({ ok: true, value: undefined });
+
+            const response = await fastify.inject({
+                method: 'DELETE',
+                url: '/maps/Map-1'
+            });
+
+            expect(response.statusCode).toBe(200);
+            expect(JSON.parse(response.payload).msg).toBe('Map deleted successfully');
         });
     });
 });

@@ -13,5 +13,6 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
         Task<ServerActionResult> ChangeOwnerAsync(MapData map, OwnerData newOwner);
         Task<ServerActionResult> UploadMapAsync(string mapName, string mapJson);
         Task<ServerActionResult> UpdateMapFileAsync(string mapName, string mapJson);
+        Task<ServerActionResult> DeleteMapAsync(string mapName);
     }
 }

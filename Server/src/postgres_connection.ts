@@ -128,6 +128,18 @@ class PostgresDatabase implements DatabaseConnection {
         }
     }
 
+    async deleteMap(mapName: string): Promise<Result<void, string>> {
+        try {
+            const result = await this.pool.query('DELETE FROM MapData WHERE MapName = $1 RETURNING MapID', [mapName]);
+            if (result.rowCount === 0) {
+                return { ok: false, error: "Map not found" };
+            }
+            return { ok: true, value: undefined };
+        } catch (err: any) {
+            return { ok: false, error: getErrorMessage(err) };
+        }
+    }
+
     async changeOwner(mapEntity: MapEntity, newOwner: OwnerEntity): Promise<Result<MapEntity, string>> {
         try {
             await this.pool.query(

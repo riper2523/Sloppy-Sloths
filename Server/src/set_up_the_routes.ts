@@ -396,4 +396,63 @@ export function setUpTheRoutes(fastifyInstance: FastifyInstance) {
             }
         }
     });
+
+    // Delete Map Route
+    fastify.route({
+        method: "DELETE",
+        url: "/maps/:mapName",
+        schema: {
+            params: getMapParamsSchema,
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+                        msg: { type: 'string' }
+                    },
+                    required: ['msg'],
+                    additionalProperties: false
+                },
+                '4xx': errorResponseSchema,
+                '5xx': errorResponseSchema
+            }
+        },
+        handler: async function (request, reply) {
+            const { mapName } = request.params;
+
+            // 1. Validate Caller Identity
+            const userResult = await databaseConnection.getCurrentUser();
+            if (!userResult.ok) {
+                return reply.status(401).send({ errMsg: "Authentication required" });
+            }
+            const currentUser = userResult.value;
+
+            // 2. Verify map exists
+            const mapResult = await databaseConnection.getMap(mapName);
+            if (!mapResult.ok) {
+                return reply.status(404).send({ errMsg: mapResult.error });
+            }
+            const mapEntity = mapResult.value;
+
+            // 3. Verify Ownership using ID
+            if (mapEntity.owner.id !== currentUser.id) {
+                return reply.status(403).send({ errMsg: "You are not the owner of this map" });
+            }
+
+            // 4. Delete from Database
+            const dbResult = await databaseConnection.deleteMap(mapName);
+            if (!dbResult.ok) {
+                return reply.status(500).send({ errMsg: dbResult.error });
+            }
+
+            // 5. Delete file
+            try {
+                await unlink(mapEntity.data.filePath);
+            } catch (err: any) {
+                request.log.error({ err }, `Failed to delete file ${mapEntity.data.filePath}`);
+            }
+
+            return { msg: "Map deleted successfully" };
+        }
+    });
 }
+

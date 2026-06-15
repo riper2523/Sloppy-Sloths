@@ -15,9 +15,64 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
         [SerializeField] private string serverBaseUrl = "http://127.0.0.1:3000";
         [SerializeField] private int requestTimeout = 5; // 5 seconds
 
+        private string? _cachedServerUrl = null;
+
+        private class ServerConfig
+        {
+            public string? ServerUrl { get; set; }
+        }
+
+        private async Task<string> GetServerUrlAsync()
+        {
+            if (_cachedServerUrl != null) return _cachedServerUrl;
+
+            _cachedServerUrl = serverBaseUrl; // Fallback
+            string configPath = System.IO.Path.Combine(Application.streamingAssetsPath, "server_config.json");
+
+            try
+            {
+                if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.WebGLPlayer)
+                {
+                    using UnityWebRequest request = UnityWebRequest.Get(configPath);
+                    var operation = request.SendWebRequest();
+                    while (!operation.isDone) await Task.Yield();
+
+                    if (request.result == UnityWebRequest.Result.Success)
+                    {
+                        ParseConfig(request.downloadHandler.text);
+                    }
+                }
+                else if (System.IO.File.Exists(configPath))
+                {
+                    string json = System.IO.File.ReadAllText(configPath);
+                    ParseConfig(json);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Failed to read server_config.json: {e.Message}");
+            }
+
+            return _cachedServerUrl;
+        }
+
+        private void ParseConfig(string json)
+        {
+            try
+            {
+                var config = JsonConvert.DeserializeObject<ServerConfig>(json);
+                if (!string.IsNullOrEmpty(config?.ServerUrl))
+                {
+                    _cachedServerUrl = config.ServerUrl;
+                }
+            }
+            catch { /* fallback to default */ }
+        }
+
         public async Task<bool> IsServerAliveAsync()
         {
-            using UnityWebRequest webRequest = UnityWebRequest.Get($"{serverBaseUrl}/status");
+            string url = await GetServerUrlAsync();
+            using UnityWebRequest webRequest = UnityWebRequest.Get($"{url}/status");
             var (result, _) = await ExecuteRequestAsync(webRequest);
             return result == ServerActionResult.SUCCESS;
         }
@@ -84,7 +139,8 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
 
         public async Task<MapData[]?> GetMapsAsync()
         {
-            string url = $"{serverBaseUrl}/maps/";
+            string urlStr = await GetServerUrlAsync();
+            string url = $"{urlStr}/maps/";
             using var webRequest = UnityWebRequest.Get(url);
 
             (var result, var json) = await ExecuteRequestAsync(webRequest);
@@ -105,8 +161,9 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
 
         public async Task<(ServerActionResult result, MapData? map)> GetMapAsync(string mapName)
         {
+            string urlStr = await GetServerUrlAsync();
             // 1. Fetch Metadata
-            string metadataUrl = $"{serverBaseUrl}/maps/{mapName}";
+            string metadataUrl = $"{urlStr}/maps/{mapName}";
             using var metadataRequest = UnityWebRequest.Get(metadataUrl);
 
             (var metaResult, var metadataJson) = await ExecuteRequestAsync(metadataRequest);
@@ -127,7 +184,7 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
             if (mapData == null) return (ServerActionResult.FAILED, null);
 
             // 2. Fetch File Content (IMapStateDTO)
-            string fileUrl = $"{serverBaseUrl}/maps/{mapName}/file";
+            string fileUrl = $"{urlStr}/maps/{mapName}/file";
             using var fileRequest = UnityWebRequest.Get(fileUrl);
 
             (var fileResult, var fileJson) = await ExecuteRequestAsync(fileRequest);
@@ -150,7 +207,8 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
 
         public async Task<ServerActionResult> ChangeOwnerAsync(MapData map, OwnerData newOwner)
         {
-            string url = $"{serverBaseUrl}/maps/{map.MapName}/owner";
+            string urlStr = await GetServerUrlAsync();
+            string url = $"{urlStr}/maps/{map.MapName}/owner";
             var body = new { newOwnerNick = newOwner.Nick };
             string jsonBody = JsonConvert.SerializeObject(body);
 
@@ -166,7 +224,8 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
 
         public async Task<ServerActionResult> UploadMapAsync(string mapName, string mapJson)
         {
-            string url = $"{serverBaseUrl}/maps/{mapName}";
+            string urlStr = await GetServerUrlAsync();
+            string url = $"{urlStr}/maps/{mapName}";
 
             List<IMultipartFormSection> formData = new()
             {
@@ -180,7 +239,8 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
 
         public async Task<ServerActionResult> UpdateMapFileAsync(string mapName, string mapJson)
         {
-            string url = $"{serverBaseUrl}/maps/{mapName}/file";
+            string urlStr = await GetServerUrlAsync();
+            string url = $"{urlStr}/maps/{mapName}/file";
 
             List<IMultipartFormSection> formData = new()
             {
@@ -189,6 +249,18 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction
 
             using var webRequest = UnityWebRequest.Post(url, formData);
             webRequest.method = "PATCH";
+
+            (var result, _) = await ExecuteRequestAsync(webRequest);
+            return result;
+        }
+
+        public async Task<ServerActionResult> DeleteMapAsync(string mapName)
+        {
+            string urlStr = await GetServerUrlAsync();
+            string url = $"{urlStr}/maps/{mapName}";
+
+            using var webRequest = UnityWebRequest.Delete(url);
+            webRequest.downloadHandler = new DownloadHandlerBuffer(); // To capture error messages from the server
 
             (var result, _) = await ExecuteRequestAsync(webRequest);
             return result;

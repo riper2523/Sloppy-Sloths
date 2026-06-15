@@ -197,17 +197,21 @@ namespace Assets.Prefabs.UI.MapSelection
 
                 // Play Button
                 GameObject playBtnObj = Instantiate(mapButtonPrefab, mapListContainer);
-                var playBtn = playBtnObj.GetComponent<Button>();
+                var playBtnController = playBtnObj.GetComponent<MapButtonController>();
+                var playBtn = playBtnController.InteractionButton;
                 var playText = playBtnObj.GetComponentInChildren<TextMeshProUGUI>();
                 playText?.SetText($"Play: {map.MapName} (by {map.Owner.Nick})");
                 playBtn?.onClick.AddListener(() => OnMapSelected(map.MapName));
+                playBtnController.TrashBinButton?.onClick.AddListener(() => OnMapDeleteSelected(map.MapName));
 
                 // Edit Button
                 GameObject editBtnObj = Instantiate(mapButtonPrefab, mapListContainer);
-                var editBtn = editBtnObj.GetComponent<Button>();
+                var editBtnController = editBtnObj.GetComponent<MapButtonController>();
+                var editBtn = editBtnController.InteractionButton;
                 var editText = editBtnObj.GetComponentInChildren<TextMeshProUGUI>();
                 editText?.SetText($"Edit: {map.MapName}");
                 editBtn?.onClick.AddListener(() => OnMapEditSelected(map.MapName));
+                editBtnController.TrashBinButton?.onClick.AddListener(() => OnMapDeleteSelected(map.MapName));
             }
 
             // Show the ScrollView now that all maps have been successfully populated
@@ -241,6 +245,25 @@ namespace Assets.Prefabs.UI.MapSelection
 
             statusPanel?.SetActive(true);
             refreshButton?.gameObject.SetActive(true);
+        }
+
+        private async void OnMapDeleteSelected(string mapName)
+        {
+            statusPanel?.SetActive(true);
+            statusText?.SetText($"Deleting map: {mapName}...");
+
+            if (serverDriver == null) return;
+            var result = await serverDriver.DeleteMapAsync(mapName);
+
+            if (result != ServerActionResult.SUCCESS)
+            {
+                statusText?.SetText($"Failed to delete map. Are you the owner?");
+                refreshButton?.gameObject.SetActive(true);
+                return;
+            }
+
+            // Refresh the list immediately after successful deletion
+            await RefreshMapList();
         }
 
         private async void OnMapEditSelected(string mapName)

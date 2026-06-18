@@ -16,6 +16,7 @@ namespace Assets.Prefabs.MapBuilder.ServerInteraction.Tests
         public void Setup()
         {
             _driver = ScriptableObject.CreateInstance<UnityServerDriver>();
+            _driver.ConfigFileName = "test_server_config.json";
         }
 
         [UnityTest]
